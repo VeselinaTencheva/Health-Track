@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <title>Health Track</title>
+    <meta charset="UTF-8">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link href="/css/bootstrap.css" rel="stylesheet" th:href="@{/css/common.css}"/>
+    <script th:src="@{/js/jquery-3.5.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+</head>
+
+<header th:fragment="header" class=" p-3" style="background-color: #0c5460; color: whitesmoke; width: 100%;">
+    <div class="d-flex justify-content-between px-3">
+        <h1 class="font-weight-bold">Health Track</h1>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</header>
+
+<side-nav>
+    <div class="sidenav h-100 mt-auto mb-auto">
+        <a href="#">My Profile</a>
+        <a href="/appointments">Appointments</a>
+        <a href="/patients">Patients</a>
+        <a href="/physicians">Physicians</a>
+<!--        <a href="#">Medical Specialists</a>-->
+        <a href="/diagnosis">Diagnosis</a>
+        <a href="/sick-leaves">Sick Leaves</a>
+        <a href="/treatments">Treatments</a>
+        <a href="#">About</a>
+    </div>
+</side-nav>
+
+<patient-profile-details>
+    <div class="form-group">
+        <div class="row py-2">
+            <div class="col">
+                <label for="name">Name</label>
+                <input class="form-control" type="text" th:field="${patient.name}" placeholder="Name" id="name">
+                <span class="text-danger" th:if="${#fields.hasErrors('name')}"
+                      th:errors="${patient.name}">Name Error</span>
+            </div>
+            <div class="col">
+                <label for="ssn">SSN</label>
+                <input class="form-control" type="text" th:field="${patient.ssn}" placeholder="SSN" id="ssn">
+                <span class="text-danger" th:if="${#fields.hasErrors('ssn')}"
+                      th:errors="${patient.ssn}">SSN Error</span>
+            </div>
+        </div>
+        <div class="row py-2">
+            <div class="col">
+                <label for="password">Password</label>
+                <input class="form-control" type="passwordt" th:field="${patient.password}" placeholder="Password" id="password">
+                <span class="text-danger" th:if="${#fields.hasErrors('password')}"
+                      th:errors="${patient.password}">Password Error</span>
+            </div>
+            <div class="col">
+                <label for="confirm-password">Confirm Password</label>
+                <input class="form-control" type="password" th:field="${patient.confirmPassword}" placeholder="Confirm Password" id="confirm-password">
+                <span class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}"
+                      th:errors="${patient.confirmPassword}">Password Error</span>
+            </div>
+        </div>
+        <div class="row py-2">
+            <div class="col">
+                <label for="gp">General Practitioner</label>
+                <select class="form-control"  type="text" th:field="${patient.generalPractitioner}" id="gp">
+                    <option value="">Select General Practitioner</option>
+                    <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.name}"
+                    ></option>
+                </select>
+                <span class="text-danger" th:if="${#fields.hasErrors('generalPractitioner')}"
+                      th:errors="${patient.generalPractitioner}">General Practitioner Error</span>
+                <!--                                        <input class="form-control" type="text" th:field="*{generalPractitioner}" placeholder="General Practitioner" id="gp">-->
+            </div>
+            <div class="col">
+                <label for="hasInsurance">Paid Insurance</label>
+                <select class="form-control"  type="text" th:field="${patient.hasInsurance}" id="hasInsurance">
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-info">Save</button>
+    </form>
+</patient-profile-details>
+
+</html>

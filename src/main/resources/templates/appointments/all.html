@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+    <header th:replace="fragments :: header"></header>
+    <main class="main">
+        <side-nav th:replace="fragments :: side-nav"></side-nav>
+        <div class="main-container">
+            <div class="row d-flex py-4">
+                <h1 class="font-weight-bold text-center" >Appointments List</h1>
+            </div>
+            <div class="section-white-container">
+                <div class="row d-flex justify-content-end">
+                    <a href="/appointments/create">Add Appointment</a>
+                </div>
+                <div class="row">
+                        <h3 th:unless="${appointments} and ${appointments.size()}">There are no registered Appointments!</h3>
+                        <table th:if="${appointments.size()>0}" class="table table-hover">
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Diagnosis</th>
+                            <th>Patient</th>
+                            <th>Physician</th>
+                            <th>Sick Leave Start Date</th>
+                            <th>Treatment</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                            <tr th:each="app : ${appointments}">
+                                <td th:text="${app.id}"></td>
+                                <td th:text="${app.date}"></td>
+                                <td><a th:href="@{'/diagnosis/'+${app.diagnosis.id}}" th:text="${app.diagnosis.name}" /></td>
+                                <td><a th:href="@{'/patients/'+${app.patient.id}}" th:text="${app.patient.name}" /></td>
+                                <td><a th:href="@{'/physicians/'+${app.physician.id}}" th:text="${app.physician.name}" /></td>
+                                <td>
+                                    <a
+                                            th:if="${app?.sickLeave?.getId() != null}"
+                                            th:href="@{'/sick-leaves/'+${app?.sickLeave?.getId()}}"
+                                            th:text="${app.sickLeave.startDate}">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a
+                                            th:if="${app?.treatment?.getId() != null}"
+                                            th:href="@{'/treatments/'+${app?.getTreatment()?.getId()}}"
+                                            th:text="${app.getTreatment().getName()}"></a>
+                                </td>
+                                <td><a class="btn btn-info" th:href="@{'/appointments/update/'+${app.id}}">Edit</a></td>
+                                <td><a class="btn btn-danger" th:href="@{'/appointments/delete/'+${app.id}}">Delete</a></td>
+                            </tr>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

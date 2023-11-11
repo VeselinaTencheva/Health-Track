@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments :: head"></head>
+    <body>
+        <header th:replace="fragments :: header"></header>
+        <main class="main">
+            <side-nav th:replace="fragments :: side-nav"></side-nav>
+            <div class="main-container">
+                <div class="row d-flex py-4">
+                    <h1 class="font-weight-bold text-center" >Edit Physician</h1>
+                </div>
+                <div class="section-white-container">
+                    <div class="row">
+                        <form class="w-100 p-2" action="#" th:action="@{/physicians/update/{id}(id=${id})}" th:object="${physician}" method="post">
+                            <div class="form-group">
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="name">Name</label>
+                                        <input class="form-control" type="text" th:field="${physician.name}" placeholder="Name" id="name">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="${physician.name}">Name Error</span>
+                                    </div>
+                                    <div class="col">
+                                        <label for="medical_uuid">Medical UUID</label>
+                                        <input class="form-control" type="text" th:field="${physician.medicalUUID}" placeholder="Medical UUID" id="medical_uuid">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('medicalUUID')}" th:errors="${physician.medicalUUID}">Medical UUID Error</span>
+                                    </div>
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col-6">
+                                        <label for="department">Department</label>
+                                        <select class="form-control"  type="text" th:field="${physician.departmentType}" id="department">
+                                            <option value="">Select Department</option>
+                                            <option th:each="department : ${departments}" th:value="${department}" th:text="${department}"
+                                            ></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <h3>General Practitioner Info: </h3>
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="practice_code">Practice Code</label>
+                                        <input class="form-control" type="text" th:field="${physician.practiceCode}" placeholder="Practice Code" id="practice_code">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('practiceCode')}" th:errors="${physician.practiceCode}">Practice Code Error</span>
+                                    </div>
+                                    <div class="col">
+                                        <label for="practice_address">Practice Address</label>
+                                        <input class="form-control" type="text" th:field="${physician.practiceAddress}" placeholder="Practice Address" id="practice_address">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('practiceAddress')}" th:errors="${physician.practiceAddress}">Practice Address Error</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-info">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

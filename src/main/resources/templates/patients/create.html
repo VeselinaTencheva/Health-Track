@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments :: head"></head>
+    <body>
+        <header th:replace="fragments :: header"></header>
+        <main class="main">
+            <side-nav th:replace="fragments :: side-nav"></side-nav>
+            <div class="main-container">
+                <div class="row d-flex py-4">
+                    <h1 class="font-weight-bold text-center" >Create Patient</h1>
+                </div>
+                <div class="section-white-container">
+                    <div class="row">
+                        <form class="w-100 p-2" action="#" th:action="@{/patients/create}" th:object="${patient}" method="post">
+                            <div class="form-group">
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="name">Name</label>
+                                        <input class="form-control" type="text" th:field="${patient.name}" placeholder="Name" id="name">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('name')}"
+                                              th:errors="${patient.name}">Name Error</span>
+                                    </div>
+                                    <div class="col">
+                                        <label for="ssn">SSN</label>
+                                        <input class="form-control" type="text" th:field="${patient.ssn}" placeholder="SSN" id="ssn">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('ssn')}"
+                                              th:errors="${patient.ssn}">SSN Error</span>
+                                    </div>
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="gp">General Practitioner</label>
+                                        <select class="form-control"  type="text" th:field="${patient.generalPractitioner}" id="gp">
+                                            <option value="">Select General Practitioner</option>
+                                            <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.name}"
+                                            ></option>
+                                        </select>
+                                        <span class="text-danger" th:if="${#fields.hasErrors('generalPractitioner')}"
+                                              th:errors="${patient.generalPractitioner}">General Practitioner Error</span>
+<!--                                        <input class="form-control" type="text" th:field="*{generalPractitioner}" placeholder="General Practitioner" id="gp">-->
+                                    </div>
+                                    <div class="col">
+                                        <label for="hasInsurance">Paid Insurance</label>
+                                        <select class="form-control"  type="text" th:field="${patient.hasInsurance}" id="hasInsurance">
+                                            <option value="true">True</option>
+                                            <option value="false">False</option>
+                                        </select>
+<!--                                        <input type="checkbox" th:name="hasInsurance" placeholder="Paid Insurance"-->
+<!--                                               th:checked="${true}"-->
+<!--                                               id="hasInsurance">-->
+                                        <!--                                        <input class="form-control" type="text" th:field="${patient.hasInsurance}" placeholder="Paid Insurance" id="hasInsurance">-->
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-info">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments :: head"></head>
+    <body>
+        <header th:replace="fragments :: header"></header>
+        <main class="main">
+            <side-nav th:replace="fragments :: side-nav"></side-nav>
+            <div class="main-container">
+                <div class="row d-flex py-4">
+                    <h1 class="font-weight-bold text-center" >Edit Appointment</h1>
+                </div>
+                <div class="section-white-container">
+                    <div class="row">
+                        <form class="w-100 p-2" action="#" th:action="@{/appointments/update/{id}(id=${id})}" th:object="${appointment}" method="post">
+                            <div class="form-group">
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="date">Date</label>
+                                        <input class="form-control" type="date" th:field="${appointment.date}"  id="date">
+                                    </div>
+                                    <div class="col">
+                                        <label for="physician">Physician</label>
+                                        <select class="form-control"  type="text" th:field="*{physician}" id="physician">
+                                            <option value="">Select Physician</option>
+                                            <option th:each="p : ${physicians}" th:value="${p.id}" th:text="${p.name}"
+                                            ></option>
+                                        </select>
+                                        <!--                                        <input class="form-control" type="text" th:field="*{physician}" placeholder="Physician" id="physician">-->
+                                    </div>
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="diagnosis">Diagnose</label>
+                                        <select class="form-control"  type="text" th:field="*{diagnosis}" id="diagnosis">
+                                            <option value="">Select Diagnose</option>
+                                            <option th:each="d : ${diagnosis}" th:value="${d.id}" th:text="${d.name}"
+                                            ></option>
+                                        </select>
+<!--                                        <input class="form-control" type="text" th:field="*{diagnosis}" placeholder="Diagnosis" id="diagnosis">-->
+                                    </div>
+                                    <div class="col">
+                                        <label for="patient">Patient</label>
+                                        <select class="form-control"  type="text" th:field="*{patient}" id="patient">
+                                            <option value="">Select Patient</option>
+                                            <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.name}"
+                                            ></option>
+                                        </select>
+<!--                                        <input class="form-control" type="text" th:field="*{patient}" placeholder="Patient" id="patient">-->
+                                    </div>
+                                </div>
+                                <h3>Sick Leave Info: </h3>
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="sick-leave-start-date">Sick Leave Date</label>
+                                        <input class="form-control" type="date" th:field="*{sickLeaveStartDate}" placeholder="Sick Leave Start Date" id="sick-leave-start-date">
+                                    </div>
+                                    <div class="col">
+                                        <label for="sick-leave-duration">Sick Leave Days Duration</label>
+                                        <input class="form-control" type="number" th:field="*{sickLeaveDuration}" placeholder="Sick Leave Days Duration" id="sick-leave-duration">
+                                    </div>
+                                </div>
+                            </div>
+                            <h3>Treatment Info: </h3>
+                            <div class="row py-2">
+                                <div class="col">
+                                    <label for="treatment-name">Treatment Name</label>
+                                    <input class="form-control" type="text" th:field="*{treatmentName}" placeholder="Treatment Name" id="treatment-name">
+                                </div>
+                                <div class="col">
+                                    <label for="treatment-description">Treatment Description</label>
+                                    <input class="form-control" type="text" th:field="*{treatmentDescription}" placeholder="Treatment Description" id="treatment-description">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-info">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

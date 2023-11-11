@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<main class="main">
+    <side-nav th:replace="fragments :: side-nav"></side-nav>
+    <div class="main-container">
+        <div class="row d-flex py-4">
+            <h1 class="font-weight-bold text-center" >View Appointment</h1>
+        </div>
+        <div class="section-white-container">
+            <div class="row">
+                <form class="w-100 p-2">
+                    <div class="form-group">
+                        <div class="row py-2">
+                            <div class="col">
+                                <label for="date">Date</label>
+                                <input readonly class="form-control" type="date" th:field="${appointment.date}"  id="date">
+                            </div>
+                            <div class="col">
+                                <label for="physician">Physician</label>
+                                <select disabled class="form-control"  type="text" th:field="*{appointment.physician}" id="physician">
+                                    <option th:value="${appointment.physician.id}" th:text="${appointment.physician.name}"></option>
+                                </select>
+                                <!--                                        <input class="form-control" type="text" th:field="*{physician}" placeholder="Physician" id="physician">-->
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col">
+                                <label for="diagnosis">Diagnose</label>
+                                <select disabled class="form-control"  type="text" th:field="*{appointment.diagnosis}" id="diagnosis">
+                                    <option th:value="${appointment.diagnosis.id}" th:text="${appointment.diagnosis.name}"
+                                    ></option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="patient">Patient</label>
+                                <select disabled class="form-control"  type="text" th:field="*{appointment.patient}" id="patient">
+                                    <option th:value="${appointment.patient.id}" th:text="${appointment.patient.name}"
+                                    ></option>
+                                </select>
+                            </div>
+                        </div>
+                        <h3>Sick Leave Info: </h3>
+                        <div class="row py-2">
+                            <div class="col">
+                                <label for="sick-leave-start-date">Sick Leave Date</label>
+                                <input readonly class="form-control" type="date" th:field="*{appointment.sickLeaveStartDate}" placeholder="Sick Leave Start Date" id="sick-leave-start-date">
+                            </div>
+                            <div class="col">
+                                <label for="sick-leave-duration">Sick Leave Days Duration</label>
+                                <input readonly class="form-control" type="number" th:field="*{appointment.sickLeaveDuration}" placeholder="Sick Leave Days Duration" id="sick-leave-duration">
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Treatment Info: </h3>
+                    <div class="row py-2">
+                        <div class="col">
+                            <label for="treatment-name">Treatment Name</label>
+                            <input readonly class="form-control" type="text" th:field="*{appointment.treatmentName}" placeholder="Treatment Name" id="treatment-name">
+                        </div>
+                        <div class="col">
+                            <label for="treatment-description">Treatment Description</label>
+                            <input readonly class="form-control" type="text" th:field="*{appointment.treatmentDescription}" placeholder="Treatment Description" id="treatment-description">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

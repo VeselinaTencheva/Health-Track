@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+    <header th:replace="fragments :: header"></header>
+    <main class="main">
+        <side-nav th:replace="fragments :: side-nav"></side-nav>
+        <div class="main-container">
+            <div class="row d-flex py-4">
+                <h1 class="font-weight-bold text-center" >Patients List</h1>
+            </div>
+            <div class="section-white-container">
+                <div class="row d-flex justify-content-end">
+                    <a href="/patients/create">Add Patient</a>
+                </div>
+                <div class="row">
+                    <h3 th:unless="${patients} and ${patients.size()}">There are no registered patients!</h3>
+                    <table th:if="${patients.size()>0}" class="table table-hover">
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>SSN</th>
+                        <th>Valid Insurance</th>
+                        <th>GP</th>
+                        <th>Diagnoses</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                        <tr th:each="patient : ${patients}">
+                            <td th:text="${patient.id}"></td>
+                            <td th:text="${patient.name}"></td>
+                            <td th:text="${patient.ssn}"></td>
+                            <td th:text="${patient.hasInsurance}"></td>
+                            <td><a
+                                    th:if="${patient?.generalPractitioner?.getId() != null}"
+                                    th:href="@{'/physicians/'+${patient.generalPractitioner.id}}"
+                                    th:text="${patient.generalPractitioner.name}" /></td>
+                            <td><a th:href="@{'/patients/'+${patient.id} + '/diagnoses'}">Diagnoses</a></td>
+                            <td><a class="btn btn-info" th:href="@{'/patients/edit-patient/'+${patient.id}}">Edit</a></td>
+                            <td><a class="btn btn-danger" th:href="@{'/patients/delete/'+${patient.id}}">Delete</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

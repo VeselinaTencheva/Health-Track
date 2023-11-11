@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<main class="main">
+    <side-nav th:replace="fragments :: side-nav"></side-nav>
+    <div class="main-container">
+        <div class="row d-flex py-4">
+            <h1 class="font-weight-bold text-center" >View Diagnosis</h1>
+        </div>
+        <div class="section-white-container">
+            <div class="row">
+                <form class="w-100 p-2">
+                    <div class="form-group">
+                        <div class="row py-2">
+                            <div class="col-6">
+                                <label for="name">Name</label>
+                                <input readonly class="form-control" type="text" th:field="${diagnose.name}" placeholder="Name" id="name">
+                            </div>
+                            <div class="col">
+                                <label for="description">Description</label>
+                                <input readonly class="form-control" type="text" th:field="${diagnose.description}" placeholder="Description" id="description">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

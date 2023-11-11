@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments :: head"></head>
+    <body>
+        <header th:replace="fragments :: header"></header>
+        <main class="main">
+            <side-nav th:replace="fragments :: side-nav"></side-nav>
+            <div class="main-container">
+                <div class="row d-flex py-4">
+                    <h1 class="font-weight-bold text-center" >Diagnoses List</h1>
+                </div>
+                <div class="section-white-container">
+                    <div class="row d-flex justify-content-end">
+                        <a href="/diagnosis/create">Add Diagnosis</a>
+                    </div>
+                    <div class="row">
+                        <h3 th:unless="${diagnoses} and ${diagnoses.size()}">There are no registered Diagnoses!</h3>
+                        <table th:if="${diagnoses.size()>0}" class="table table-hover">
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Patients Count</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                            <tr th:each="d : ${diagnoses}">
+                                <td th:text="${d.id}"></td>
+                                <td th:text="${d.name}"></td>
+                                <td th:text="${d.description}"></td>
+                                <td th:text="${d.patientsCount}"></td>
+                                <td><a class="btn btn-info" th:href="@{'/diagnosis/update/'+${d.id}}">Edit</a></td>
+                                <td><a class="btn btn-danger" th:href="@{'/diagnosis/delete/'+${d.id}}">Delete</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

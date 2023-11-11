@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<main>
+    <div class="row">
+        <div class="col-3">
+            <side-nav th:replace="fragments :: side-nav"></side-nav>
+        </div>
+        <div class="col-9 d-flex flex-column justify-content-center w-100" style="overflow: hidden">
+<!--            <div class="d-flex">-->
+                <div class="row py-4">
+                    <h1 class="font-weight-bold text-center" >General Practitioners List</h1>
+                    <a href="/GPs/create">Add General Practitioner</a>
+                </div>
+                <div class="row section-white-container">
+                    <h3 th:unless="${GPs} and ${GPs.size()}">There are no registered General Practitioners!</h3>
+                    <table th:if="${GPs.size()>0}" class="table table-hover">
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Medical UUID</th>
+                        <th>Department</th>
+                        <th>Practice Code</th>
+                        <th>Practice Address</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                        <tr th:each="gp : ${GPs}">
+                            <td th:text="${gp.id}"></td>
+                            <td th:text="${gp.name}"></td>
+                            <td th:text="${gp.medicalUUID}"></td>
+                            <td th:text="${gp.departmentType}"></td>
+                            <td th:text="${gp.practiceCode}"></td>
+                            <td th:text="${gp.practiceAddress}"></td>
+                            <td><a class="btn btn-info" th:href="@{'/GPs/update/'+${gp.id}}">Edit</a></td>
+                            <td><a class="btn btn-danger" th:href="@{'/GPs/delete/'+${gp.id}}">Delete</a></td>
+                        </tr>
+                    </table>
+                </div>
+<!--            </div>-->
+
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

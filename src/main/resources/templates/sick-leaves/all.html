@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments :: head"></head>
+    <body>
+        <header th:replace="fragments :: header"></header>
+        <main class="main">
+            <side-nav th:replace="fragments :: side-nav"></side-nav>
+            <div class="main-container">
+                <div class="row d-flex py-4">
+                    <h1 class="font-weight-bold text-center" >Sick Leaves List</h1>
+                </div>
+                <div class="section-white-container">
+                    <div class="row d-flex justify-content-end">
+                        <a href="/sick-leaves/create">Add Sick Leave</a>
+                    </div>
+                    <div class="row">
+                            <h3 th:unless="${sickLeaves} and ${sickLeaves.size()}">There are no registered Sick Leaves!</h3>
+                            <table th:if="${sickLeaves.size()>0}" class="table table-hover">
+                                <th>ID</th>
+                                <th>Patient</th>
+                                <th>Physician</th>
+                                <th>Start Date</th>
+                                <th>Duration</th>
+                                <th>Appointment</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                                <tr th:each="sl : ${sickLeaves}">
+                                    <td th:text="${sl.id}"></td>
+                                    <td><a th:href="@{'/patients/'+${sl.patient.id}}" th:text="${sl.patient.name}" /></td>
+                                    <td><a th:href="@{'/physicians/'+${sl.physician.id}}" th:text="${sl.physician.name}" /></td>
+                                    <td th:text="${sl.startDate}"></td>
+                                    <td th:text="${sl.Duration}"></td>
+                                    <td><a th:href="@{'/appointments/'+${sl.appointment.id}}" th:text="${sl.appointment.id}" /></td>
+                                    <td><a class="btn btn-info" th:href="@{'/sick-leaves/update/'+${sl.id}}">Edit</a></td>
+                                    <td><a class="btn btn-danger" th:href="@{'/sick-leaves/delete/'+${sl.id}}">Delete</a></td>
+                                </tr>
+                            </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

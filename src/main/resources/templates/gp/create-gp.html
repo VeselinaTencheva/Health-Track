@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body>
+<header th:replace="fragments :: header"></header>
+<main>
+    <div class="row">
+        <div class="col-3">
+            <side-nav th:replace="fragments :: side-nav"></side-nav>
+        </div>
+        <div class="col-9 d-flex flex-column justify-content-center w-100">
+            <div class="row py-4">
+                <h1 class="font-weight-bold text-center" >Register General Practitioner</h1>
+            </div>
+            <div class="row section-white-container">
+                <form class="w-100 p-2" action="#" th:action="@{/GPs/create}" th:object="${gp}" method="post">
+                    <div class="form-group">
+                        <div class="row py-2">
+                            <div class="col">
+                                <label for="name">Name</label>
+                                <input class="form-control" type="text" th:field="*{name}" placeholder="Name" id="name">
+                            </div>
+                            <div class="col">
+                                <label for="medical_uuid">Medical UUID</label>
+                                <input class="form-control" type="text" th:field="*{medicalUUID}" placeholder="Medical UUID" id="medical_uuid">
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col">
+                                <label for="department">Department</label>
+                                <select class="form-control"  type="text" th:field="*{departmentType}" id="department">
+                                    <option th:each="department : ${departments}" th:value="${department}" th:text="${department}"
+                                    ></option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="practice_code">Practice Code</label>
+                                <input class="form-control" type="text" th:field="*{practiceCode}" placeholder="Practice Code" id="practice_code">
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col">
+                                <label for="practice_address">Practice Address</label>
+                                <input class="form-control" type="text" th:field="*{practiceAddress}" placeholder="Practice Address" id="practice_address">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments :: footer"></footer>
+</body>
+</html>

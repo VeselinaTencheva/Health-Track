@@ -1,0 +1,137 @@
+body {
+    font-family: 'AvenirNextLTPro-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+    background: whitesmoke ;
+    height: 100vh;
+    /*top: 0;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+}
+
+main {
+    /*height: 100%;*/
+    position: absolute;
+    top: 87px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+}
+.emr-image {
+    background-image: url(../images/emr-background.jpg);
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+
+}
+
+.section-white-container {
+    width: 100%;
+    border-radius: 5px;
+    background: #ffffff;
+    padding: 30px;
+}
+
+
+.sidenav {
+    /*height: 100%; !* Full-height: remove this if you want "auto" height *!*/
+    /*position: fixed; !* Fixed Sidebar (stay in place on scroll) *!*/
+    /*z-index: 1; !* Stay on top *!*/
+    /*top: 88px; !* Stay at the top, under header*!*/
+    /*left: 0;*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*width: 300px;*/
+    background-color: #0c5460 !important;
+    opacity: 85%;
+    /*overflow-x: hidden; !* Disable horizontal scroll *!*/
+}
+
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+    padding: 20px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 20px 15px 7px 30px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #f0ad4e;
+}
+
+/* Style page content */
+/*.main {*/
+/*    margin-left: 160px; !* Same as the width of the sidebar *!*/
+/*    padding: 0px 10px;*/
+/*}*/
+
+.center-text{
+    text-align: center;
+}
+
+.btn {
+    color: #0c5460;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.forgot-password{
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+a {
+    color: #ffc107;
+}
+
+a:hover{
+    color: #ffc107;
+    opacity: 75%;
+}
+
+.underline{
+    text-decoration: underline;
+}
+
+.outline-none {
+    outline: none;
+}
+
+.background-primary {
+    background-color: #007BFF;
+}
+
+.background-secondary {
+    background-color: #28A745;
+}
+
+.backround-accent {
+    background-color: #FFC107
+}
+
+.primary-color {
+    color: #007BFF;
+}
+
+.secondary-color {
+    color: #28A745;
+}
+
+.accent-color {
+    color: #FFC107
+}

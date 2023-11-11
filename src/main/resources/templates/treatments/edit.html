@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments :: head"></head>
+    <body>
+        <header th:replace="fragments :: header"></header>
+        <main class="main">
+            <side-nav th:replace="fragments :: side-nav"></side-nav>
+            <div class="main-container">
+                <div class="row d-flex py-4">
+                    <h1 class="font-weight-bold text-center" >Edit Treatment</h1>
+                </div>
+                <div class="section-white-container">
+                    <div class="row">
+                        <form class="w-100 p-2" action="#" th:action="@{/treatments/update/{id}(id=${id})}" th:object="${treatment}" method="post">
+                            <div class="form-group">
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="name">Name</label>
+                                        <input class="form-control" type="text" th:field="${treatment.name}" placeholder="Name" id="name">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('name')}"
+                                              th:errors="${treatment.name}">Name Error</span>
+                                    </div>
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <label for="description">Description</label>
+                                        <input class="form-control" type="text" th:field="${treatment.description}" placeholder="Description" id="description">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('description')}"
+                                              th:errors="${treatment.description}">Description Error</span>
+                                    </div>
+                                </div>
+                            <button type="submit" class="btn btn-info">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

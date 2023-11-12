@@ -9,7 +9,7 @@ public interface SickLeaveService {
 
     SickLeaveDto findById(Long id);
 
-    SickLeaveDto create(SickLeaveDto sickLeave);
+    SickLeaveDto create(CreateSickLeaveDto sickLeave);
 
     SickLeaveDto update(Long id, UpdateSickLeaveDto sickLeave);
 

@@ -36,7 +36,7 @@ public class SickLeaveServiceImpl implements SickLeaveService {
     }
 
     @Override
-    public SickLeaveDto create(SickLeaveDto sickLeave) {
+    public SickLeaveDto create(CreateSickLeaveDto sickLeave) {
         return convertToSickLeaveDto(
                 this.sickLeaveRepository.save(this.modelMapper.map(sickLeave, SickLeaveEntity.class)));
     }

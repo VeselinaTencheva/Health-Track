@@ -16,23 +16,37 @@
                     <div class="row">
                             <h3 th:unless="${physicians} and ${physicians.size()}">There are no registered physicians!</h3>
                             <table th:if="${physicians.size()>0}" class="table table-hover">
-                                <th>ID</th>
-                                <th>Name</th>
+                                <th>Full Name</th>
+                                <th>Username/Email</th>
                                 <th>Medical UUID</th>
-                                <th>Department</th>
+                                <th>SSN</th>
+                                <th>Birth Date</th>
+                                <th>Gender</th>
+                                <!-- <th>Department</th> -->
                                 <th>Is GP</th>
                                 <th>Patients Count</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th>Actions</th>
                                 <tr th:each="ph : ${physicians}">
-                                    <td th:text="${ph.id}"></td>
-                                    <td th:text="${ph.name}"></td>
-                                    <td th:text="${ph.medicalUUID}"></td>
-                                    <td th:text="${ph.departmentType}"></td>
+                                    <td th:text="${ph.firstName + ' ' + ph.lastName}"></td>
+                                    <td th:text="${ph.username}"></td>
+                                    <td th:text="${ph.medicalLicenseNumber}"></td>
+                                    <td th:text="${ph.ssn}"></td>
+                                    <td th:text="${ph.birthDate}"></td>
+                                    <td th:text="${ph.gender}"></td>
+                                    <!-- <td th:text="${ph.departmentType}"></td> TODO fix this to use specialty -->
                                     <td th:text="${ph.isGP}"></td>
                                     <td th:text="${ph.patientsCount}"></td>
-                                    <td><a class="btn btn-info" th:href="@{'/physicians/update/'+${ph.id}}">Edit</a></td>
-                                    <td><a class="btn btn-danger" th:href="@{'/physicians/delete/'+${ph.id}}">Delete</a></td>
+                                    <td>
+                                        <!-- Edit button with edit icon -->
+                                        <a th:href="@{'/physicians/update/'+${ph.id}}">
+                                            <i class="fas fa-edit" style="font-weight: 400;"></i>
+                                        </a>
+                                        
+                                        <!-- Delete button with delete icon -->
+                                        <a th:href="@{'/physicians/delete/'+${ph.id}}">
+                                            <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             </table>
                         </div>

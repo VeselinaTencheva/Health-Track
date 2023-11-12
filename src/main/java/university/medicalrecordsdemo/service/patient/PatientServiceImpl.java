@@ -1,9 +1,12 @@
 package university.medicalrecordsdemo.service.patient;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -11,7 +14,10 @@ import university.medicalrecordsdemo.dto.patient.*;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
 import university.medicalrecordsdemo.model.entity.PhysicianEntity;
+import university.medicalrecordsdemo.model.entity.RoleEntity;
+import university.medicalrecordsdemo.model.entity.RoleType;
 import university.medicalrecordsdemo.repository.PatientRepository;
+import university.medicalrecordsdemo.repository.RoleRepository;
 import university.medicalrecordsdemo.service.physician.PhysicianService;
 
 @AllArgsConstructor
@@ -21,6 +27,9 @@ public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
     private final PhysicianService physicianService;
     private final ModelMapper modelMapper;
+    private final RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder encoder;
 
     // private final DiagnosisService diagnosisService;
     // private final AppointmentService appointmentService;
@@ -52,11 +61,22 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDto create(PatientDto patient) {
-        final PatientEntity patientEntity = modelMapper.map(patient, PatientEntity.class);
-        PhysicianEntity physicianEntity = modelMapper.map(patient.getGeneralPractitioner(), PhysicianEntity.class);
+    public PatientDto create(PatientDto patientDto) {
+        // Map PatientDto to PatientEntity
+        PatientEntity patientEntity = modelMapper.map(patientDto, PatientEntity.class);
+
+        // Map General Practitioner from DTO and set it to the PatientEntity
+        PhysicianEntity physicianEntity = modelMapper.map(patientDto.getGeneralPractitioner(), PhysicianEntity.class);
         patientEntity.setPhysician(physicianEntity);
-        return convertToPatientDto(this.patientRepository.save(patientEntity));
+
+        // Set the patient role
+        RoleEntity patientRole = roleRepository.findByAuthority(RoleType.ROLE_PATIENT);
+        patientEntity.setRoles(Collections.singleton(patientRole));
+        physicianEntity.setPassword(encoder.encode(patientDto.getPassword()));
+
+        // Save the patient entity and map it back to DTO
+        PatientEntity savedPatientEntity = patientRepository.save(patientEntity);
+        return modelMapper.map(savedPatientEntity, PatientDto.class);
     }
 
     @Override

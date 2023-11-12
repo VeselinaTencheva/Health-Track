@@ -2,11 +2,12 @@ package university.medicalrecordsdemo.service.physician;
 
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
-import university.medicalrecordsdemo.dto.physician.UpdatePhysicianDto;
+import university.medicalrecordsdemo.model.entity.PatientEntity;
 import university.medicalrecordsdemo.model.entity.PhysicianEntity;
 import university.medicalrecordsdemo.model.entity.RoleEntity;
 import university.medicalrecordsdemo.model.entity.RoleType;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
+import university.medicalrecordsdemo.repository.PatientRepository;
 import university.medicalrecordsdemo.repository.PhysicianRepository;
 import university.medicalrecordsdemo.repository.RoleRepository;
 
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,7 @@ public class PhysicianServiceImpl implements PhysicianService {
 
     private final ModelMapper modelMapper;
     private final PhysicianRepository physicianRepository;
+    private final PatientRepository patientRepository;
     private final RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder encoder;
@@ -69,42 +72,27 @@ public class PhysicianServiceImpl implements PhysicianService {
     }
 
     @Override
-    public PhysicianDto update(Long id, UpdatePhysicianDto updatePhysicianDto) {
-        PhysicianEntity physician = modelMapper.map(updatePhysicianDto, PhysicianEntity.class);
+    public PhysicianDto update(Long id, PhysicianDto physicianDto) {
+        PhysicianEntity prevousEntity = modelMapper.map(this.findById(id), PhysicianEntity.class);
+        physicianDto.setPassword(prevousEntity.getPassword());
+        PhysicianEntity physician = convertToPhysicianEntity(physicianDto);
         physician.setId(id);
-        return convertToPhysicianDTO(
-                physicianRepository.save(modelMapper.map(physician, PhysicianEntity.class)));
-        // GeneralPractitioner prevGP;
-        // try {
-        // prevGP = generalPractitionerService.findById(id);
-        // } catch (Exception e) {
-        // prevGP = null;
-        // }
-
-        // if (prevGP == null && physician.getPracticeCode().isEmpty() &&
-        // physician.getPracticeCode().isBlank()) {
-        // return
-        // convertToPhysicianDTO(this.physicianRepository.save(modelMapper.map(physician,
-        // Physician.class)));
-        // } else if (prevGP == null && (!physician.getPracticeCode().isBlank())) {
-        // physicianRepository.delete(modelMapper.map(physician, Physician.class));
-        // return convertToPhysicianDTO(
-        // generalPractitionerRepository
-        // .save(modelMapper.map(physician, GeneralPractitioner.class)));
-        // } else if (prevGP != null && physician.getPracticeCode().isBlank()) {
-        // generalPractitionerRepository.deleteById(id);
-        // return
-        // convertToPhysicianDTO(physicianRepository.save(modelMapper.map(physician,
-        // Physician.class)));
-        // } else {
-        // return convertToPhysicianDTO(
-        // generalPractitionerRepository.save(modelMapper.map(physician,
-        // GeneralPractitioner.class)));
-        // }
+        return convertToPhysicianDTO(physicianRepository.save(physician));
     }
 
     @Override
     public void delete(Long id) {
+        PhysicianEntity physicianEntity = modelMapper.map(this.findById(id), PhysicianEntity.class);
+        // Fetch patients associated with the physician
+        List<PatientEntity> patients = patientRepository.findByPhysician(physicianEntity);
+
+        // Set physician to null for each patient and save/update them
+        patients.forEach(patient -> {
+            patient.setPhysician(null);
+            patientRepository.save(patient); // or patientRepository.update(patient) if you have a custom update method
+        });
+
+        // Delete the physician
         this.physicianRepository.deleteById(id);
     }
 

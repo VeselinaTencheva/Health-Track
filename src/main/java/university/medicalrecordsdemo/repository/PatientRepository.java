@@ -11,6 +11,6 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long> {
         // List<PatientEntity> findDistinctByAppointments(List<AppointmentEntity>
         // appointments);
 
-        List<PatientEntity> findDistinctByPhysician(PhysicianEntity physician);
+        List<PatientEntity> findByPhysician(PhysicianEntity physician);
 
 }

@@ -11,7 +11,7 @@ public interface PhysicianService {
 
     PhysicianDto create(PhysicianDto physician);
 
-    PhysicianDto update(Long id, UpdatePhysicianDto physician);
+    PhysicianDto update(Long id, PhysicianDto physician);
 
     void delete(Long id);
 }

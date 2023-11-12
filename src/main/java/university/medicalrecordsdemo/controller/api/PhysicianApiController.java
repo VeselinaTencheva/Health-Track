@@ -29,7 +29,7 @@ public class PhysicianApiController {
     }
 
     @PutMapping(value = "/api/Physician/{id}")
-    public PhysicianDto updatePhysician(@PathVariable("id") long id, @RequestBody UpdatePhysicianDto Physician) {
+    public PhysicianDto updatePhysician(@PathVariable("id") long id, @RequestBody PhysicianDto Physician) {
         return physicianService.update(id, Physician);
     }
 

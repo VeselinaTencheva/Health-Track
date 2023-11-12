@@ -31,7 +31,6 @@ import university.medicalrecordsdemo.model.binding.physicians.UpdatePhysicianVie
 import university.medicalrecordsdemo.model.entity.DepartmentType;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.service.physician.PhysicianService;
-import university.medicalrecordsdemo.service.user.UserService;
 
 @Controller
 @AllArgsConstructor
@@ -40,9 +39,6 @@ public class PhysicianController {
 
     private PhysicianService physicianService;
 
-    private UserService usersService;
-
-    // private GeneralPractitionerService generalPractitionerService;
     private ModelMapper modelMapper;
 
     @GetMapping

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="fragments :: head"></head>
+    <head th:replace="~{fragments :: head}"></head>
     <body>
-        <header th:replace="fragments :: header"></header>
+        <header th:replace="~{fragments :: header}"></header>
         <main class="main">
-            <side-nav th:replace="fragments :: side-nav"></side-nav>
+            <side-nav th:replace="~{fragments :: side-nav}"></side-nav>
             <div class="main-container">
                 <div class="row d-flex py-4">
                     <h1 class="font-weight-bold text-center" >Edit Appointment</h1>

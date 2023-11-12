@@ -4,18 +4,25 @@ import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
+import university.medicalrecordsdemo.model.binding.BaseViewModel;
 import university.medicalrecordsdemo.model.entity.RoleEntity;
 
 @Getter
 @Setter
-public class UserViewModel {
+public class UserViewModel extends BaseViewModel {
     private String firstName;
+
+    private String ssn;
 
     private String lastName;
 
     private String username;
 
     private String password;
+
+    private String birthDate;
+
+    private String gender;
 
     private String confirmPassword;
 

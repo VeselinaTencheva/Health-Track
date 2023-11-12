@@ -8,14 +8,18 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.patient.*;
+import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
+import university.medicalrecordsdemo.model.entity.PhysicianEntity;
 import university.medicalrecordsdemo.repository.PatientRepository;
+import university.medicalrecordsdemo.service.physician.PhysicianService;
 
 @AllArgsConstructor
 @Service
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
+    private final PhysicianService physicianService;
     private final ModelMapper modelMapper;
 
     // private final DiagnosisService diagnosisService;
@@ -49,12 +53,30 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientDto create(PatientDto patient) {
-        return convertToPatientDto(this.patientRepository.save(modelMapper.map(patient, PatientEntity.class)));
+        final PatientEntity patientEntity = modelMapper.map(patient, PatientEntity.class);
+        PhysicianEntity physicianEntity = modelMapper.map(patient.getGeneralPractitioner(), PhysicianEntity.class);
+        patientEntity.setPhysician(physicianEntity);
+        return convertToPatientDto(this.patientRepository.save(patientEntity));
     }
 
     @Override
     public PatientDto update(Long id, UpdatePatientDto updatePatientDTO) {
+        String generalPractitionerId = updatePatientDTO.getPhysicianId();
         PatientEntity patient = modelMapper.map(updatePatientDTO, PatientEntity.class);
+
+        Long physicianId = null;
+        if (generalPractitionerId != null && !generalPractitionerId.isEmpty()) {
+            physicianId = Long.valueOf(generalPractitionerId);
+        }
+
+        if (physicianId != null) {
+            PhysicianEntity physicianEntity = modelMapper.map(physicianService
+                    .findById(physicianId), PhysicianEntity.class);
+            patient.setPhysician(physicianEntity);
+        }
+
+        PatientEntity prevousEntity = modelMapper.map(this.findById(id), PatientEntity.class);
+        patient.setPassword(prevousEntity.getPassword());
         patient.setId(id);
         return convertToPatientDto(this.patientRepository.save(patient));
     }
@@ -65,6 +87,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     public PatientDto convertToPatientDto(PatientEntity patient) {
-        return modelMapper.map(patient, PatientDto.class);
+        final PatientDto patientDto = modelMapper.map(patient, PatientDto.class);
+        if (patient.getPhysician() != null) {
+            final PhysicianDto physicianDto = modelMapper.map(patient.getPhysician(), PhysicianDto.class);
+            patientDto.setGeneralPractitioner(physicianDto);
+        }
+        return patientDto;
     }
 }

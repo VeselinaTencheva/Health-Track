@@ -16,26 +16,38 @@
                 <div class="row">
                     <h3 th:unless="${patients} and ${patients.size()}">There are no registered patients!</h3>
                     <table th:if="${patients.size()>0}" class="table table-hover">
-                        <th>ID</th>
-                        <th>Name</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Username</th>
+                        <th>Gender</th>
                         <th>SSN</th>
                         <th>Valid Insurance</th>
                         <th>GP</th>
                         <th>Diagnoses</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th>Actions</th>
                         <tr th:each="patient : ${patients}">
-                            <td th:text="${patient.id}"></td>
-                            <td th:text="${patient.name}"></td>
+                            <td th:text="${patient.firstName}"></td>
+                            <td th:text="${patient.lastName}"></td>
+                            <td th:text="${patient.username}"></td>
+                            <td th:text="${patient.gender}"></td>
                             <td th:text="${patient.ssn}"></td>
                             <td th:text="${patient.hasInsurance}"></td>
                             <td><a
                                     th:if="${patient?.generalPractitioner?.getId() != null}"
                                     th:href="@{'/physicians/'+${patient.generalPractitioner.id}}"
-                                    th:text="${patient.generalPractitioner.name}" /></td>
+                                    th:text="${patient.generalPractitioner.firstName + ' ' + patient.generalPractitioner.lastName}"></td>
                             <td><a th:href="@{'/patients/'+${patient.id} + '/diagnoses'}">Diagnoses</a></td>
-                            <td><a class="btn btn-info" th:href="@{'/patients/edit-patient/'+${patient.id}}">Edit</a></td>
-                            <td><a class="btn btn-danger" th:href="@{'/patients/delete/'+${patient.id}}">Delete</a></td>
+                            <td>
+                                <!-- Edit button with edit icon -->
+                                <a th:href="@{'/patients/edit-patient/'+${patient.id}}">
+                                    <i class="fas fa-edit" style="font-weight: 400;"></i>
+                                </a>
+                                
+                                <!-- Delete button with delete icon -->
+                                <a th:href="@{'/patients/delete/'+${patient.id}}">
+                                    <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
+                                </a>
+                            </td>
                         </tr>
                     </table>
                 </div>

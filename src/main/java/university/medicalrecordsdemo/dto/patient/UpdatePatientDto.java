@@ -10,4 +10,5 @@ import university.medicalrecordsdemo.dto.user.UpdateUserDto;
 @NoArgsConstructor
 public class UpdatePatientDto extends UpdateUserDto {
     private boolean hasInsurance;
+    private String physicianId;
 }

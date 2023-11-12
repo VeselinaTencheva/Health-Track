@@ -9,7 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UpdateUserDto {
     private String firstName;
+    private String ssn;
     private String lastName;
+    private String username;
     private String gender;
-
+    private String birthDate;
 }

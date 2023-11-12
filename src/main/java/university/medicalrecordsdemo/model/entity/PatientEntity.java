@@ -21,9 +21,6 @@ import java.util.Set;
 @Table(name = "patient")
 public class PatientEntity extends UserEntity {
 
-    @Column(name = "ssn", nullable = false, unique = true)
-    private String ssn;
-
     @Column(name = "has_insurance", nullable = false)
     private boolean hasInsurance;
 

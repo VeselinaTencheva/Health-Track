@@ -3,12 +3,18 @@ package university.medicalrecordsdemo.service.user;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import university.medicalrecordsdemo.dto.role.RoleDto;
+import university.medicalrecordsdemo.dto.user.UserDto;
+import university.medicalrecordsdemo.model.entity.RoleEntity;
+import university.medicalrecordsdemo.model.entity.RoleType;
 import university.medicalrecordsdemo.model.entity.UserEntity;
+import university.medicalrecordsdemo.repository.RoleRepository;
 import university.medicalrecordsdemo.repository.UserRepository;
 
 @Service
@@ -16,6 +22,8 @@ import university.medicalrecordsdemo.repository.UserRepository;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final ModelMapper modelMapper;
 
     // private RoleRepository roleRepo;
 
@@ -89,6 +97,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Set<UserDto> findAllByRole(RoleDto role) {
+        final RoleEntity roleEntity = modelMapper.map(role, RoleEntity.class);
+        return this.userRepository.findAllByRole(roleEntity).stream()
+                .map(this::convertToUserDTO)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<UserDto> findAllByRoleType(RoleType roleType) {
+        final RoleEntity roleEntity = roleRepository.findByAuthority(roleType);
+        return this.userRepository.findAllByRole(roleEntity).stream()
+                .map(this::convertToUserDTO)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public UserEntity findUserById(Long id) {
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("ID not found"));
@@ -106,5 +130,9 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(username);
         }
         return user;
+    }
+
+    private UserDto convertToUserDTO(UserEntity user) {
+        return modelMapper.map(user, UserDto.class);
     }
 }

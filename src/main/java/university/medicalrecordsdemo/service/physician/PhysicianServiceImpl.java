@@ -11,6 +11,8 @@ import university.medicalrecordsdemo.repository.PhysicianRepository;
 import university.medicalrecordsdemo.repository.RoleRepository;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -24,6 +26,8 @@ public class PhysicianServiceImpl implements PhysicianService {
     private final ModelMapper modelMapper;
     private final PhysicianRepository physicianRepository;
     private final RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
     public Set<PhysicianDto> findAll() {
@@ -126,6 +130,9 @@ public class PhysicianServiceImpl implements PhysicianService {
             RoleEntity roleEntity = roleRepository.findByAuthority(RoleType.ROLE_PHYSICIAN);
             roles.add(roleEntity);
         }
+
+        physicianEntity.setPassword(encoder.encode(physicianDto.getPassword())); // TODO investigate why it is not
+                                                                                 // encoding automatically
 
         physicianEntity.setRoles(roles);
         return physicianEntity;

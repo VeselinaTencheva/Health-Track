@@ -50,74 +50,84 @@ public class DbInit implements CommandLineRunner {
 
         @Override
         public void run(String... args) throws Exception {
-                if (userRepository.findAll().size() > 0) {
-                        this.userRepository.deleteAll();
-                }
-                if (roleRepository.findAll().size() > 0)
-                        this.roleRepository.deleteAll();
-                if (privilegeRepository.findAll().size() > 0)
-                        this.privilegeRepository.deleteAll();
-                //
-                PrivilegeEntity readPatient = createPrivilegeIfNotFound(PrivilegeType.READ_PATIENT);
-                PrivilegeEntity readPhysician = createPrivilegeIfNotFound(PrivilegeType.READ_PHYSICIAN);
-                // PrivilegeEntity readGeneralPractitioner
-                // = createPrivilegeIfNotFound("READ_GENERAL_PRACTITIONER");
-                PrivilegeEntity writePatient = createPrivilegeIfNotFound(PrivilegeType.WRITE_PATIENT);
-                PrivilegeEntity writePhysician = createPrivilegeIfNotFound(PrivilegeType.WRITE_PHYSICIAN);
+                // if (userRepository.findAll().size() > 0) {
+                // this.userRepository.deleteAll();
+                // }
+                // if (roleRepository.findAll().size() > 0)
+                // this.roleRepository.deleteAll();
+                // if (privilegeRepository.findAll().size() > 0)
+                // this.privilegeRepository.deleteAll();
+                // //
+                // PrivilegeEntity readPatient =
+                // createPrivilegeIfNotFound(PrivilegeType.READ_PATIENT);
+                // PrivilegeEntity readPhysician =
+                // createPrivilegeIfNotFound(PrivilegeType.READ_PHYSICIAN);
+                // // PrivilegeEntity readGeneralPractitioner
+                // // = createPrivilegeIfNotFound("READ_GENERAL_PRACTITIONER");
+                // PrivilegeEntity writePatient =
+                // createPrivilegeIfNotFound(PrivilegeType.WRITE_PATIENT);
+                // PrivilegeEntity writePhysician =
+                // createPrivilegeIfNotFound(PrivilegeType.WRITE_PHYSICIAN);
                 // PrivilegeEntity writeGeneralPractitioner
                 // = createPrivilegeIfNotFound("WRITE_GENERAL_PRACTITIONER");
-                PrivilegeEntity readDiagnosis = createPrivilegeIfNotFound(PrivilegeType.READ_DIAGNOSIS);
-                PrivilegeEntity writeDiagnosis = createPrivilegeIfNotFound(PrivilegeType.WRITE_DIAGNOSIS);
-                PrivilegeEntity readSickLeave = createPrivilegeIfNotFound(PrivilegeType.READ_SICK_LEAVE);
-                PrivilegeEntity writeSickLeave = createPrivilegeIfNotFound(PrivilegeType.WRITE_SICK_LEAVE);
-                PrivilegeEntity readVisitation = createPrivilegeIfNotFound(PrivilegeType.READ_VISITATION);
-                PrivilegeEntity writeVisitation = createPrivilegeIfNotFound(PrivilegeType.WRITE_VISITATION);
+                // PrivilegeEntity readDiagnosis =
+                // createPrivilegeIfNotFound(PrivilegeType.READ_DIAGNOSIS);
+                // PrivilegeEntity writeDiagnosis =
+                // createPrivilegeIfNotFound(PrivilegeType.WRITE_DIAGNOSIS);
+                // PrivilegeEntity readSickLeave =
+                // createPrivilegeIfNotFound(PrivilegeType.READ_SICK_LEAVE);
+                // PrivilegeEntity writeSickLeave =
+                // createPrivilegeIfNotFound(PrivilegeType.WRITE_SICK_LEAVE);
+                // PrivilegeEntity readVisitation =
+                // createPrivilegeIfNotFound(PrivilegeType.READ_VISITATION);
+                // PrivilegeEntity writeVisitation =
+                // createPrivilegeIfNotFound(PrivilegeType.WRITE_VISITATION);
 
-                Set<PrivilegeEntity> adminPrivileges = Arrays.asList(
-                                readPatient, readDiagnosis, readPhysician,
-                                readVisitation, readSickLeave, writePatient, writeDiagnosis,
-                                writePhysician, writeVisitation, writeSickLeave)
-                                .stream().collect(Collectors.toSet());
+                // Set<PrivilegeEntity> adminPrivileges = Arrays.asList(
+                // readPatient, readDiagnosis, readPhysician,
+                // readVisitation, readSickLeave, writePatient, writeDiagnosis,
+                // writePhysician, writeVisitation, writeSickLeave)
+                // .stream().collect(Collectors.toSet());
 
-                Set<PrivilegeEntity> patientPrivileges = Arrays.asList(
-                                readPatient, readPhysician, writePatient,
-                                readDiagnosis, readSickLeave, readVisitation)
-                                .stream().collect(Collectors.toSet());
+                // Set<PrivilegeEntity> patientPrivileges = Arrays.asList(
+                // readPatient, readPhysician, writePatient,
+                // readDiagnosis, readSickLeave, readVisitation)
+                // .stream().collect(Collectors.toSet());
 
-                Set<PrivilegeEntity> physicianPrivileges = Arrays.asList(
-                                readPatient, readDiagnosis, readPhysician,
-                                readVisitation, readSickLeave, writePhysician,
-                                writeDiagnosis, writeVisitation, writeSickLeave)
-                                .stream().collect(Collectors.toSet());
+                // Set<PrivilegeEntity> physicianPrivileges = Arrays.asList(
+                // readPatient, readDiagnosis, readPhysician,
+                // readVisitation, readSickLeave, writePhysician,
+                // writeDiagnosis, writeVisitation, writeSickLeave)
+                // .stream().collect(Collectors.toSet());
 
-                Set<PrivilegeEntity> generalPractitionerPrivileges = Arrays.asList(
-                                readPatient, readDiagnosis, readPhysician,
-                                readVisitation, readSickLeave,
-                                writeDiagnosis, writeVisitation, writeSickLeave, writePhysician)
-                                .stream().collect(Collectors.toSet());
+                // Set<PrivilegeEntity> generalPractitionerPrivileges = Arrays.asList(
+                // readPatient, readDiagnosis, readPhysician,
+                // readVisitation, readSickLeave,
+                // writeDiagnosis, writeVisitation, writeSickLeave, writePhysician)
+                // .stream().collect(Collectors.toSet());
 
-                createRoleIfNotFound(RoleType.ROLE_ADMIN, adminPrivileges);
-                createRoleIfNotFound(RoleType.ROLE_PATIENT, patientPrivileges);
-                createRoleIfNotFound(RoleType.ROLE_PHYSICIAN, physicianPrivileges);
-                createRoleIfNotFound(RoleType.ROLE_GENERAL_PRACTITIONER,
-                                generalPractitionerPrivileges);
+                // createRoleIfNotFound(RoleType.ROLE_ADMIN, adminPrivileges);
+                // createRoleIfNotFound(RoleType.ROLE_PATIENT, patientPrivileges);
+                // createRoleIfNotFound(RoleType.ROLE_PHYSICIAN, physicianPrivileges);
+                // createRoleIfNotFound(RoleType.ROLE_GENERAL_PRACTITIONER,
+                // generalPractitionerPrivileges);
 
-                RoleEntity adminRole = roleRepository.findByAuthority(RoleType.ROLE_ADMIN);
-                UserEntity user = new UserEntity();
+                // RoleEntity adminRole = roleRepository.findByAuthority(RoleType.ROLE_ADMIN);
+                // UserEntity user = new UserEntity();
 
-                user.setFirstName("Veselina");
-                user.setSsn("123-45-6789");
-                user.setLastName("Tencheva");
-                user.setGender("woman");
-                user.setBirthDate("08/09/1998");
-                user.setPassword(encoder.encode("vesi"));
-                user.setUsername("veselina");
-                user.setRoles(Arrays.asList(adminRole).stream().collect(Collectors.toSet()));
-                user.setEnabled(true);
-                user.setAccountNonExpired(true);
-                user.setAccountNonLocked(true);
-                user.setCredentialsNonExpired(true);
-                userRepository.save(user);
+                // user.setFirstName("Veselina");
+                // user.setSsn("123-45-6789");
+                // user.setLastName("Tencheva");
+                // user.setGender("woman");
+                // user.setBirthDate("08/09/1998");
+                // user.setPassword(encoder.encode("vesi"));
+                // user.setUsername("veselina");
+                // user.setRoles(Arrays.asList(adminRole).stream().collect(Collectors.toSet()));
+                // user.setEnabled(true);
+                // user.setAccountNonExpired(true);
+                // user.setAccountNonLocked(true);
+                // user.setCredentialsNonExpired(true);
+                // userRepository.save(user);
 
                 // do tuk
 

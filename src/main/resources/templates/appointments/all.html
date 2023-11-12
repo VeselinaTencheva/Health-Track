@@ -23,14 +23,13 @@
                             <th>Physician</th>
                             <th>Sick Leave Start Date</th>
                             <th>Treatment</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            <th>Actions</th>
                             <tr th:each="app : ${appointments}">
                                 <td th:text="${app.id}"></td>
                                 <td th:text="${app.date}"></td>
                                 <td><a th:href="@{'/diagnosis/'+${app.diagnosis.id}}" th:text="${app.diagnosis.name}" /></td>
-                                <td><a th:href="@{'/patients/'+${app.patient.id}}" th:text="${app.patient.name}" /></td>
-                                <td><a th:href="@{'/physicians/'+${app.physician.id}}" th:text="${app.physician.name}" /></td>
+                                <td><a th:href="@{'/patients/'+${app.patient.id}}"  th:text="${app.patient.firstName + ' ' + app.patient.lastName}" /></td>
+                                <td><a th:href="@{'/physicians/'+${app.physician.id}}" th:text="${app.physician.firstName + ' ' + app.physician.lastName}" /></td>
                                 <td>
                                     <a
                                             th:if="${app?.sickLeave?.getId() != null}"
@@ -44,8 +43,17 @@
                                             th:href="@{'/treatments/'+${app?.getTreatment()?.getId()}}"
                                             th:text="${app.getTreatment().getName()}"></a>
                                 </td>
-                                <td><a class="btn btn-info" th:href="@{'/appointments/update/'+${app.id}}">Edit</a></td>
-                                <td><a class="btn btn-danger" th:href="@{'/appointments/delete/'+${app.id}}">Delete</a></td>
+                                <td>
+                                    <!-- Edit button with edit icon -->
+                                    <a th:href="@{'/appointments/update/'+${app.id}}">
+                                        <i class="fas fa-edit" style="font-weight: 400;"></i>
+                                    </a>
+                                    
+                                    <!-- Delete button with delete icon -->
+                                    <a th:href="@{'/appointments/delete/'+${app.id}}">
+                                        <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
+                                    </a>
+                                </td>
                             </tr>
                         </table>
                 </div>

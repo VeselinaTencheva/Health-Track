@@ -23,12 +23,11 @@
                                 <th>Appointment</th>
                                 <th>Actions</th>
                                 <tr th:each="sl : ${sickLeaves}">
-                                    <td th:text="${sl.id}"></td>
-                                    <td><a th:href="@{'/patients/'+${sl.patient.id}}" th:text="${sl.patient.name}" /></td>
-                                    <td><a th:href="@{'/physicians/'+${sl.physician.id}}" th:text="${sl.physician.name}" /></td>
+                                    <td><a th:href="@{'/patients/'+${sl.patientId}}"  th:text="${sl.patientFirstName  + ' ' + sl.patientLastName}" /></td>
+                                    <td><a th:href="@{'/physicians/'+${sl.physicianId}}" th:text="${sl.physicianFirstName  + ' ' + sl.physicianLastName}" /></td>
                                     <td th:text="${sl.startDate}"></td>
                                     <td th:text="${sl.Duration}"></td>
-                                    <td><a th:href="@{'/appointments/'+${sl.appointment.id}}" th:text="${sl.appointment.id}" /></td>
+                                    <td><a th:href="@{'/appointments/'+${sl.appointmentId}}" th:text="${sl.appointmentId}" /></td>
                                     <td>
                                         <!-- Edit button with edit icon -->
                                         <a th:href="@{'/sick-leaves/update/'+${sl.id}}">

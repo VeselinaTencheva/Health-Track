@@ -24,7 +24,7 @@ public class TreatmentApiController {
     }
 
     @PostMapping(value = "/api/Treatment")
-    public TreatmentDto createTreatment(@RequestBody TreatmentDto Treatment) {
+    public TreatmentDto createTreatment(@RequestBody CreateTreatmentDto Treatment) {
         return treatmentService.create(Treatment);
     }
 

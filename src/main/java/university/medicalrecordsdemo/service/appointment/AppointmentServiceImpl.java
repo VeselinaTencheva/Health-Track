@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.appointment.AppointmentDto;
+import university.medicalrecordsdemo.dto.appointment.CreateAppointmentDto;
 import university.medicalrecordsdemo.dto.appointment.UpdateAppointmentDto;
 import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.model.entity.AppointmentEntity;
@@ -38,7 +39,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentDto create(AppointmentDto createAppointmentDto) {
+    public AppointmentDto create(CreateAppointmentDto createAppointmentDto) {
         return convertToAppointmentDto(
                 this.appointmentRepository.save(modelMapper.map(createAppointmentDto, AppointmentEntity.class)));
         // Appointment appointment = modelMapper.map(createAppointmentDto,

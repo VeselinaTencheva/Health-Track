@@ -30,7 +30,7 @@ public class AppointmentApiController {
     }
 
     @PostMapping(value = "/api/appointments")
-    public AppointmentDto createAppointment(@RequestBody AppointmentDto appointment) {
+    public AppointmentDto createAppointment(@RequestBody CreateAppointmentDto appointment) {
         return appointmentService.create(appointment);
     }
 

@@ -34,7 +34,7 @@
                                         <label for="patient">Patient</label>
                                         <select class="form-control"  type="text" th:field="${appointment.patient}" id="patient">
                                             <option value="">Select Patient</option>
-                                            <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.name}"></option>
+                                            <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.firstName + ' ' + patient.lastName}"></option>
                                         </select>
                                         <span class="text-danger" th:if="${#fields.hasErrors('patient')}"
                                               th:errors="${appointment.patient}">Patient Error</span>
@@ -44,7 +44,7 @@
                                         <label for="physician">Physician</label>
                                         <select class="form-control"  type="text" th:field="${appointment.physician}" id="physician">
                                             <option value="">Select Physician</option>
-                                            <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.name}"></option>
+                                            <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.firstName + ' ' + physician.lastName}"></option>
                                         </select>
                                         <span class="text-danger" th:if="${#fields.hasErrors('physician')}"
                                               th:errors="${appointment.physician}">Physician Error</span>

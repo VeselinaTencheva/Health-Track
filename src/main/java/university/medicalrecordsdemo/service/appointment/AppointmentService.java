@@ -10,7 +10,7 @@ public interface AppointmentService {
 
     AppointmentDto findById(Long id);
 
-    AppointmentDto create(AppointmentDto appointment);
+    AppointmentDto create(CreateAppointmentDto appointment);
 
     AppointmentDto update(Long id, UpdateAppointmentDto updateAppointmentDto);
 

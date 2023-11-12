@@ -24,7 +24,7 @@ public class SickLeaveApiController {
     }
 
     @PostMapping(value = "/api/SickLeave")
-    public SickLeaveDto createSickLeave(@RequestBody SickLeaveDto SickLeave) {
+    public SickLeaveDto createSickLeave(@RequestBody CreateSickLeaveDto SickLeave) {
         return sickLeaveService.create(SickLeave);
     }
 

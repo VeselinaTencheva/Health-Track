@@ -33,9 +33,9 @@
                             <td th:text="${patient.ssn}"></td>
                             <td th:text="${patient.hasInsurance}"></td>
                             <td><a
-                                    th:if="${patient?.generalPractitioner?.getId() != null}"
-                                    th:href="@{'/physicians/'+${patient.generalPractitioner.id}}"
-                                    th:text="${patient.generalPractitioner.firstName + ' ' + patient.generalPractitioner.lastName}"></td>
+                                    th:if="${patient?.physicianId != null}"
+                                    th:href="@{'/physicians/'+${patient.physicianId}}"
+                                    th:text="${patient.physicianFullName}"></td>
                             <td><a th:href="@{'/patients/'+${patient.id} + '/diagnoses'}">Diagnoses</a></td>
                             <td>
                                 <!-- Edit button with edit icon -->

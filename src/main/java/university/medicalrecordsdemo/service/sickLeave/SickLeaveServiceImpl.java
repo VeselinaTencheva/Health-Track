@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import university.medicalrecordsdemo.dto.appointment.AppointmentDto;
 import university.medicalrecordsdemo.dto.sickLeave.*;
 import university.medicalrecordsdemo.model.entity.SickLeaveEntity;
 import university.medicalrecordsdemo.repository.SickLeaveRepository;
@@ -54,6 +55,11 @@ public class SickLeaveServiceImpl implements SickLeaveService {
     }
 
     private SickLeaveDto convertToSickLeaveDto(SickLeaveEntity sickLeave) {
-        return modelMapper.map(sickLeave, SickLeaveDto.class);
+        final SickLeaveDto sickLeaveDto = modelMapper.map(sickLeave, SickLeaveDto.class);
+        if (sickLeave.getAppointment() != null) {
+            final AppointmentDto appointmentDto = modelMapper.map(sickLeave.getAppointment(), AppointmentDto.class);
+            sickLeaveDto.setAppointmentDto(appointmentDto);
+        }
+        return sickLeaveDto;
     }
 }

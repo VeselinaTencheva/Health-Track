@@ -120,6 +120,12 @@ public class PatientController {
     }
 
     private PatientViewModel convertToPatientViewModel(PatientDto patientDTO) {
-        return modelMapper.map(patientDTO, PatientViewModel.class);
+        final PatientViewModel patientViewModel = modelMapper.map(patientDTO, PatientViewModel.class);
+        if (patientDTO.getGeneralPractitioner() != null) {
+            patientViewModel.setPhysicianId(patientDTO.getGeneralPractitioner().getId());
+            patientViewModel.setPhysicianFullName(patientDTO.getGeneralPractitioner().getFirstName() + ' '
+                    + patientDTO.getGeneralPractitioner().getLastName());
+        }
+        return patientViewModel;
     }
 }

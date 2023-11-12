@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import university.medicalrecordsdemo.model.entity.AppointmentEntity;
-import university.medicalrecordsdemo.model.entity.PatientEntity;
-import university.medicalrecordsdemo.model.entity.PhysicianEntity;
 
 import java.time.LocalDate;
 
@@ -18,7 +15,14 @@ public class SickLeaveViewModel {
     private long id;
     private LocalDate startDate;
     private int duration;
-    private PatientEntity patient;
-    private AppointmentEntity appointment;
-    private PhysicianEntity physician; // TODO maybe change with PhysicianvieModel
+
+    private long patientId;
+    private String patientFirstName;
+    private String patientLastName;
+
+    private long physicianId;
+    private String physicianFirstName;
+    private String physicianLastName;
+
+    private long appointmentId;
 }

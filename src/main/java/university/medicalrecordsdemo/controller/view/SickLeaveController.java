@@ -85,7 +85,16 @@ public class SickLeaveController {
         return "redirect:/sick-leaves";
     }
 
-    private SickLeaveViewModel convertToSickLeaveViewModel(SickLeaveDto SickLeaveDto) {
-        return modelMapper.map(SickLeaveDto, SickLeaveViewModel.class);
+    private SickLeaveViewModel convertToSickLeaveViewModel(SickLeaveDto sickLeaveDto) {
+        SickLeaveViewModel sickLeaveViewModel = modelMapper.map(sickLeaveDto, SickLeaveViewModel.class);
+        if (sickLeaveDto.getAppointmentDto() != null) {
+            sickLeaveViewModel.setPatientId(sickLeaveDto.getAppointmentDto().getPatient().getId());
+            sickLeaveViewModel.setPatientFirstName(sickLeaveDto.getAppointmentDto().getPatient().getFirstName());
+            sickLeaveViewModel.setPatientLastName(sickLeaveDto.getAppointmentDto().getPatient().getLastName());
+            sickLeaveViewModel.setPhysicianId(sickLeaveDto.getAppointmentDto().getPhysician().getId());
+            sickLeaveViewModel.setPhysicianFirstName(sickLeaveDto.getAppointmentDto().getPhysician().getFirstName());
+            sickLeaveViewModel.setPhysicianLastName(sickLeaveDto.getAppointmentDto().getPatient().getLastName());
+        }
+        return sickLeaveViewModel;
     }
 }

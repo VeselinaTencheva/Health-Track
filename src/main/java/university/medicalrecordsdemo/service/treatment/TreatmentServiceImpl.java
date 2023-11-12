@@ -1,6 +1,7 @@
 package university.medicalrecordsdemo.service.treatment;
 
 import lombok.AllArgsConstructor;
+import university.medicalrecordsdemo.dto.treatment.CreateTreatmentDto;
 import university.medicalrecordsdemo.dto.treatment.TreatmentDto;
 import university.medicalrecordsdemo.dto.treatment.UpdateTreatmentDto;
 import university.medicalrecordsdemo.model.entity.TreatmentEntity;
@@ -33,7 +34,7 @@ public class TreatmentServiceImpl implements TreatmentService {
     }
 
     @Override
-    public TreatmentDto create(TreatmentDto treatment) {
+    public TreatmentDto create(CreateTreatmentDto treatment) {
         return convertToTreatmentDto(
                 this.treatmentRepository.saveAndFlush(this.modelMapper.map(treatment, TreatmentEntity.class)));
     }

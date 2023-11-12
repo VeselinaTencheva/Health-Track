@@ -9,7 +9,7 @@ public interface TreatmentService {
 
     TreatmentDto findById(Long id);
 
-    TreatmentDto create(TreatmentDto treatment);
+    TreatmentDto create(CreateTreatmentDto treatment);
 
     TreatmentDto update(Long id, UpdateTreatmentDto treatment);
 

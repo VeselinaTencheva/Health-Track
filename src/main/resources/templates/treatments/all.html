@@ -19,14 +19,22 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th>Actions</th>
                                 <tr th:each="t : ${treatments}">
                                     <td th:text="${t.id}"></td>
                                     <td th:text="${t.name}"></td>
                                     <td th:text="${t.description}"></td>
-                                    <td><a class="btn btn-info" th:href="@{'/treatments/update/'+${t.id}}">Edit</a></td>
-                                    <td><a class="btn btn-danger" th:href="@{'/treatments/delete/'+${t.id}}">Delete</a></td>
+                                    <td>
+                                        <!-- Edit button with edit icon -->
+                                        <a th:href="@{'/treatments/update/'+${t.id}}">
+                                            <i class="fas fa-edit" style="font-weight: 400;"></i>
+                                        </a>
+                                        
+                                        <!-- Delete button with delete icon -->
+                                        <a th:href="@{'/treatments/delete/'+${t.id}}">
+                                            <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             </table>
                         </div>

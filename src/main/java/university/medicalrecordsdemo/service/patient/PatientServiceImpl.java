@@ -100,6 +100,7 @@ public class PatientServiceImpl implements PatientService {
 
         PatientEntity prevousEntity = modelMapper.map(this.findById(id), PatientEntity.class);
         patient.setPassword(prevousEntity.getPassword());
+        patient.setBirthDate(prevousEntity.getBirthDate());
         patient.setId(id);
         return convertToPatientDto(this.patientRepository.save(patient));
     }

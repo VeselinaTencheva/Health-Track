@@ -18,11 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-// import org.springframework.validation.BindingResult;
-// import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -74,9 +75,12 @@ public class PatientController {
             return "/patients/create";
         }
 
+        LocalDate birthDate = patient.getBirthDate() == null || patient.getBirthDate().isEmpty() ? null :
+        LocalDate.parse(patient.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        
         // Map the view model to DTO
-        PatientDto createPatientDTO = modelMapper.map(patient,
-                PatientDto.class);
+        PatientDto createPatientDTO = modelMapper.map(patient, PatientDto.class);
+        createPatientDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
         patientService.create(createPatientDTO);
         return "redirect:/patients";
     }

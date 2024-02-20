@@ -28,17 +28,14 @@ public abstract class CreateUserViewModel {
     @Size(min = 7, message = "Password must be at least 8 characters long")
     private String password;
 
-    @NotEmpty(message = "Confirm password is required")
-    @Size(min = 7, message = "Confirm password must be at least 8 characters long")
-    private String confirmPassword;
 
     @NotNull(message = "Gender is required")
     private String gender;
 
-    @NotNull(message = "Birth date is required")
+    @NotEmpty(message = "Birth date is required")
     // Assuming date format is yyyy-MM-dd
-    @PastOrPresent(message = "Birth date cannot be in the future")
-    private LocalDate birthDate;
+    // @PastOrPresent(message = "Birth date cannot be in the future")
+    private String birthDate;
 
     @NotEmpty(message = "SSN is required")
     // Assuming SSN format is ###-##-#### currently not validating for this format

@@ -11,4 +11,5 @@ import university.medicalrecordsdemo.model.entity.DiagnosisEntity;
 public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Long> {
     DiagnosisEntity findByAppointments(AppointmentEntity appointment);
     List<DiagnosisEntity> findAllByCategory(DepartmentType category);
+
 }

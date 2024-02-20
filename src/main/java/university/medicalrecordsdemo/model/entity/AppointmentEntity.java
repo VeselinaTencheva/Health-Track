@@ -31,7 +31,7 @@ public class AppointmentEntity extends BaseEntity {
     @JoinColumn(name = "physician_id")
     private PhysicianEntity physician;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "sickLeave_id", referencedColumnName = "id")
     private SickLeaveEntity sickLeave;
 

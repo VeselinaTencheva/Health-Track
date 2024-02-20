@@ -103,4 +103,19 @@ public class UserEntity extends BaseEntity implements UserDetails {
         isEnabled = enabled;
     }
 
+
+    public UserEntity(String ssn, String firstName, String lastName, String gender, String birthDate, String username, String password, RoleEntity role) {
+        this.ssn = ssn;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.username = username;
+        this.password = password;
+        this.isAccountNonExpired = false;
+        this.isAccountNonLocked = false;
+        this.isCredentialsNonExpired = false;
+        this.isEnabled = false;
+        this.roles = Set.of(role);
+    }
 }

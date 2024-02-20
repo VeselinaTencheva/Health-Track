@@ -12,6 +12,7 @@ import university.medicalrecordsdemo.repository.DiagnosisRepository;
 import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
 import university.medicalrecordsdemo.dto.diagnosis.UpdateDiagnosisDto;
 import university.medicalrecordsdemo.model.entity.AppointmentEntity;
+import university.medicalrecordsdemo.model.entity.DepartmentType;
 import university.medicalrecordsdemo.model.entity.DiagnosisEntity;
 
 @Service
@@ -29,6 +30,19 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         return diagnosisRepository.findAll().stream()
                 .map(this::convertToDiagnosisDto)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<DiagnosisDto> findAllByCategory(Set<DepartmentType> categories) {
+        Set<DiagnosisDto> diagnosisDtos = new HashSet<>();
+    
+        for (DepartmentType category : categories) {
+            diagnosisDtos.addAll(diagnosisRepository.findAllByCategory(category).stream()
+                .map(this::convertToDiagnosisDto)
+                .collect(Collectors.toSet()));
+        }
+    
+        return diagnosisDtos;
     }
 
     @Override

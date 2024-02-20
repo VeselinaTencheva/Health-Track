@@ -60,6 +60,15 @@ public class PhysicianServiceImpl implements PhysicianService {
     }
 
     @Override
+    public Set<PhysicianDto> findAllBySpecialty(SpecialtyType specialty) {
+        Set<SpecialtyType> specialtySet = new HashSet<>();
+        specialtySet.add(specialty);
+        return physicianRepository.findAllBySpecialtiesIn(specialtySet).stream()
+                .map(this::convertToPhysicianDTO)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public PhysicianDto findById(Long id) {
         return convertToPhysicianDTO(this.physicianRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Physician ID: " + id)));

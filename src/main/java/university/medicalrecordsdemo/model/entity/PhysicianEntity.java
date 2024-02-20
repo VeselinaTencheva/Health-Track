@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -42,7 +43,7 @@ public class PhysicianEntity extends UserEntity {
     private Set<AppointmentEntity> appointments;
 
     public PhysicianEntity(String ssn, String firstName, String lastName, String gender,
-        String birthDate, String username, String password, String medicalLicenseNumber, Set<SpecialtyType> specialties, RoleEntity role) {
+        LocalDate birthDate, String username, String password, String medicalLicenseNumber, Set<SpecialtyType> specialties, RoleEntity role) {
             super(ssn, firstName, lastName, gender, birthDate, username, password, role);
             this.medicalLicenseNumber = medicalLicenseNumber;
             this.specialties = specialties;

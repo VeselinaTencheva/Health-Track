@@ -72,7 +72,10 @@ public class PatientServiceImpl implements PatientService {
         // Set the patient role
         RoleEntity patientRole = roleRepository.findByAuthority(RoleType.ROLE_PATIENT);
         patientEntity.setRoles(Collections.singleton(patientRole));
-        physicianEntity.setPassword(encoder.encode(patientDto.getPassword()));
+
+        // Encode the password
+        final String encodedPassword = encoder.encode(patientDto.getPassword());
+        patientEntity.setPassword(encodedPassword);
 
         // Save the patient entity and map it back to DTO
         PatientEntity savedPatientEntity = patientRepository.save(patientEntity);

@@ -1,5 +1,6 @@
 package university.medicalrecordsdemo.model.binding.users;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class UserViewModel extends BaseViewModel {
 
     private String password;
 
-    private String birthDate;
+    private LocalDate birthDate;
 
     private String gender;
 

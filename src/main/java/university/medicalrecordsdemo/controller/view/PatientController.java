@@ -3,14 +3,13 @@ package university.medicalrecordsdemo.controller.view;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.dto.patient.UpdatePatientDto;
+import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.model.binding.patients.CreatePatientViewModel;
 import university.medicalrecordsdemo.model.binding.patients.PatientViewModel;
 import university.medicalrecordsdemo.model.binding.patients.UpdatePatientViewModel;
-import university.medicalrecordsdemo.model.entity.RoleType;
+import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.service.patient.PatientService;
 import university.medicalrecordsdemo.service.physician.PhysicianService;
-import university.medicalrecordsdemo.service.user.UserService;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +22,9 @@ import org.springframework.validation.BindingResult;
 // import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-// import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -35,8 +35,6 @@ public class PatientController {
     private PatientService patientService;
 
     private PhysicianService physicianService;
-
-    private UserService userService;
 
     private final ModelMapper modelMapper;
 
@@ -59,30 +57,24 @@ public class PatientController {
         return "patients/view-patient";
     }
 
-    // @GetMapping("/{id}/diagnoses")
-    // public String getPatientsDiagnoses(Model model, @PathVariable Long id) {
-    // final List<DiagnoseViewModel> diagnoses =
-    // patientService.findAllDiagnosesPerPatient(id).stream()
-    // .map((el) -> this.modelMapper.map(el, DiagnoseViewModel.class))
-    // .collect(Collectors.toList());
-    // model.addAttribute("diagnoses", diagnoses);
-    // return "/diagnoses/all";
-    // }
-
     @GetMapping("/create")
     public String showCreatePatientForm(Model model) {
         model.addAttribute("patient", new CreatePatientViewModel());
-        model.addAttribute("physicians", userService.findAllByRoleType(RoleType.ROLE_GENERAL_PRACTITIONER));
+        Set<PhysicianDto> gpPhysicians = physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE);
+        model.addAttribute("physicians", gpPhysicians);
         return "/patients/create";
     }
 
     @PostMapping("/create")
-    public String createPatient(Model model, @ModelAttribute("patient") CreatePatientViewModel patient,
+    public String createPatient(Model model,@Valid @ModelAttribute("patient") CreatePatientViewModel patient,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("physicians", physicianService.findAll());
+            Set<PhysicianDto> gpPhysicians = physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE);
+            model.addAttribute("physicians", gpPhysicians);
             return "/patients/create";
         }
+
+        // Map the view model to DTO
         PatientDto createPatientDTO = modelMapper.map(patient,
                 PatientDto.class);
         patientService.create(createPatientDTO);
@@ -97,18 +89,20 @@ public class PatientController {
         if (patientDto.getGeneralPractitioner() != null) {
             updatePatientViewModel.setPhysicianId(String.valueOf(patientDto.getGeneralPractitioner().getId()));
         }
+
         model.addAttribute("patient", updatePatientViewModel);
-        model.addAttribute("physicians", userService.findAllByRoleType(RoleType.ROLE_GENERAL_PRACTITIONER));
+        model.addAttribute("physicians", physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE));
         return "/patients/edit-patient";
     }
 
     @PostMapping("/update/{id}")
     public String updatePatient(Model model, @PathVariable long id,
-            @ModelAttribute("patient") UpdatePatientViewModel patient, BindingResult bindingResult) {
+            @Valid @ModelAttribute("patient") UpdatePatientViewModel patient, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("physicians", userService.findAllByRoleType(RoleType.ROLE_GENERAL_PRACTITIONER));
+            model.addAttribute("physicians", physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE));
             return "/patients/edit-patient";
         }
+
         patientService.update(id, modelMapper.map(patient, UpdatePatientDto.class));
         return "redirect:/patients";
     }

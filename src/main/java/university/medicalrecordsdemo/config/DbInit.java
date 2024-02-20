@@ -27,6 +27,7 @@ import university.medicalrecordsdemo.repository.RoleRepository;
 import university.medicalrecordsdemo.repository.SickLeaveRepository;
 import university.medicalrecordsdemo.repository.UserRepository;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -69,22 +70,22 @@ public class DbInit implements CommandLineRunner {
 
         @Override
         public void run(String... args) throws Exception {
-                // Load roles
+                // // Load roles
                 // this.loadRoles();
 
-                // Load admin
+                // // Load admin
                 // this.loadAdmin();
 
-                // Load physicians
+                // // Load physicians
                 // this.loadPhysicians();
                 
-                // Load patients
+                // // Load patients
                 // this.loadPatients();
 
-                // Load diagnoses
+                // // Load diagnoses
                 // this.loadDiagnoses();
 
-                // Load appointments
+                // // Load appointments
                 // this.loadAppointments();
         }
 
@@ -102,7 +103,7 @@ public class DbInit implements CommandLineRunner {
                 user.setSsn("123-45-6789");
                 user.setLastName("Tencheva");
                 user.setGender("woman");
-                user.setBirthDate("08/09/1998");
+                user.setBirthDate(LocalDate.of(1998, 8, 9));
                 user.setPassword(encoder.encode("password"));
                 user.setUsername("veselina");
                 user.setRoles(Arrays.asList(adminRole).stream().collect(Collectors.toSet()));
@@ -158,16 +159,16 @@ public class DbInit implements CommandLineRunner {
 
                 final RoleEntity patientRole = roleRepository.findByAuthority(RoleType.ROLE_PATIENT);
                 List<PatientEntity> patients = Arrays.asList(
-                        new PatientEntity("9812014225", "John", "Doe", "Male", "01/01/1980", "john@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("8505062523", "Jane", "Smith", "Female", "02/02/1985", "jane@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("8202025623", "Michael", "Johnson", "Male", "03/03/1990", "michael@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("8301052365", "Emily", "Brown", "Female", "04/04/1982", "emily@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("0006058586", "David", "Wilson", "Male", "05/05/1978", "david@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("0205047475", "Sarah", "Martinez", "Female", "06/06/1995", "sarah@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("0106125456", "Christopher", "Lopez", "Male", "07/07/1988", "christopher@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("9808095457", "Amanda", "Garcia", "Female", "08/08/1992", "amanda@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("7402084545", "James", "Perez", "Male", "09/09/1983", "james@patient.com", encoder.encode("password"), true, patientRole),
-                        new PatientEntity("7604054245", "Jessica", "Rodriguez", "Female", "10/10/1997", "jessica@patient.com", encoder.encode("password"), true, patientRole)
+                        new PatientEntity("9812014225", "John", "Doe", "Male", LocalDate.of(1980, 1, 1), "john@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("8505062523", "Jane", "Smith", "Female", LocalDate.of(1990, 3, 3), "jane@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("8202025623", "Michael", "Johnson", "Male", LocalDate.of(1990, 3, 3), "michael@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("8301052365", "Emily", "Brown", "Female", LocalDate.of(1982, 4, 4), "emily@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("0006058586", "David", "Wilson", "Male",LocalDate.of(1978, 5, 5), "david@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("0205047475", "Sarah", "Martinez", "Female", LocalDate.of(1995, 6, 6), "sarah@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("0106125456", "Christopher", "Lopez", "Male", LocalDate.of(1978, 7, 7), "christopher@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("9808095457", "Amanda", "Garcia", "Female", LocalDate.of(1992, 8, 8), "amanda@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("7402084545", "James", "Perez", "Male", LocalDate.of(1983, 9, 9), "james@patient.com", encoder.encode("password"), true, patientRole),
+                        new PatientEntity("7604054245", "Jessica", "Rodriguez", "Female", LocalDate.of(1998, 10, 10), "jessica@patient.com", encoder.encode("password"), true, patientRole)
                 );
                 // loop all patients and set their physician to the first physician in the list
                 Set<SpecialtyType> specialtySet = new HashSet<>();
@@ -252,17 +253,17 @@ public class DbInit implements CommandLineRunner {
                 }
                 final RoleEntity physicianRole = roleRepository.findByAuthority(RoleType.ROLE_PHYSICIAN);
                 List<PhysicianEntity> physicians = Arrays.asList(
-                        new PhysicianEntity("1234567890", "John", "Doe", "Male", "01/01/1980", "john@example.com", encoder.encode("password"), "MD123456", new HashSet<>(Arrays.asList(SpecialtyType.ALLERGY_AND_IMMUNOLOGY)), physicianRole),
-                        new PhysicianEntity("2345678901", "Jane", "Smith", "Female", "02/02/1985", "jane@example.com", encoder.encode("password"), "MD234567", new HashSet<>(Arrays.asList(SpecialtyType.ANATOMIC_PATHOLOGY)), physicianRole),
-                        new PhysicianEntity("3456789012", "Michael", "Johnson", "Male", "03/03/1975", "michael@example.com", encoder.encode("password"), "MD345678", new HashSet<>(Arrays.asList(SpecialtyType.ANESTHESIOLOGIST)), physicianRole),
-                        new PhysicianEntity("4567890123", "Emily", "Brown", "Female", "04/04/1990", "emily@example.com", encoder.encode("password"), "MD456789", new HashSet<>(Arrays.asList(SpecialtyType.CLINICAL_IMMUNOLOGY)), physicianRole),
-                        new PhysicianEntity("5678901234", "David", "Martinez", "Male", "05/05/1982", "david@example.com", encoder.encode("password"), "MD567890", new HashSet<>(Arrays.asList(SpecialtyType.CLINICAL_PATHOLOGY)), physicianRole),
-                        new PhysicianEntity("6789012345", "Jessica", "Garcia", "Female", "06/06/1978", "jessica@example.com", encoder.encode("password"), "MD678901", new HashSet<>(Arrays.asList(SpecialtyType.COAGULATION_DISORDERS)), physicianRole),
-                        new PhysicianEntity("7890123456", "Christopher", "Lopez", "Male", "07/07/1987", "christopher@example.com", encoder.encode("password"), "MD789012", new HashSet<>(Arrays.asList(SpecialtyType.COLORECTAL_SURGERY)), physicianRole),
-                        new PhysicianEntity("8901234567", "Amanda", "Perez", "Female", "08/08/1980", "amanda@example.com", encoder.encode("password"), "MD890123", new HashSet<>(Arrays.asList(SpecialtyType.COSMETIC_DERMATOLOGY)), physicianRole),
-                        new PhysicianEntity("9012345678", "Daniel", "Gonzalez", "Male", "09/09/1989", "daniel@example.com", encoder.encode("password"), "MD901234", new HashSet<>(Arrays.asList(SpecialtyType.DERMATOPATHOLOGY)), physicianRole),
-                        new PhysicianEntity("0123456789", "Ashley", "Ramirez", "Female", "10/10/1983", "ashley@example.com", encoder.encode("password"), "MD012345", new HashSet<>(Arrays.asList(SpecialtyType.DIABETES_AND_METABOLISM)), physicianRole),
-                        new PhysicianEntity("9876543210", "Matthew", "Torres", "Male", "11/11/1984", "matthew@example.com", encoder.encode("password"), "MD987654", new HashSet<>(Arrays.asList(SpecialtyType.ELECTROPHYSIOLOGY)), physicianRole)
+                        new PhysicianEntity("1234567890", "John", "Doe", "Male", LocalDate.of(1980, 1, 1), "john@example.com", encoder.encode("password"), "MD123456", new HashSet<>(Arrays.asList(SpecialtyType.ALLERGY_AND_IMMUNOLOGY)), physicianRole),
+                        new PhysicianEntity("2345678901", "Jane", "Smith", "Female", LocalDate.of(1985, 2, 2), "jane@example.com", encoder.encode("password"), "MD234567", new HashSet<>(Arrays.asList(SpecialtyType.ANATOMIC_PATHOLOGY)), physicianRole),
+                        new PhysicianEntity("3456789012", "Michael", "Johnson", "Male", LocalDate.of(1975, 3, 3), "michael@example.com", encoder.encode("password"), "MD345678", new HashSet<>(Arrays.asList(SpecialtyType.ANESTHESIOLOGIST)), physicianRole),
+                        new PhysicianEntity("4567890123", "Emily", "Brown", "Female", LocalDate.of(1990, 4, 4), "emily@example.com", encoder.encode("password"), "MD456789", new HashSet<>(Arrays.asList(SpecialtyType.CLINICAL_IMMUNOLOGY)), physicianRole),
+                        new PhysicianEntity("5678901234", "David", "Martinez", "Male", LocalDate.of(1982, 5, 5), "david@example.com", encoder.encode("password"), "MD567890", new HashSet<>(Arrays.asList(SpecialtyType.CLINICAL_PATHOLOGY)), physicianRole),
+                        new PhysicianEntity("6789012345", "Jessica", "Garcia", "Female", LocalDate.of(1978, 6, 6), "jessica@example.com", encoder.encode("password"), "MD678901", new HashSet<>(Arrays.asList(SpecialtyType.COAGULATION_DISORDERS)), physicianRole),
+                        new PhysicianEntity("7890123456", "Christopher", "Lopez", "Male", LocalDate.of(1987, 7, 7), "christopher@example.com", encoder.encode("password"), "MD789012", new HashSet<>(Arrays.asList(SpecialtyType.COLORECTAL_SURGERY)), physicianRole),
+                        new PhysicianEntity("8901234567", "Amanda", "Perez", "Female", LocalDate.of(1980, 8, 8), "amanda@example.com", encoder.encode("password"), "MD890123", new HashSet<>(Arrays.asList(SpecialtyType.COSMETIC_DERMATOLOGY)), physicianRole),
+                        new PhysicianEntity("9012345678", "Daniel", "Gonzalez", "Male", LocalDate.of(1989, 9, 9), "daniel@example.com", encoder.encode("password"), "MD901234", new HashSet<>(Arrays.asList(SpecialtyType.DERMATOPATHOLOGY)), physicianRole),
+                        new PhysicianEntity("0123456789", "Ashley", "Ramirez", "Female", LocalDate.of(1983, 10, 10), "ashley@example.com", encoder.encode("password"), "MD012345", new HashSet<>(Arrays.asList(SpecialtyType.DIABETES_AND_METABOLISM)), physicianRole),
+                        new PhysicianEntity("9876543210", "Matthew", "Torres", "Male", LocalDate.of(1984, 11, 11), "matthew@example.com", encoder.encode("password"), "MD987654", new HashSet<>(Arrays.asList(SpecialtyType.ELECTROPHYSIOLOGY)), physicianRole)
                 );
                 physicianRepository.saveAll(physicians);
         }

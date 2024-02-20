@@ -1,5 +1,7 @@
 package university.medicalrecordsdemo.dto.user;
 
+import java.time.LocalDate;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,5 +15,5 @@ public class UpdateUserDto {
     private String lastName;
     private String username;
     private String gender;
-    private String birthDate;
+    private LocalDate birthDate;
 }

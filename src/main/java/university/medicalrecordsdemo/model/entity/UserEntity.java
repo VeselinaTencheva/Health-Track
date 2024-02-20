@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String gender;
 
     @Column(name = "birth_date", nullable = false)
-    private String birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username; // email
@@ -104,7 +105,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     }
 
 
-    public UserEntity(String ssn, String firstName, String lastName, String gender, String birthDate, String username, String password, RoleEntity role) {
+    public UserEntity(String ssn, String firstName, String lastName, String gender, LocalDate birthDate, String username, String password, RoleEntity role) {
         this.ssn = ssn;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -77,6 +77,8 @@
                                     <input type="radio" id="female" th:field="${patient.gender}" name="gender" value="Female"/>
                                     <label class="form-check-label" for="female">Female</label>
                                 </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('gender')}"
+                                    th:errors="${patient.gender}">Gender Error</span>
                             </div>
             
                             <div class="col form-group">
@@ -89,6 +91,8 @@
                                     <input type="radio" id="false" th:field="${patient.hasInsurance}" name="hasInsurance" value="False"/>
                                     <label class="form-check-label" for="false">False</label>
                                 </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('hasInsurance')}"
+                                    th:errors="${patient.hasInsurance}">Has Insurance Error</span>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-info w-25">Save</button>

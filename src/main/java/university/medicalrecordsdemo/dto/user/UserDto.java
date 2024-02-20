@@ -1,5 +1,6 @@
 package university.medicalrecordsdemo.dto.user;
 
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ public class UserDto extends BaseDto {
     private String firstName;
     private String lastName;
     private String gender;
-    private String birthDate;
+    private LocalDate birthDate;
     private String username; // email
     private String password;
     private boolean isAccountNonExpired = true; // Set default value

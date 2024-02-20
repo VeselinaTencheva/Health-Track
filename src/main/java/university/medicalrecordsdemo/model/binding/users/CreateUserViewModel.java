@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import university.medicalrecordsdemo.model.entity.RoleEntity;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 @Getter
@@ -25,7 +23,7 @@ public abstract class CreateUserViewModel {
     private String username;
 
     @NotEmpty(message = "Password is required")
-    @Size(min = 7, message = "Password must be at least 8 characters long")
+    @Size(min = 7, message = "Password must be at least 7 characters long")
     private String password;
 
 

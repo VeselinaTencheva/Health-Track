@@ -13,35 +13,36 @@
                     <form class="w-100 d-flex flex-column" style="gap: 1rem;" action="#"  th:action="@{/physicians/create}" th:object="${physician}" method="post">
                         <div class="row d-flex">
                             <div class="col form-group">
-                                <label for="birthDate">Username:</label>
+                                <label for="username">Username:</label>
                                 <input type="text" class="form-control" id="username" th:field="${physician.username}" name="username"
                                         placeholder="Username">
                                 <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</span>
                             </div>
 
                             <div class="col form-group">
-                                <label for="birthDate">Password:</label>
+                                <label for="password">Password:</label>
                                 <input type="password" class="form-control" id="password" th:field="${physician.password}" name="password"
                                         placeholder="Password">
                                 <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</span>
                             </div>
     
                             <div class="col form-group">
-                                <label for="birthDate">SSN:</label>
+                                <label for="ssn">SSN:</label>
                                 <input type="text" class="form-control" id="ssn" th:field="${physician.ssn}" name="ssn" placeholder="Social Security Number"/>
+                                <span class="text-danger" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}">SSN Error</span>
                             </div>
 
                         </div>
                         <div class="row d-flex">
                             <div class="col form-group">
-                                <label for="birthDate">First Name:</label>
+                                <label for="firstName">First Name:</label>
                                 <input type="text" class="form-control" id="firstName" th:field="${physician.firstName}" name="firstName"
                                         placeholder="First Name">
                                 <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name Error</span>
                             </div>
             
                             <div class="col form-group">
-                                <label for="birthDate">Last Name:</label>
+                                <label for="lastName">Last Name:</label>
                                 <input type="text" class="form-control" id="lastName" th:field="${physician.lastName}" name="lastName"
                                         placeholder="Last Name">
                                 <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</span>
@@ -72,6 +73,7 @@
                                         <label class="form-check-label" style="padding-left: 0.5rem;" th:for="${'specialty-' + specialty}" th:text="${specialty.displayName}"></label>
                                     </div>
                                 </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('specialties')}" th:errors="*{specialties}">Specialties Error</span>
                             </div>
                             
                             <div class="col form-group">
@@ -84,20 +86,8 @@
                                     <input type="radio" id="female" th:field="${physician.gender}" name="gender" value="Female"/>
                                     <label class="form-check-label" for="female">Female</label>
                                 </div>
+                                <span class="text-danger" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">Gender Error</span>
                             </div>
-
-
-                            <!-- <div class="row py-2">
-                                <div class="col-6">
-                                    <label for="department">Department</label>
-                                    <select class="form-control"  type="text" th:field="${physician.departmentType}" id="department">
-                                        <option value="">Select Department</option>
-                                        <option th:each="department : ${departments}" th:value="${department}" th:text="${department}"
-                                        ></option>
-                                    </select>
-                                </div>
-                            </div> -->
-            
                         </div>
                         <button type="submit" class="btn btn-info w-25">Save</button>
                     </form>

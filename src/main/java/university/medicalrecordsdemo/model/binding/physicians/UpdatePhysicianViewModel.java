@@ -1,10 +1,12 @@
 package university.medicalrecordsdemo.model.binding.physicians;
 
-import university.medicalrecordsdemo.model.binding.users.UserViewModel;
+import university.medicalrecordsdemo.model.binding.users.UpdateUserViewModel;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
 
 import java.util.Set;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,13 +16,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdatePhysicianViewModel extends UserViewModel {
-    // @NotBlank(message = "Medical UUID is mandatory")
-    // @Digits(integer = 10, fraction = 0, message = "Medical UUID must contains
-    // only digits")
-    // @Size(min = 6, max = 6, message = "Medical UUID must be exact 6 integers")
+public class UpdatePhysicianViewModel extends UpdateUserViewModel {
+   
+    @Size(min = 8, max = 8, message = "Medical UUID must be exact 8 symbols")
+    @NotNull(message = "Medical License Number is mandatory")
     private String medicalLicenseNumber;
 
+    @NotNull(message = "Specialties are mandatory")
     private Set<SpecialtyType> specialties;
 
 }

@@ -76,8 +76,9 @@ public class PhysicianServiceImpl implements PhysicianService {
 
     @Override
     public PhysicianDto create(PhysicianDto physicianDto) {
-        return convertToPhysicianDTO(
-                this.physicianRepository.saveAndFlush(convertToPhysicianEntity(physicianDto)));
+        PhysicianEntity physicianEntity = convertToPhysicianEntity(physicianDto);
+        physicianEntity.setPassword(encoder.encode(physicianDto.getPassword()));
+        return convertToPhysicianDTO(physicianRepository.save(physicianEntity));
     }
 
     @Override

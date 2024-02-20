@@ -1,20 +1,13 @@
 package university.medicalrecordsdemo.controller.view;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-// import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-// import org.springframework.validation.BindingResult;
-// import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
-
-// import javax.validation.Valid;
-// import java.util.List;
-// import java.util.Optional;
-// import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.model.binding.physicians.CreatePhysicianViewModel;
@@ -67,14 +61,20 @@ public class PhysicianController {
     }
 
     @PostMapping("/create")
-    public String createPhysician(Model model, @ModelAttribute("physician") CreatePhysicianViewModel physician,
+    public String createPhysician(Model model,@Valid @ModelAttribute("physician") CreatePhysicianViewModel physician,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("specialities", SpecialtyType.values());
             return "/physicians/create";
         }
+
+        LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
+        LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        
+        // Map the view model to DTO
         PhysicianDto createPhysicianDTO = modelMapper.map(physician,
                 PhysicianDto.class);
+        createPhysicianDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
         physicianService.create(createPhysicianDTO);
         return "redirect:/physicians";
     }
@@ -87,14 +87,21 @@ public class PhysicianController {
     }
 
     @PostMapping("/update/{id}")
-    public String updatePhysicians(@PathVariable long id,
-            @ModelAttribute("physician") UpdatePhysicianViewModel physician,
+    public String updatePhysicians(Model model, @PathVariable long id,
+            @Valid @ModelAttribute("physician") UpdatePhysicianViewModel physician,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("specialities", SpecialtyType.values());
             return "/physicians/edit";
         }
-        physicianService.update(id, modelMapper.map(physician,
-                PhysicianDto.class));
+        LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
+        LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        
+        // Map the view model to DTO
+        PhysicianDto updatePhysicianDTO = modelMapper.map(physician,
+                PhysicianDto.class);
+        updatePhysicianDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
+        physicianService.update(id, updatePhysicianDTO);
         return "redirect:/physicians";
     }
 

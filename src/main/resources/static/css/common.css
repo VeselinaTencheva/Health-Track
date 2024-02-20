@@ -44,8 +44,10 @@ main {
     /*display: flex;*/
     /*flex-direction: column;*/
     /*width: 300px;*/
-    background-color: #0c5460 !important;
-    opacity: 85%;
+    background-color: #3498db !important;
+    opacity: 75%;
+    padding: 1rem;
+    width: 15rem;
     /*overflow-x: hidden; !* Disable horizontal scroll *!*/
 }
 
@@ -69,7 +71,8 @@ main {
 
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
-    color: #f0ad4e;
+    /* color: #cccccc; */
+    font-weight: 700;
 }
 
 /* Style page content */
@@ -96,12 +99,12 @@ main {
 }
 
 a {
-    color: #ffc107;
+    color: #ffaa00;
 }
 
 a:hover{
-    color: #ffc107;
-    opacity: 75%;
+    color:  #ffaa00;
+    opacity: 85%;
 }
 
 .underline{
@@ -135,3 +138,70 @@ a:hover{
 .accent-color {
     color: #FFC107
 }
+
+.pagination-container {
+    display: flex;
+    gap: 4rem;
+}
+
+.pagination {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+}
+
+.pagination li.disabled a {
+    pointer-events: none;
+    color: #ccc;
+}
+
+.selected-page {
+    color: #3498db !important; /* Change to the desired text color */
+}
+
+/* Pagination dropdown */
+.dropdown {
+    display: inline-block;
+    position: relative;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 60px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-menu li {
+    display: block;
+  }
+  
+  .dropdown-menu li a {
+    color: #333;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }

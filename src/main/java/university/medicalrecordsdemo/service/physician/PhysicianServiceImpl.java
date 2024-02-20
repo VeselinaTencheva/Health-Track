@@ -13,8 +13,11 @@ import university.medicalrecordsdemo.repository.RoleRepository;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +60,13 @@ public class PhysicianServiceImpl implements PhysicianService {
         // return physicianDTO;
         // })
         // .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<PhysicianDto> findAllByPage(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("firstName"));
+        Page<PhysicianEntity> physicianPage = physicianRepository.findAll(pageRequest);
+        return physicianPage.map(this::convertToPhysicianDTO);
     }
 
     @Override

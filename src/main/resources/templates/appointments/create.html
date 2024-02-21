@@ -40,16 +40,6 @@
                                               th:errors="${appointment.patient}">Patient Error</span>
 <!--                                        <input class="form-control" type="text" th:field="*{patient}" placeholder="Patient" id="patient">-->
                                     </div>
-                                    <div class="col">
-                                        <label for="physician">Physician</label>
-                                        <select class="form-control"  type="text" th:field="${appointment.physician}" id="physician">
-                                            <option value="">Select Physician</option>
-                                            <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.firstName + ' ' + physician.lastName}"></option>
-                                        </select>
-                                        <span class="text-danger" th:if="${#fields.hasErrors('physician')}"
-                                              th:errors="${appointment.physician}">Physician Error</span>
-<!--                                        <input class="form-control" type="text" th:field="*{physician}" placeholder="Physician" id="physician">-->
-                                    </div>
                                 </div>
                                 <h3>Sick Leave Info: </h3>
 <!--                                <input type="checkbox" th:name="addSickLeave" placeholder="Add Sick Leave"-->
@@ -95,7 +85,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-info">Save</button>
+                            <button type="submit" class="btn">Save</button>
                         </form>
                     </div>
                 </div>

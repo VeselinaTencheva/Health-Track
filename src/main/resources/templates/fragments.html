@@ -12,11 +12,9 @@
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
 </head>
 
-<header th:fragment="header" class=" p-3" style="background-color: #0c5460; color: whitesmoke; width: 100%;">
-    <div class="d-flex justify-content-between px-3">
-        <h1 class="font-weight-bold">Health Track</h1>
-        <a th:href="@{/logout}">Logout</a>
-    </div>
+<header th:fragment="header" class="header">
+    <h1 class="font-weight-bold">Health Track</h1>
+    <a th:href="@{/logout}">Logout</a>
 </header>
 
 <side-nav>

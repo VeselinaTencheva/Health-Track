@@ -18,4 +18,8 @@ public class PhysiciansViewModel extends UserViewModel {
     private Set<SpecialtyType> specialties;
     private boolean isGP;
     private int patientsCount;
+
+    public String getFullname() {
+        return this.getFirstName() + " " + this.getLastName();
+    }
 }

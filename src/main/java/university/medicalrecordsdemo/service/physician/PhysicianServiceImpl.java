@@ -10,6 +10,7 @@ import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.repository.PatientRepository;
 import university.medicalrecordsdemo.repository.PhysicianRepository;
 import university.medicalrecordsdemo.repository.RoleRepository;
+import university.medicalrecordsdemo.util.enums.PhysicianTableColumnsEnum;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +64,21 @@ public class PhysicianServiceImpl implements PhysicianService {
     }
 
     @Override
+    public Page<PhysicianDto> findAllByPageAndSort(int page, int size, PhysicianTableColumnsEnum sortField, String sortDirection) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            direction = Sort.Direction.DESC;
+        }
+        final String sortFieldString = sortField.getColumnName().toString();
+        Sort sort = Sort.by(direction, sortFieldString);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<PhysicianEntity> physicianPage = physicianRepository.findAll(pageRequest);
+        return physicianPage.map(this::convertToPhysicianDTO);
+    }
+
+    @Override
     public Page<PhysicianDto> findAllByPage(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("firstName"));
+        PageRequest pageRequest = PageRequest.of(page, size);
         Page<PhysicianEntity> physicianPage = physicianRepository.findAll(pageRequest);
         return physicianPage.map(this::convertToPhysicianDTO);
     }

@@ -11,22 +11,22 @@
         </div>
         <div class="section-white-container">
             <div class="row d-flex justify-content-end">
-                <a class="pr-4" href="/physicians/create">Add Physician</a>
+                <a class="btn mb-2" href="/physicians/create">Add Physician</a>
             </div>
             <div class="row">
                 <h3 th:unless="${physicians} and ${physicians.size()}">There are no registered physicians!</h3>
                 <table th:if="${physicians.size()>0}" class="table table-hover">
-                    <th>Full Name</th>
-                    <th>Username/Email</th>
-                    <th>Medical UUID</th>
-                    <th>SSN</th>
-                    <th>Birth Date</th>
-                    <th>Gender</th>
-                    <th>Is GP</th>
-                    <th>Patients Count</th>
+                    <th:block th:each="column :  ${columnsEnum}">
+                        <th>
+                            <a th:href="@{'/physicians?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=' + ${column} + '&sortDirection=' + ${sortField.toString() == column.toString() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
+                                <span th:text="${column.columnDiplayValue}"></span>
+                                <i th:class="${sortField.toString() == column.toString() ? (sortDirection == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down') : 'fas fa-sort'}"></i>
+                            </a>
+                        </th>
+                    </th:block>
                     <th>Actions</th>
                     <tr th:each="ph : ${physicians}">
-                        <td th:text="${ph.firstName + ' ' + ph.lastName}"></td>
+                        <td th:text="${ph.getFullname()}"></td>
                         <td th:text="${ph.username}"></td>
                         <td th:text="${ph.medicalLicenseNumber}"></td>
                         <td th:text="${ph.ssn}"></td>

@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import university.medicalrecordsdemo.model.entity.RoleType;
 import university.medicalrecordsdemo.repository.PatientRepository;
 import university.medicalrecordsdemo.repository.RoleRepository;
 import university.medicalrecordsdemo.service.physician.PhysicianService;
+import university.medicalrecordsdemo.util.enums.PatientTableColumnsEnum;
 
 @AllArgsConstructor
 @Service
@@ -39,6 +43,26 @@ public class PatientServiceImpl implements PatientService {
         return patientRepository.findAll().stream()
                 .map(this::convertToPatientDto)
                 .collect(Collectors.toSet());
+    }
+
+     @Override
+    public Page<PatientDto> findAllByPageAndSort(int page, int size, PatientTableColumnsEnum sortField, String sortDirection) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            direction = Sort.Direction.DESC;
+        }
+        final String sortFieldString = sortField.getColumnName().toString();
+        Sort sort = Sort.by(direction, sortFieldString);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<PatientEntity> patientPage = patientRepository.findAll(pageRequest);
+        return patientPage.map(this::convertToPatientDto);
+    }
+
+    @Override
+    public Page<PatientDto> findAllByPage(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<PatientEntity> patientPage = patientRepository.findAll(pageRequest);
+        return patientPage.map(this::convertToPatientDto);
     }
 
     // @Override

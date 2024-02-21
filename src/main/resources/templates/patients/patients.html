@@ -16,24 +16,24 @@
                 <div class="row">
                     <h3 th:unless="${patients} and ${patients.size()}">There are no registered patients!</h3>
                     <table th:if="${patients.size()>0}" class="table table-hover">
-                        <th>First name</th>
-                        <th>Last name</th>
-                        <th>Username</th>
-                        <th>Birth Date</th>
-                        <th>Gender</th>
-                        <th>SSN</th>
-                        <th>Valid Insurance</th>
-                        <th>GP</th>
+                        <th:block th:each="column :  ${columnsEnum}">
+                            <th>
+                                <a th:href="@{'/patients?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=' + ${column} + '&sortDirection=' + ${sortField.toString() == column.toString() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
+                                    <span th:text="${column.columnDiplayValue}"></span>
+                                    <i th:class="${sortField.toString() == column.toString() ? (sortDirection == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down') : 'fas fa-sort'}"></i>
+                                </a>
+                            </th>
+                        </th:block>
                         <th>Diagnoses</th>
                         <th>Actions</th>
                         <tr th:each="patient : ${patients}">
-                            <td th:text="${patient.firstName}"></td>
-                            <td th:text="${patient.lastName}"></td>
+                            <td th:text="${patient.getFullname()}"></td>
                             <td th:text="${patient.username}"></td>
+                            <td th:text="${patient.ssn}"></td>
                             <td th:text="${patient.birthDate}"></td>
                             <td th:text="${patient.gender}"></td>
-                            <td th:text="${patient.ssn}"></td>
                             <td th:text="${patient.hasInsurance}"></td>
+                            <!-- <td th:text="${patient.physicianFullName}"></td> -->
                             <td><a
                                     th:if="${patient?.physicianId != null}"
                                     th:href="@{'/physicians/'+${patient.physicianId}}"
@@ -53,6 +53,45 @@
                         </tr>
                     </table>
                 </div>
+                <!-- Pagination controls -->
+                <div class="pagination-container">
+                    <div class="pagination-container">
+                        <div>
+                            <ul class="pagination">
+                                <li th:class="${currentPage == 0} ? 'disabled'">
+                                    <a th:href="@{'/patients?page=0&size=' + ${size}}"><i class="fas fa-angle-double-left"></i></a>
+                                </li>
+                                <li th:with="prevPage=${currentPage - 1}" th:class="${currentPage == 0} ? 'disabled'">
+                                    <a th:href="@{|'/patients?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size}|}">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li th:each="pageNumber : ${pageNumbers}">
+                                    <a th:href="@{'/patients?page=' + ${pageNumber} + '&size=' + ${size}}"
+                                       th:class="${pageNumber == currentPage} ? 'selected-page' : ''"
+                                       th:text="${pageNumber + 1}"></a>
+                                </li>
+                                <li th:with="nextPage=${currentPage + 1}" th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a th:href="@{|'/patients?page=' + ${nextPage} + '&size=' + ${size}|}">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a th:href="@{|'/patients?page=' + (${totalPages - 1}) + '&size=' + ${size}|}">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="dropdown">
+                            <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{'/patients?page=' + ${currentPage} + '&size=5'}">5</a></li>
+                                <li><a th:href="@{'/patients?page=' + ${currentPage} + '&size=10'}">10</a></li>
+                                <li><a th:href="@{'/patients?page=' + ${currentPage} + '&size=20'}">20</a></li>
+                            </ul>
+                        </div>
+                </div> 
             </div>
         </div>
     </main>

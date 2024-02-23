@@ -16,7 +16,7 @@
                                 <div class="row py-2">
                                     <div class="col">
                                         <label for="date">Date</label>
-                                        <input class="form-control" type="date" th:field="${appointment.date}" placeholder="Date" id="date">
+                                        <input class="form-control" type="date" th:value="${appointment.date}" placeholder="Date" id="date">
                                         <span class="text-danger" th:if="${#fields.hasErrors('date')}"
                                               th:errors="${appointment.date}">Date Error</span>
                                     </div>
@@ -32,7 +32,7 @@
                                 <div class="row py-2">
                                     <div class="col">
                                         <label for="patient">Patient</label>
-                                        <select class="form-control"  type="text" th:field="${appointment.patient}" id="patient">
+                                        <select class="form-control" type="text" th:field="${appointment.patient}" id="patient">
                                             <option value="">Select Patient</option>
                                             <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.firstName + ' ' + patient.lastName}"></option>
                                         </select>
@@ -48,8 +48,8 @@
                                 <div class="row py-2">
                                     <div class="col">
                                         <label for="start-date">Start Date</label>
-                                        <input class="form-control" type="date" th:field="*{sickLeaveStartDate}" placeholder="Start Date" id="start-date">
-                                    </div>
+                                        <input class="form-control" type="date" th:value="${appointment.sickLeaveStartDate}" placeholder="Start Date" id="start-date">
+                                    </div>                                    
                                     <div class="col">
                                         <label for="duration">Duration</label>
                                         <input class="form-control" type="text" th:field="*{sickLeaveDuration}" placeholder="Duration" id="duration">

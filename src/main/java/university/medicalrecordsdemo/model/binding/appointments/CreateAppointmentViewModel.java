@@ -1,6 +1,11 @@
 package university.medicalrecordsdemo.model.binding.appointments;
 
 import lombok.*;
+import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
+import university.medicalrecordsdemo.dto.patient.PatientDto;
+import university.medicalrecordsdemo.dto.physician.PhysicianDto;
+import university.medicalrecordsdemo.dto.sickLeave.SickLeaveDto;
+import university.medicalrecordsdemo.dto.treatment.TreatmentDto;
 import university.medicalrecordsdemo.model.entity.DiagnosisEntity;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
 import university.medicalrecordsdemo.model.entity.PhysicianEntity;
@@ -37,21 +42,4 @@ public class CreateAppointmentViewModel {
 
     private TreatmentEntity treatment;
 
-    public CreateAppointmentViewModel(LocalDate date, PatientEntity patient, PhysicianEntity physician,
-            SickLeaveEntity sickLeave,
-            DiagnosisEntity diagnosis) {
-        this.date = date;
-        this.patient = patient;
-        this.physician = physician;
-        this.sickLeave = sickLeave;
-        this.diagnosis = diagnosis;
-    }
-
-    public CreateAppointmentViewModel(LocalDate date, PatientEntity patient, PhysicianEntity physician,
-            DiagnosisEntity diagnosis) {
-        this.date = date;
-        this.patient = patient;
-        this.physician = physician;
-        this.diagnosis = diagnosis;
-    }
 }

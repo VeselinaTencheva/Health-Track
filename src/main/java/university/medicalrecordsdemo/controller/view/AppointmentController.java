@@ -1,14 +1,18 @@
 package university.medicalrecordsdemo.controller.view;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +20,8 @@ import org.springframework.validation.BindingResult;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.appointment.AppointmentDto;
 import university.medicalrecordsdemo.dto.appointment.CreateAppointmentDto;
+import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
+import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.dto.sickLeave.CreateSickLeaveDto;
 import university.medicalrecordsdemo.dto.sickLeave.SickLeaveDto;
 import university.medicalrecordsdemo.dto.treatment.CreateTreatmentDto;
@@ -25,7 +31,10 @@ import university.medicalrecordsdemo.model.binding.appointments.CreateAppointmen
 import university.medicalrecordsdemo.model.binding.appointments.CreateAppointmentViewModel;
 import university.medicalrecordsdemo.model.binding.sickLeaves.CreateSickLeaveViewModel;
 import university.medicalrecordsdemo.model.binding.treatments.CreateTreatmentViewModel;
+import university.medicalrecordsdemo.model.entity.DepartmentType;
+import university.medicalrecordsdemo.model.entity.PhysicianEntity;
 import university.medicalrecordsdemo.model.entity.SickLeaveEntity;
+import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.model.entity.TreatmentEntity;
 import university.medicalrecordsdemo.service.appointment.AppointmentService;
 import university.medicalrecordsdemo.service.diagnosis.DiagnosisService;
@@ -60,10 +69,37 @@ public class AppointmentController {
 
     @GetMapping("/create")
     public String createAppointment(Model model) {
-        model.addAttribute("physicians", physicianService.findAll());
-        model.addAttribute("patients", patientService.findAll());
-        model.addAttribute("diagnosis", diagnosisService.findAll());
-        model.addAttribute("appointment", new CreateAppointmentAndSickLeaveAndTreatmentViewModel());
+        // Fetch autheticated user to get the physician's specialties which correspond to the departments and then get diagnoses for those departments
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Get the principal (user) from the Authentication object
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof PhysicianEntity) {
+                PhysicianEntity physician = (PhysicianEntity) principal;
+                Set<SpecialtyType> specialties = physician.getSpecialties();
+                Set<DepartmentType> departments = specialties.stream()
+                    .map(SpecialtyType::getDepartment)
+                    .collect(Collectors.toSet());
+
+                // Pass department types to the diagnosis service to retrieve diagnoses for those departments
+                Set<DiagnosisDto> diagnoses = diagnosisService.findAllByCategory(departments);
+
+                model.addAttribute("diagnosis", diagnoses);
+            }
+        }
+        CreateAppointmentAndSickLeaveAndTreatmentViewModel viewModel = new CreateAppointmentAndSickLeaveAndTreatmentViewModel();
+    
+        // Set default values
+        viewModel.setDate(LocalDate.now());
+        viewModel.setSickLeaveStartDate(LocalDate.now());
+
+        model.addAttribute("appointment", viewModel);
+
+        Set<PatientDto> patients = patientService.findAll();
+
+        model.addAttribute("patients", patients);
         return "/appointments/create";
     }
 
@@ -71,12 +107,30 @@ public class AppointmentController {
     public String createAppointment(Model model,
             @ModelAttribute("appointment") CreateAppointmentAndSickLeaveAndTreatmentViewModel appointment,
             BindingResult bindingResult) {
+        // if (appointment.getSickLeaveStartDate() != null) {
+        //     appointment.setSickLeaveStartDate(null);
+        // }
         if (bindingResult.hasErrors()) {
-            model.addAttribute("physicians", physicianService.findAll());
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnosis", diagnosisService.findAll());
             return "/appointments/create";
         }
+
+        // Fetch autheticated user to get the physician's specialties which correspond to the departments and then get diagnoses for those departments
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        PhysicianEntity physician= null;
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Get the principal (user) from the Authentication object
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof PhysicianEntity) {
+                physician = (PhysicianEntity) principal;
+            }
+        }
+
+        // System.out.println("Physician: " + physicianDto);
+
 
         SickLeaveDto appointmentSickLeave = null;
         TreatmentDto appointmentTreatment = null;
@@ -95,7 +149,7 @@ public class AppointmentController {
             appointmentTreatment = treatmentService.create(createTreatmentDTO);
         }
 
-        //
+        // //
         SickLeaveEntity sickLeave = appointmentSickLeave != null
                 ? modelMapper.map(appointmentSickLeave, SickLeaveEntity.class)
                 : null;
@@ -106,10 +160,12 @@ public class AppointmentController {
         CreateAppointmentViewModel createAppointmentViewModel = new CreateAppointmentViewModel(
                 appointment.getDate(),
                 appointment.getPatient(),
-                appointment.getPhysician(),
+                physician,
                 sickLeave,
                 appointment.getDiagnosis(),
                 treatment);
+
+        // CreateAppointmentViewModel createAppointmentViewModel = new CreateAppointmentViewModel();
 
         CreateAppointmentDto appointmentDTO = modelMapper.map(createAppointmentViewModel, CreateAppointmentDto.class);
         appointmentService.create(appointmentDTO);

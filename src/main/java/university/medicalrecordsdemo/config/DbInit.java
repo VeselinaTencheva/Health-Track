@@ -270,6 +270,9 @@ public class DbInit implements CommandLineRunner {
 
         @Transactional
         public void loadDiagnoses() {
+                if (diagnosisRepository.findAll().size() > 0) {
+                        diagnosisRepository.deleteAll();
+                }
                 List<DiagnosisEntity> diagnoses = Arrays.asList(
                         // Immunology
                         new DiagnosisEntity("Allergic Rhinitis", "IMM001", DepartmentType.IMMUNOLOGY, "Allergic inflammation of the nasal airways"),
@@ -311,7 +314,7 @@ public class DbInit implements CommandLineRunner {
                         new DiagnosisEntity("Anemia", "HEMAT001", DepartmentType.HEMATOLOGY, "Condition characterized by a deficiency of red blood cells or hemoglobin"),
                         new DiagnosisEntity("Hemophilia", "HEMAT002", DepartmentType.HEMATOLOGY, "Genetic disorder impairing the body's ability to control blood clotting"),
                         new DiagnosisEntity("Thrombocytopenia", "HEMAT003", DepartmentType.HEMATOLOGY, "Low platelet count in the blood"),
-                        new DiagnosisEntity("Leukemia", "HEMAT004", DepartmentType.HEMATOLOGY, "Cancer of the body's blood-forming tissues"),
+                        // new DiagnosisEntity("Leukemia", "HEMAT004", DepartmentType.HEMATOLOGY, "Cancer of the body's blood-forming tissues"),
                         new DiagnosisEntity("Sickle Cell Disease", "HEMAT005", DepartmentType.HEMATOLOGY, "Inherited blood disorder causing abnormal hemoglobin"),
                         // Neurology
                         new DiagnosisEntity("Migraine", "NEURO001", DepartmentType.NEUROLOGY, "Recurrent throbbing headaches"),
@@ -335,8 +338,8 @@ public class DbInit implements CommandLineRunner {
                         new DiagnosisEntity("Asthma", "PULM001", DepartmentType.PULMONOLOGY, "Chronic inflammatory disease of the airways"),
                         new DiagnosisEntity("Chronic Obstructive Pulmonary Disease (COPD)", "PULM002", DepartmentType.PULMONOLOGY, "Progressive lung disease causing breathing problems"),
                         new DiagnosisEntity("Pneumonia", "PULM003", DepartmentType.PULMONOLOGY, "Infection that inflames air sacs in one or both lungs"),
-                        new DiagnosisEntity("Tuberculosis", "PULM004", DepartmentType.PULMONOLOGY, "Bacterial infection that primarily affects the lungs"),
-                        new DiagnosisEntity("Lung Cancer", "PULM005", DepartmentType.PULMONOLOGY, "Cancer that begins in the lungs")
+                        new DiagnosisEntity("Tuberculosis", "PULM004", DepartmentType.PULMONOLOGY, "Bacterial infection that primarily affects the lungs")
+                        // new DiagnosisEntity("Lung Cancer", "PULM005", DepartmentType.PULMONOLOGY, "Cancer that begins in the lungs")
                 );
             
                 diagnosisRepository.saveAll(diagnoses);

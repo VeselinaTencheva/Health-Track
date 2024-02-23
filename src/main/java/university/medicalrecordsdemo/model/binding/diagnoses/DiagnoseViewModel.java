@@ -13,5 +13,6 @@ public class DiagnoseViewModel {
     private long id;
     private String name;
     private String description;
+    private String category;
     private int patientsCount;
 }

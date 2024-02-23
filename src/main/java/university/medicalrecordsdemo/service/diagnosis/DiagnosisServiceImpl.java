@@ -5,10 +5,14 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.repository.DiagnosisRepository;
+import university.medicalrecordsdemo.util.enums.DiagnosisTableColumnsEnum;
 import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
 import university.medicalrecordsdemo.dto.diagnosis.UpdateDiagnosisDto;
 import university.medicalrecordsdemo.model.entity.AppointmentEntity;
@@ -43,6 +47,19 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         }
     
         return diagnosisDtos;
+    }
+
+    @Override
+    public Page<DiagnosisDto> findAllByPageAndSort(int page, int size, DiagnosisTableColumnsEnum sortField, String sortDirection) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            direction = Sort.Direction.DESC;
+        }
+        final String sortFieldString = sortField.getColumnName().toString();
+        Sort sort = Sort.by(direction, sortFieldString);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<DiagnosisEntity> diagnosisPage = diagnosisRepository.findAll(pageRequest);
+        return diagnosisPage.map(this::convertToDiagnosisDto);
     }
 
     @Override

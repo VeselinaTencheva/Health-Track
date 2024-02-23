@@ -6,16 +6,17 @@ import university.medicalrecordsdemo.dto.diagnosis.UpdateDiagnosisDto;
 import university.medicalrecordsdemo.model.binding.diagnoses.CreateDiagnoseViewModel;
 import university.medicalrecordsdemo.model.binding.diagnoses.DiagnoseViewModel;
 import university.medicalrecordsdemo.service.diagnosis.DiagnosisService;
-
+import university.medicalrecordsdemo.util.enums.DiagnosisTableColumnsEnum;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-// import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @AllArgsConstructor
@@ -24,13 +25,40 @@ public class DiagnosisController {
     private DiagnosisService diagnosisService;
     private ModelMapper modelMapper;
 
+    private static final String DEFAULT_SORT_FIELD = "NAME";
+
     @GetMapping
-    public String getDiagnosis(Model model) {
-        final List<DiagnoseViewModel> diagnoses = diagnosisService.findAll()
-                .stream()
-                .map(this::convertToDiagnoseViewModel)
-                .collect(Collectors.toList());
-        model.addAttribute("diagnoses", diagnoses);
+    public String getDiagnosis(Model model,
+                                @RequestParam(name = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "size", defaultValue = "5") int size,
+                                @RequestParam(name = "sortField", defaultValue = DEFAULT_SORT_FIELD) String sortField,
+                                @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection) {
+        Page<DiagnoseViewModel> diagnosisPage;
+        List<Integer> pageNumbers;
+
+        DiagnosisTableColumnsEnum sortFieldEnum = DiagnosisTableColumnsEnum.valueOf(sortField);
+
+        diagnosisPage = diagnosisService.findAllByPageAndSort(page, size, sortFieldEnum, sortDirection)
+                                        .map(this::convertToDiagnoseViewModel);
+
+
+        
+        pageNumbers = IntStream.rangeClosed(0, diagnosisPage.getTotalPages() - 1)
+                            .boxed()
+                            .collect(Collectors.toList());
+
+        model.addAttribute("diagnosisPage", diagnosisPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("size", size);
+        model.addAttribute("diagnoses", diagnosisPage.getContent());
+        model.addAttribute("firstPage", 0);
+        model.addAttribute("totalPages", diagnosisPage.getTotalPages());
+        model.addAttribute("pageNumbers", pageNumbers); 
+        model.addAttribute("columnsEnum", DiagnosisTableColumnsEnum.values());
+
+
         return "diagnoses/all";
     }
 

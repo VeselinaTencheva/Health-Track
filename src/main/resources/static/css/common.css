@@ -2,6 +2,7 @@ body {
     font-family: 'AvenirNextLTPro-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
     background: whitesmoke ;
     height: 100vh;
+    overflow: hidden;
     /*top: 0;*/
     /*right: 0;*/
     /*bottom: 0;*/
@@ -9,7 +10,6 @@ body {
 }
 
 main {
-    /*height: 100%;*/
     position: absolute;
     top: 87px;
     right: 0;
@@ -17,14 +17,29 @@ main {
     left: 0;
     display: flex;
 }
+
 .emr-image {
-    background-image: url(../images/emr-background.jpg);
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+}
 
+.background-image {
+    background-image: url(../images/emr-background.jpg);
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.5; /* Adjust the opacity value as needed */
+}
+
+.content-container {
+    position: relative;
+    z-index: 1; /* Ensure content appears above the background image */
 }
 
 .header {
@@ -42,13 +57,40 @@ main {
     align-items: center;
 }
 
-.section-white-container {
-    width: 100%;
-    border-radius: 5px;
-    background: #ffffff;
-    padding: 30px;
+.login-page {
+    background-color: #385399;
+    height: 100%;
+
 }
 
+.login-button {
+    background-color: #385399 !important;
+    color: #f9f9f9 !important;
+    border: 1px solid #385399;
+    width: 100%;
+}
+
+.login-page-title {
+    font-weight: 800;
+    color: #385399;
+}
+
+.login-form-container {
+    width: 40%;
+    border: 2px solid #ccc; /* Border color and width */
+    border-radius: 30px; /* Border radius for rounded corners */
+    padding: 30px; /* Padding inside the form container */
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+}
+
+.section-white-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
 
 .sidenav {
     /*height: 100%; !* Full-height: remove this if you want "auto" height *!*/
@@ -72,7 +114,7 @@ main {
     flex-direction: column;
     align-items: center;
     overflow: auto;
-    padding: 20px;
+    padding: 50px;
 }
 
 /* The navigation menu links */
@@ -115,7 +157,7 @@ main {
 }
 
 .forgot-password{
-    color: white;
+    color: #385399;
     font-size: 14px;
     cursor: pointer;
 }
@@ -130,10 +172,14 @@ a {
 
 }
 
-a:hover {
-    color: #8e1015;
+.logout-btn {
+    color: white;
+}
+
+.logout-btn:hover {
+    color: white;
     opacity: 85%;
-    font-weight: 700;
+    font-weight: 800;
     text-decoration: none;
 }
 

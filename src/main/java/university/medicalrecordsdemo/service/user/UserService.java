@@ -11,7 +11,7 @@ import university.medicalrecordsdemo.model.entity.UserEntity;
 
 public interface UserService extends UserDetailsService // extends UserDetailsService //
 {
-    // UserEntity findUserByUserName(String username);
+    UserEntity findUserByUserName(String username);
 
     // UserEntity findUserByEmail(String email);
 

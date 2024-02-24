@@ -31,4 +31,8 @@ public class AppointmentViewModel {
 
     private SickLeaveEntity sickLeave;
 
+    public String getSickLeaveInfo() {
+        return this.sickLeave == null ? "" : this.sickLeave.getStartDate() + " - " + this.sickLeave.getDuration() + " days";
+    }
+
 }

@@ -1,6 +1,9 @@
 package university.medicalrecordsdemo.service.appointment;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -11,6 +14,7 @@ import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.model.entity.AppointmentEntity;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
 import university.medicalrecordsdemo.repository.AppointmentRepository;
+import university.medicalrecordsdemo.util.enums.AppointmentTableColumnsEnum;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +30,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepository.findAll().stream()
                 .map(this::convertToAppointmentDto)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Page<AppointmentDto> findAllByPageAndSort(int page, int size, AppointmentTableColumnsEnum sortField, String sortDirection) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            direction = Sort.Direction.DESC;
+        }
+        final String sortFieldString = sortField.getColumnName().toString();
+        Sort sort = Sort.by(direction, sortFieldString);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<AppointmentEntity> patientPage = appointmentRepository.findAll(pageRequest);
+        return patientPage.map(this::convertToAppointmentDto);
     }
 
     @Override

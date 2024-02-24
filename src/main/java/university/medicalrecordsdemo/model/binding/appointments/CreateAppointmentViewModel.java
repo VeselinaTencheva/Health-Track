@@ -6,17 +6,6 @@ import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.dto.sickLeave.SickLeaveDto;
 import university.medicalrecordsdemo.dto.treatment.TreatmentDto;
-import university.medicalrecordsdemo.model.entity.DiagnosisEntity;
-import university.medicalrecordsdemo.model.entity.PatientEntity;
-import university.medicalrecordsdemo.model.entity.PhysicianEntity;
-import university.medicalrecordsdemo.model.entity.SickLeaveEntity;
-import university.medicalrecordsdemo.model.entity.TreatmentEntity;
-
-// import org.jetbrains.annotations.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
-
-// import javax.validation.constraints.NotBlank;
-// import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
 @Getter
@@ -25,21 +14,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString
 public class CreateAppointmentViewModel {
-    // @NotBlank
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    // @PastOrPresent
     private LocalDate date;
 
-    // @NotBlank
-    private PatientEntity patient;
+    private PatientDto patient;
 
-    // @NotBlank
-    private PhysicianEntity physician;
+    private PhysicianDto physician;
 
-    private SickLeaveEntity sickLeave;
+    private SickLeaveDto sickLeave;
 
-    private DiagnosisEntity diagnosis;
+    private DiagnosisDto diagnosis;
 
-    private TreatmentEntity treatment;
+    private TreatmentDto treatment;
 
 }

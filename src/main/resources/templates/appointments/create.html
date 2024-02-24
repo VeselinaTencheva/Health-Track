@@ -22,22 +22,23 @@
                                     </div>
                                     <div class="col">
                                         <label for="diagnosis">Diagnosis</label>
-                                        <select class="form-control"  type="text" th:field="${appointment.diagnosis}" id="diagnosis">
+                                        <select class="form-control"  type="text" th:field="${appointment.diagnosisId}" id="diagnosis">
                                             <option value="">Select Diagnose</option>
                                             <option th:each="diagnose : ${diagnosis}" th:value="${diagnose.id}" th:text="${diagnose.name}"></option>
                                         </select>
-<!--                                        <input class="form-control" type="text" th:field="*{diagnosis}" placeholder="Diagnosis" id="diagnosis">-->
+                                        <span class="text-danger" th:if="${#fields.hasErrors('diagnosisId')}"
+                                            th:errors="${appointment.diagnosisId}">Diagnose Error</span>
                                     </div>
                                 </div>
                                 <div class="row py-2">
                                     <div class="col">
                                         <label for="patient">Patient</label>
-                                        <select class="form-control" type="text" th:field="${appointment.patient}" id="patient">
+                                        <select class="form-control" type="text" th:field="${appointment.patientId}" id="patient">
                                             <option value="">Select Patient</option>
                                             <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.firstName + ' ' + patient.lastName}"></option>
                                         </select>
-                                        <span class="text-danger" th:if="${#fields.hasErrors('patient')}"
-                                              th:errors="${appointment.patient}">Patient Error</span>
+                                        <span class="text-danger" th:if="${#fields.hasErrors('patientId')}"
+                                              th:errors="${appointment.patientId}">Patient Error</span>
 <!--                                        <input class="form-control" type="text" th:field="*{patient}" placeholder="Patient" id="patient">-->
                                     </div>
                                 </div>
@@ -49,43 +50,33 @@
                                     <div class="col">
                                         <label for="start-date">Start Date</label>
                                         <input class="form-control" type="date" th:value="${appointment.sickLeaveStartDate}" placeholder="Start Date" id="start-date">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveStartDate')}"
+                                        th:errors="${appointment.sickLeaveStartDate}">Sick Leave Start Date Error</span>
                                     </div>                                    
                                     <div class="col">
                                         <label for="duration">Duration</label>
                                         <input class="form-control" type="text" th:field="*{sickLeaveDuration}" placeholder="Duration" id="duration">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveDuration')}"
+                                        th:errors="${appointment.sickLeaveDuration}">Sick Leave Duration Error</span>
                                     </div>
-<!--                                    <div class="col">-->
-<!--                                        <label>Add Sick Leave</label>-->
-<!--                                        <a th:href="@{'/sick-leaves/create/'}">Add Sick Leave</a>-->
-
-<!--                                        &lt;!&ndash;                                        <select class="form-control"  type="text" th:field="${appointment.sick-leave}" id="sick-leave">&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <option value="">Select Sick Leave</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <option th:each="physician : ${sick}" th:value="${physician.id}" th:text="${physician.name}"></option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        </select>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <input class="form-control" type="text" th:field="*{sickLeave}" placeholder="Sick Leave" id="sick-leave">&ndash;&gt;-->
-<!--                                    </div>-->
-<!--                                    <div class="col">-->
-<!--                                        <label for="treatment">Add Treatment</label>-->
-<!--                                        <select class="form-control"  type="text" th:field="${appointment.treatment}" id="treatment">-->
-<!--                                            <option value="">Select Treatment</option>-->
-<!--                                            <option th:each="treatment : ${treatments}" th:value="${treatment.id}" th:text="${treatment.name}"></option>-->
-<!--                                        </select>-->
-<!--&lt;!&ndash;                                        <input class="form-control" type="text" th:field="*{treatment}" placeholder="Treatment" id="treatment">&ndash;&gt;-->
-<!--                                    </div>-->
                                 </div>
                                 <h3>Treatment Info: </h3>
                                 <div class="row py-2">
                                     <div class="col">
                                         <label for="treatmentName">Name</label>
                                         <input class="form-control" type="text" th:field="*{treatmentName}" placeholder="Treatment Name" id="treatmentName">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('treatmentName')}"
+                                        th:errors="${appointment.treatmentName}">Treatment Name Error</span>
                                     </div>
                                     <div class="col">
                                         <label for="treatmentDescription">Description</label>
                                         <input class="form-control" type="text" th:field="*{treatmentDescription}" placeholder="Treatment Description" id="treatmentDescription">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('treatmentDescription')}"
+                                        th:errors="${appointment.treatmentDescription}">Treatment Description Error</span>
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn">Save</button>
+                            <button type="submit" class="btn w-25">Save</button>
                         </form>
                     </div>
                 </div>

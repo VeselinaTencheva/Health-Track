@@ -12,14 +12,29 @@
                 <div class="section-white-container">
                     <form class="w-100 d-flex flex-column" style="gap: 1rem;" action="#" th:action="@{/diagnosis/update/{id}(id=${id})}" th:object="${diagnosis}" method="post">
                         <div class="form-group">
-                            <div class="row">
-                                <div class="col-4">
+                            <div class="row py-2">
+                                <div class="col">
                                     <label for="name">Name</label>
                                     <input class="form-control" type="text" th:field="${diagnosis.name}" placeholder="Name" id="name">
                                     <span class="text-danger" th:if="${#fields.hasErrors('name')}"
                                             th:errors="${diagnosis.name}">Name Error</span>
                                 </div>
-                                <div class="col-8">
+                                <div class="col">
+                                    <label for="department">Department</label>
+                                    <select class="form-control"  type="text" th:field="${diagnosis.category}" id="department">
+                                        <option th:each="department : ${departments}" th:value="${department}" th:text="${department}"
+                                        ></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <label for="code">Code</label>
+                                    <input class="form-control" type="text" th:field="${diagnosis.code}" placeholder="Code" id="code">
+                                    <span class="text-danger" th:if="${#fields.hasErrors('code')}"
+                                            th:errors="${diagnosis.code}">Code Error</span>
+                                </div>
+                                <div class="col-9">
                                     <label for="description">Description</label>
                                     <input class="form-control" type="text" th:field="${diagnosis.description}" placeholder="Description" id="description">
                                     <span class="text-danger" th:if="${#fields.hasErrors('description')}"

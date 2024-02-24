@@ -1,5 +1,6 @@
 package university.medicalrecordsdemo.model.binding.diagnoses;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +11,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateDiagnoseViewModel {
-    // @NotBlank(message = "Name is mandatory")
-    // @Size(min = 5, max=30, message = "Name must be between 5 and 30 characters")
+    @NotEmpty(message = "Code is required")
+    private String code;
+
+    @NotEmpty(message = "Name is required")
     private String name;
 
-    // @Size(min = 5, max=50, message = "Description must be between 5 and 50
-    // characters")
+    @NotEmpty(message = "Description is required")
     private String description;
+
+    @NotEmpty(message = "Department is required")
+    private String category;
 }

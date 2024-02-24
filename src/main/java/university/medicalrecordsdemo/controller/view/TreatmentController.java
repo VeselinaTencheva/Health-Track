@@ -4,21 +4,22 @@ import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.treatment.CreateTreatmentDto;
 import university.medicalrecordsdemo.dto.treatment.TreatmentDto;
 import university.medicalrecordsdemo.dto.treatment.UpdateTreatmentDto;
-import university.medicalrecordsdemo.dto.treatment.CreateTreatmentDto;
 import university.medicalrecordsdemo.model.binding.treatments.CreateTreatmentViewModel;
 import university.medicalrecordsdemo.model.binding.treatments.TreatmentViewModel;
 import university.medicalrecordsdemo.model.binding.treatments.UpdateTreatmentViewModel;
 import university.medicalrecordsdemo.service.treatment.TreatmentService;
+import university.medicalrecordsdemo.util.enums.TreatmentTableColumnsEnum;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-// import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @AllArgsConstructor
@@ -28,15 +29,42 @@ public class TreatmentController {
     private TreatmentService treatmentService;
     private ModelMapper modelMapper;
 
+    private static final String DEFAULT_SORT_FIELD = "NAME";
+
     @GetMapping
-    public String getTreatments(Model model) {
-        final List<TreatmentViewModel> treatments = treatmentService.findAll()
-                .stream()
-                .map(this::convertToTreatmentViewModel)
-                .collect(Collectors.toList());
-        model.addAttribute("treatments", treatments);
-        return "treatments/all";
+    public String getTreatments(Model model,
+                                @RequestParam(name = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "size", defaultValue = "5") int size,
+                                @RequestParam(name = "sortField", defaultValue = DEFAULT_SORT_FIELD) String sortField,
+                                @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection) {
+        Page<TreatmentViewModel> treatmentPage;
+        List<Integer> pageNumbers;
+
+        // TreatmentTableColumnsEnum sortFieldEnum = TreatmentTableColumnsEnum.valueOf(sortField.toUpperCase());
+        TreatmentTableColumnsEnum sortFieldEnum = TreatmentTableColumnsEnum.valueOf(sortField);
+
+        treatmentPage = treatmentService.findAllByPageAndSort(page, size, sortFieldEnum, sortDirection)
+                                        .map(this::convertToTreatmentViewModel);
+        
+        pageNumbers = IntStream.rangeClosed(0, treatmentPage.getTotalPages() - 1)
+                            .boxed()
+                            .collect(Collectors.toList());
+
+        model.addAttribute("treatmentPage", treatmentPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("size", size);
+        model.addAttribute("treatments", treatmentPage.getContent());
+        model.addAttribute("firstPage", 0);
+        model.addAttribute("totalPages", treatmentPage.getTotalPages());
+        model.addAttribute("pageNumbers", pageNumbers); 
+        model.addAttribute("columnsEnum", TreatmentTableColumnsEnum.values());
+
+
+        return "/treatments/all";
     }
+
 
     @GetMapping("/{id}")
     public String getTreatmentById(Model model, @PathVariable Long id) {

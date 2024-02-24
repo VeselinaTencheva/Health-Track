@@ -13,4 +13,5 @@ public class TreatmentViewModel {
     private long id;
     private String name;
     private String description;
+    private long appointmentId;
 }

@@ -6,8 +6,11 @@
 <main class="main">
     <side-nav th:replace="~{fragments :: side-nav}"></side-nav>
     <div class="main-container">
-        <div class="row d-flex py-4">
+        <div class="row d-flex w-100 justify-content-between py-4">
             <h1 class="font-weight-bold text-center" >View Diagnosis</h1>
+            <a th:href="@{'/diagnosis/update/'+${diagnose.id}}">
+                <i class="fas fa-edit" style="font-weight: 400;"></i>
+            </a>
         </div>
         <div class="section-white-container">
             <div class="row">
@@ -18,6 +21,12 @@
                                 <label for="name">Name</label>
                                 <input readonly class="form-control" type="text" th:field="${diagnose.name}" placeholder="Name" id="name">
                             </div>
+                            <div class="col-6">
+                                <label for="department">Department</label>
+                                <input readonly class="form-control" type="text" th:field="${diagnose.category}" placeholder="Department" id="department">
+                            </div>
+                        </div>
+                        <div class="row py-2">
                             <div class="col">
                                 <label for="description">Description</label>
                                 <input readonly class="form-control" type="text" th:field="${diagnose.description}" placeholder="Description" id="description">

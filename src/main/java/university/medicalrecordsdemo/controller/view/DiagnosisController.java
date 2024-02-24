@@ -5,6 +5,8 @@ import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
 import university.medicalrecordsdemo.dto.diagnosis.UpdateDiagnosisDto;
 import university.medicalrecordsdemo.model.binding.diagnoses.CreateDiagnoseViewModel;
 import university.medicalrecordsdemo.model.binding.diagnoses.DiagnoseViewModel;
+import university.medicalrecordsdemo.model.binding.diagnoses.UpdateDiagnoseViewModel;
+import university.medicalrecordsdemo.model.entity.DepartmentType;
 import university.medicalrecordsdemo.service.diagnosis.DiagnosisService;
 import university.medicalrecordsdemo.util.enums.DiagnosisTableColumnsEnum;
 import org.modelmapper.ModelMapper;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,6 +68,7 @@ public class DiagnosisController {
 
     @GetMapping("/create")
     public String createDiagnosis(Model model) {
+        model.addAttribute("departments", DepartmentType.values());
         model.addAttribute("diagnosis", new CreateDiagnoseViewModel());
         return "/diagnoses/create";
     }
@@ -76,9 +81,10 @@ public class DiagnosisController {
     }
 
     @PostMapping("/create")
-    public String createDiagnosis(@ModelAttribute("diagnosis") CreateDiagnoseViewModel diagnosis,
+    public String createDiagnosis(Model model, @Valid @ModelAttribute("diagnosis") CreateDiagnoseViewModel diagnosis,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("departments", DepartmentType.values());
             return "/diagnoses/create";
         }
         diagnosisService.create(modelMapper.map(diagnosis, DiagnosisDto.class));
@@ -87,16 +93,18 @@ public class DiagnosisController {
 
     @GetMapping("/update/{id}")
     public String editDiagnosis(Model model, @PathVariable Long id) {
+        model.addAttribute("departments", DepartmentType.values());
         model.addAttribute("diagnosis",
                 modelMapper.map(diagnosisService.findById(id),
-                        UpdateDiagnosisDto.class));
+                        UpdateDiagnoseViewModel.class));
         return "/diagnoses/edit";
     }
 
     @PostMapping("/update/{id}")
     public String editDiagnosis(Model model, @PathVariable long id,
-            @ModelAttribute("diagnosis") DiagnoseViewModel diagnosis, BindingResult bindingResult) {
+    @Valid @ModelAttribute("diagnosis") UpdateDiagnoseViewModel diagnosis, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("departments", DepartmentType.values());
             return "/diagnoses/edit";
         }
         diagnosisService.update(id, modelMapper.map(diagnosis,

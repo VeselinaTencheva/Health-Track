@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum DiagnosisTableColumnsEnum {
+    CODE("code", "Code"),
     NAME("name", "Name"),
     DESCRIPTION("description", "Description"),
     CATEGORY("category", "Category");

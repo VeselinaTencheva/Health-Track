@@ -13,14 +13,14 @@
                 <form class="w-100 d-flex flex-column" style="gap: 1rem;" action="#" th:action="@{/patients/update/{id}(id=${id})}" th:object="${patient}" method="post">
                     <div class="row d-flex">
                         <div class="col form-group">
-                            <label for="birthDate">Username:</label>
+                            <label for="username">Username:</label>
                             <input type="text" readonly class="form-control" id="username" th:field="${patient.username}" name="username"
                                     placeholder="Username">
                             <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</span>
                         </div>
 
                         <div class="col form-group">
-                            <label for="birthDate">SSN:</label>
+                            <label for="ssn">SSN:</label>
                             <input type="text" readonly class="form-control" id="ssn" th:field="${patient.ssn}" name="ssn" placeholder="Social Security Number"/>
                         </div>
 
@@ -32,14 +32,14 @@
                     </div>
                     <div class="row d-flex">
                         <div class="col form-group">
-                            <label for="birthDate">First Name:</label>
+                            <label for="firstName">First Name:</label>
                             <input type="text" class="form-control" id="firstName" th:field="${patient.firstName}" name="firstName"
                                     placeholder="First Name">
                             <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name Error</span>
                         </div>
         
                         <div class="col form-group">
-                            <label for="birthDate">Last Name:</label>
+                            <label for="lastName">Last Name:</label>
                             <input type="text" class="form-control" id="lastName" th:field="${patient.lastName}" name="lastName"
                                     placeholder="Last Name">
                             <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</span>
@@ -58,7 +58,7 @@
                     <div class="row d-flex">
                         
                         <div class="col-4 form-group">
-                            <label>Gender:</label>
+                            <label for="gender">Gender:</label>
                             <div class="form-check">
                                 <input type="radio" id="male" th:field="${patient.gender}" name="gender" value="Male"/>
                                 <label class="form-check-label" for="male">Male</label>

@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DiagnoseViewModel {
     private long id;
+    private String code;
     private String name;
     private String description;
     private String category;

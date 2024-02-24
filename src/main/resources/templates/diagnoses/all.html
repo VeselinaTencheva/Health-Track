@@ -24,8 +24,10 @@
                                     </a>
                                 </th>
                             </th:block>
+                            <th>Patients</th>
                             <th>Actions</th>
                             <tr th:each="d : ${diagnoses}">
+                                <td th:text="${d.code}"></td>
                                 <td th:text="${d.name}"></td>
                                 <td th:text="${d.description}"></td>
                                 <td th:text="${d.category}"></td>

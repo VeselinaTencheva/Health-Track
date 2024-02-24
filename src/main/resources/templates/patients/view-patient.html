@@ -13,45 +13,41 @@
             <form class="w-100 d-flex flex-column" style="gap: 1rem;" th:object="${patient}">
                 <div class="row d-flex">
                     <div class="col form-group">
-                        <label for="birthDate">Username:</label>
+                        <label for="username">Username:</label>
                         <input type="text" readonly class="form-control" id="username" th:field="${patient.username}" name="username"
                                 placeholder="Username">
                         <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</span>
                     </div>
 
                     <div class="col form-group">
-                        <label for="birthDate">SSN:</label>
+                        <label for="ssn">SSN:</label>
                         <input type="text" readonly class="form-control" id="ssn" th:field="${patient.ssn}" name="ssn" placeholder="Social Security Number"/>
                     </div>
 
                     <div class="col form-group">
                         <label for="birthDate">Birth Date:</label>
-                        <input type="date" class="form-control" readonly id="birthDate" th:field="${patient.birthDate}" name="birthDate"/>
+                        <input type="date" class="form-control" readonly id="birthDate" th:value="${#dates.format(patient.birthDate, 'yyyy-MM-dd')}" name="birthDate"/>
                         <span class="text-danger" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">Birth Date Error</span>
                     </div>
                 </div>
                 <div class="row d-flex">
                     <div class="col form-group">
-                        <label for="birthDate">First Name:</label>
+                        <label for="firstName">First Name:</label>
                         <input type="text" readonly class="form-control" id="firstName" th:field="${patient.firstName}" name="firstName"
                                 placeholder="First Name">
                         <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name Error</span>
                     </div>
     
                     <div class="col form-group">
-                        <label for="birthDate">Last Name:</label>
+                        <label for="lastName">Last Name:</label>
                         <input type="text" readonly class="form-control" id="lastName" th:field="${patient.lastName}" name="lastName"
                                 placeholder="Last Name">
                         <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</span>
                     </div>
 
                     <div class="col form-group">
-                        <label>General Practitioner:</label>
-                        <select class="form-control" readonly type="text" th:field="${patient.physicianId}" id="gp" placeholder="Select General Practitioner">
-                            <option th:if="${patient.physicianId == null}" value="" selected>Select General Practitioner</option>
-                            <option th:each="physician : ${physicians}" th:value="${physician.id}" th:selected="${physician.id == patient.physicianId}" th:text="${physician.firstName + ' ' + physician.lastName}"></option>
-                        </select>
-                        <span class="text-danger" th:if="${#fields.hasErrors('physicianId')}" th:errors="${patient.physicianId}">General Practitioner Error</span>
+                        <label for="gp">General Practitioner:</label>
+                        <input type="text" readonly class="form-control" id="gp" th:field="${patient.physicianFullName}" name="physicianFullName" placeholder="General Practitioner Name"/>
                     </div>
 
                 </div>

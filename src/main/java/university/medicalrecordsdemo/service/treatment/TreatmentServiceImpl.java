@@ -6,8 +6,12 @@ import university.medicalrecordsdemo.dto.treatment.TreatmentDto;
 import university.medicalrecordsdemo.dto.treatment.UpdateTreatmentDto;
 import university.medicalrecordsdemo.model.entity.TreatmentEntity;
 import university.medicalrecordsdemo.repository.TreatmentRepository;
+import university.medicalrecordsdemo.util.enums.TreatmentTableColumnsEnum;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -25,6 +29,19 @@ public class TreatmentServiceImpl implements TreatmentService {
         return this.treatmentRepository.findAll().stream()
                 .map(this::convertToTreatmentDto)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Page<TreatmentDto> findAllByPageAndSort(int page, int size, TreatmentTableColumnsEnum sortField, String sortDirection) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            direction = Sort.Direction.DESC;
+        }
+        final String sortFieldString = sortField.getColumnName().toString();
+        Sort sort = Sort.by(direction, sortFieldString);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<TreatmentEntity> treatmentPage = treatmentRepository.findAll(pageRequest);
+        return treatmentPage.map(this::convertToTreatmentDto);
     }
 
     @Override

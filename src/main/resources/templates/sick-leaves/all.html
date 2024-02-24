@@ -16,11 +16,14 @@
                     <div class="row">
                             <h3 th:unless="${sickLeaves} and ${sickLeaves.size()}">There are no registered Sick Leaves!</h3>
                             <table th:if="${sickLeaves.size()>0}" class="table table-hover">
-                                <th>Patient</th>
-                                <th>Physician</th>
-                                <th>Start Date</th>
-                                <th>Duration</th>
-                                <th>Appointment</th>
+                                <th:block th:each="column :  ${columnsEnum}">
+                                    <th>
+                                        <a th:href="@{'/sick-leaves?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=' + ${column} + '&sortDirection=' + ${sortField.toString() == column.toString() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
+                                            <span th:text="${column.columnDiplayValue}"></span>
+                                            <i th:class="${sortField.toString() == column.toString() ? (sortDirection == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down') : 'fas fa-sort'}"></i>
+                                        </a>
+                                    </th>
+                                </th:block>
                                 <th>Actions</th>
                                 <tr th:each="sl : ${sickLeaves}">
                                     <td><a th:href="@{'/patients/'+${sl.patientId}}"  th:text="${sl.patientFirstName  + ' ' + sl.patientLastName}" /></td>
@@ -42,6 +45,45 @@
                                 </tr>
                             </table>
                     </div>
+                    <!-- Pagination controls -->
+                <div class="pagination-container">
+                    <div class="pagination-container">
+                        <div>
+                            <ul class="pagination">
+                                <li th:class="${currentPage == 0} ? 'disabled'">
+                                    <a th:href="@{'/sick-leaves?page=0&size=' + ${size}}"><i class="fas fa-angle-double-left"></i></a>
+                                </li>
+                                <li th:with="prevPage=${currentPage - 1}" th:class="${currentPage == 0} ? 'disabled'">
+                                    <a th:href="@{|'/sick-leaves?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size}|}">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li th:each="pageNumber : ${pageNumbers}">
+                                    <a th:href="@{'/sick-leaves?page=' + ${pageNumber} + '&size=' + ${size}}"
+                                       th:class="${pageNumber == currentPage} ? 'selected-page' : ''"
+                                       th:text="${pageNumber + 1}"></a>
+                                </li>
+                                <li th:with="nextPage=${currentPage + 1}" th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a th:href="@{|'/sick-leaves?page=' + ${nextPage} + '&size=' + ${size}|}">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a th:href="@{|'/sick-leaves?page=' + (${totalPages - 1}) + '&size=' + ${size}|}">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="dropdown">
+                            <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{'/sick-leaves?page=' + ${currentPage} + '&size=5'}">5</a></li>
+                                <li><a th:href="@{'/sick-leaves?page=' + ${currentPage} + '&size=10'}">10</a></li>
+                                <li><a th:href="@{'/sick-leaves?page=' + ${currentPage} + '&size=20'}">20</a></li>
+                            </ul>
+                        </div>
+                </div> 
                 </div>
             </div>
         </main>

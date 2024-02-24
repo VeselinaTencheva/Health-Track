@@ -25,4 +25,12 @@ public class SickLeaveViewModel {
     private String physicianLastName;
 
     private long appointmentId;
+
+    public String getPatientFullName() {
+        return this.patientFirstName + " " + this.patientLastName;
+    }
+
+    public String getPhysicianFullName() {
+        return this.physicianFirstName + " " + this.physicianLastName;
+    }
 }

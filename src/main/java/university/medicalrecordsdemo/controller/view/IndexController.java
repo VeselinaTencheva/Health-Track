@@ -3,21 +3,29 @@ package university.medicalrecordsdemo.controller.view;
 // import com.example.Medical.Records.v10.data.entity.DepartmentType;
 // import com.example.Medical.Records.v10.data.entity.physicians.Physician;
 // import com.example.Medical.Records.v10.data.view.model.physicians.CreatePhysicianAndGPViewModel;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.model.binding.physicians.CreatePhysicianViewModel;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.service.physician.PhysicianService;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 // import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import jakarta.validation.Valid;
 
 @Controller
 @AllArgsConstructor
@@ -28,6 +36,23 @@ public class IndexController {
 
     @GetMapping
     public String getIndex(Model model) {
+        // Get the authentication object
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // Get the logged user's first and last name
+
+        String email = null;
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                email = userDetails.getUsername();
+            }
+        }
+        
+        // Add the first and last name to the model
+        model.addAttribute("email", email);
+        
         return "index";
     }
 
@@ -41,9 +66,7 @@ public class IndexController {
         return "login";
     }
 
-    // TODO do the register, add view models
     @GetMapping("/register")
-    @PreAuthorize("isAnonymous()")
     public String register(Model model) {
 
         model.addAttribute("specialities", SpecialtyType.values());
@@ -53,23 +76,22 @@ public class IndexController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("isAnonymous()")
-    public String registerConfirm(CreatePhysicianViewModel model, BindingResult bindingResult) {
+    public String registerConfirm(Model model,@Valid @ModelAttribute("physician") CreatePhysicianViewModel physician,
+            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            // Add error messages to the model for display
-            return "register";
+            model.addAttribute("specialities", SpecialtyType.values());
+            return "/physicians/create";
         }
 
-        if (!model.getPassword().equals(model.getConfirmPassword())) {
-            // Use a validation annotation to handle password matching
-            bindingResult.rejectValue("confirmPassword", "PasswordMismatch", "The passwords do not match");
-            return "register";
-        }
-
-        // Create physician if validation passes
-        this.physicianService.create(this.modelMapper.map(model, PhysicianDto.class));
-
-        return "login";
+        LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
+        LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        
+        // Map the view model to DTO
+        PhysicianDto createPhysicianDTO = modelMapper.map(physician,
+                PhysicianDto.class);
+        createPhysicianDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
+        physicianService.create(createPhysicianDTO);
+        return "redirect:/physicians";
     }
 
     @GetMapping("unauthorized")

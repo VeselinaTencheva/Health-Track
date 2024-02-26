@@ -14,7 +14,12 @@
 
 <header th:fragment="header" class="header">
     <h1 class="font-weight-bold">Health Track</h1>
-    <a class="logout-btn" th:href="@{/logout}">Logout</a>
+    <div class="user-info">
+        <span th:text="'Welcome, ' + ${email}"></span> <!-- Replace John Doe with the user's name -->
+        <a class="logout-btn ml-2" th:href="@{/logout}">
+            <i class="fas fa-sign-out-alt"></i> <!-- Font Awesome icon for logout -->
+        </a>
+    </div>
 </header>
 
 <side-nav>

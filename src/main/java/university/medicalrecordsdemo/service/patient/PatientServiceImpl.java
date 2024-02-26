@@ -1,6 +1,7 @@
 package university.medicalrecordsdemo.service.patient;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,10 +16,12 @@ import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.patient.*;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
+import university.medicalrecordsdemo.model.entity.AppointmentEntity;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
 import university.medicalrecordsdemo.model.entity.PhysicianEntity;
 import university.medicalrecordsdemo.model.entity.RoleEntity;
 import university.medicalrecordsdemo.model.entity.RoleType;
+import university.medicalrecordsdemo.repository.AppointmentRepository;
 import university.medicalrecordsdemo.repository.PatientRepository;
 import university.medicalrecordsdemo.repository.RoleRepository;
 import university.medicalrecordsdemo.service.physician.PhysicianService;
@@ -29,6 +32,7 @@ import university.medicalrecordsdemo.util.enums.PatientTableColumnsEnum;
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
+    private final AppointmentRepository appointmentRepository;
     private final PhysicianService physicianService;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
@@ -56,6 +60,35 @@ public class PatientServiceImpl implements PatientService {
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         Page<PatientEntity> patientPage = patientRepository.findAll(pageRequest);
         return patientPage.map(this::convertToPatientDto);
+    }
+
+    @Override
+    public Page<PatientDto> findAllByDiagnoseAndPageAndSort(Long diagnoseId, int page, int size,
+            PatientTableColumnsEnum sortField, String sortDirection) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            direction = Sort.Direction.DESC;
+        }
+        final String sortFieldString = sortField.getColumnName().toString();
+        Sort sort = Sort.by(direction, sortFieldString);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        List<AppointmentEntity> appointments = appointmentRepository.findByDiagnosisId(diagnoseId);
+
+        Page<PatientEntity> patientPage = patientRepository.findAllByAppointmentsIn(pageRequest, appointments);
+
+        return patientPage.map(this::convertToPatientDto);
+    }
+
+    @Override
+    public Set<PatientDto> findAllByDiagnose(Long diagnoseId) {
+        List<AppointmentEntity> appointments = appointmentRepository.findByDiagnosisId(diagnoseId);
+
+        List<PatientEntity> patients = patientRepository.findAllByAppointmentsIn(appointments);
+
+        return patients
+            .stream()
+            .map(this::convertToPatientDto)
+            .collect(Collectors.toSet());
     }
 
     @Override

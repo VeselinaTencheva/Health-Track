@@ -27,6 +27,10 @@
                             </div>
                         </div>
                         <div class="row py-2">
+                            <div class="col-2">
+                                <label for="code">Code</label>
+                                <input readonly class="form-control" type="text" th:field="${diagnose.code}" placeholder="Code" id="code">
+                            </div>
                             <div class="col">
                                 <label for="description">Description</label>
                                 <input readonly class="form-control" type="text" th:field="${diagnose.description}" placeholder="Description" id="description">

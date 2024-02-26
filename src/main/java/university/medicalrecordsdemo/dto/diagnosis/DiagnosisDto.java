@@ -13,4 +13,5 @@ public class DiagnosisDto {
     private String name;
     private String description;
     private String category;
+    private int patientsCount;
 }

@@ -32,13 +32,13 @@
                                     </div>
                                 </div>
                                 <div class="row py-2">
-                                    <div class="col-3">
+                                    <div class="col-2">
                                         <label for="code">Code</label>
                                         <input class="form-control" type="text" th:field="${diagnosis.code}" placeholder="Code" id="code">
                                         <span class="text-danger" th:if="${#fields.hasErrors('code')}"
                                                 th:errors="${diagnosis.code}">Code Error</span>
                                     </div>
-                                    <div class="col-9">
+                                    <div class="col">
                                         <label for="description">Description</label>
                                         <input class="form-control" type="text" th:field="${diagnosis.description}" placeholder="Description" id="description">
                                         <span class="text-danger" th:if="${#fields.hasErrors('description')}"

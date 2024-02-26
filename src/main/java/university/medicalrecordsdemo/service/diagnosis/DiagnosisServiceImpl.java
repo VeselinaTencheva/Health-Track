@@ -18,6 +18,7 @@ import university.medicalrecordsdemo.dto.diagnosis.UpdateDiagnosisDto;
 import university.medicalrecordsdemo.model.entity.AppointmentEntity;
 import university.medicalrecordsdemo.model.entity.DepartmentType;
 import university.medicalrecordsdemo.model.entity.DiagnosisEntity;
+import university.medicalrecordsdemo.model.entity.PatientEntity;
 
 @Service
 @AllArgsConstructor
@@ -100,6 +101,12 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     private DiagnosisDto convertToDiagnosisDto(DiagnosisEntity diagnosis) {
-        return modelMapper.map(diagnosis, DiagnosisDto.class);
+        final Set<AppointmentEntity> appointments = diagnosis.getAppointments();
+        final Set<PatientEntity> patients = new HashSet<>();
+        appointments.forEach(appointment -> patients.add(appointment.getPatient()));
+        final DiagnosisDto diagnosisDto = modelMapper.map(diagnosis, DiagnosisDto.class);
+        diagnosisDto.setPatientsCount(patients.size());
+        
+        return diagnosisDto;
     }
 }

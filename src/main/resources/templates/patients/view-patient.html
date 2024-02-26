@@ -26,7 +26,7 @@
 
                     <div class="col form-group">
                         <label for="birthDate">Birth Date:</label>
-                        <input type="date" class="form-control" readonly id="birthDate" th:value="${#dates.format(patient.birthDate, 'yyyy-MM-dd')}" name="birthDate"/>
+                        <input type="date" class="form-control" readonly id="birthDate" th:value="${patient.birthDate}" name="birthDate"/>
                         <span class="text-danger" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">Birth Date Error</span>
                     </div>
                 </div>

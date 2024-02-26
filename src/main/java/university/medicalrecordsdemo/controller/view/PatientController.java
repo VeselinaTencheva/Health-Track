@@ -103,6 +103,68 @@ public class PatientController {
         model.addAttribute("totalPages", patientsPage.getTotalPages());
         model.addAttribute("pageNumbers", pageNumbers); 
         model.addAttribute("columnsEnum", PatientTableColumnsEnum.values());
+        model.addAttribute("url", "patients");
+
+
+        return "patients/patients";
+    }
+
+    @GetMapping("/diagnose/{diagnoseId}")
+    public String getPatientsByDiagnose(Model model,
+                                @PathVariable Long diagnoseId,
+                                @RequestParam(name = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "size", defaultValue = "5") int size,
+                                @RequestParam(name = "sortField", defaultValue = DEFAULT_SORT_FIELD) String sortField,
+                                @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection) {
+        Page<PatientViewModel> patientsPage;
+        List<Integer> pageNumbers;
+
+        // PatientTableColumnsEnum sortFieldEnum = PatientTableColumnsEnum.valueOf(sortField.toUpperCase());
+        PatientTableColumnsEnum sortFieldEnum = PatientTableColumnsEnum.valueOf(sortField);
+
+        if (!sortFieldEnum.equals(PatientTableColumnsEnum.FULL_NAME) && !sortFieldEnum.equals(PatientTableColumnsEnum.GP)) {
+            patientsPage = patientService.findAllByDiagnoseAndPageAndSort(diagnoseId, page, size, sortFieldEnum, sortDirection)
+                                            .map(this::convertToPatientViewModel);
+        } else {
+            List<PatientViewModel> patientViewModels = patientService.findAllByDiagnose(diagnoseId)
+                                                                            .stream()
+                                                                            .map(this::convertToPatientViewModel)
+                                                                            .collect(Collectors.toList());
+
+            if ("desc".equalsIgnoreCase(sortDirection)) {
+                if (PatientTableColumnsEnum.GP.equals(sortFieldEnum)) {
+                    patientViewModels.sort(Comparator.comparing(PatientViewModel::getPhysicianFullName).reversed());
+                } else {
+                    patientViewModels.sort(Comparator.comparing(PatientViewModel::getFullname).reversed());
+                }
+            } else {
+                if (PatientTableColumnsEnum.GP.equals(sortFieldEnum)) {
+                    patientViewModels.sort(Comparator.comparing(PatientViewModel::getPhysicianFullName));
+                } else {
+                    patientViewModels.sort(Comparator.comparing(PatientViewModel::getFullname));
+                }
+            }
+
+            int start = (int) (page * size);
+            int end = Math.min((start + size), patientViewModels.size());
+            patientsPage = new PageImpl<>(patientViewModels.subList(start, end), PageRequest.of(page, size), patientViewModels.size());
+        }
+        
+        pageNumbers = IntStream.rangeClosed(0, patientsPage.getTotalPages() - 1)
+                            .boxed()
+                            .collect(Collectors.toList());
+
+        model.addAttribute("patientsPage", patientsPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("size", size);
+        model.addAttribute("patients", patientsPage.getContent());
+        model.addAttribute("firstPage", 0);
+        model.addAttribute("totalPages", patientsPage.getTotalPages());
+        model.addAttribute("pageNumbers", pageNumbers); 
+        model.addAttribute("columnsEnum", PatientTableColumnsEnum.values());
+        model.addAttribute("url", "patients/diagnose/" + diagnoseId);
 
 
         return "patients/patients";
@@ -111,6 +173,7 @@ public class PatientController {
     @GetMapping("/{id}")
     public String getPatientById(Model model, @PathVariable Long id) {
         PatientViewModel patient = convertToPatientViewModel(patientService.findById(id));
+        
         model.addAttribute("patient", patient);
 
         return "patients/view-patient";
@@ -125,7 +188,7 @@ public class PatientController {
     }
 
     @PostMapping("/create")
-    public String createPatient(Model model,@Valid @ModelAttribute("patient") CreatePatientViewModel patient,
+    public String createPatient(Model model, @Valid @ModelAttribute("patient") CreatePatientViewModel patient,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Set<PhysicianDto> gpPhysicians = physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE);

@@ -26,13 +26,22 @@
                             </th:block>
                             <th>Patients</th>
                             <th>Actions</th>
-                            <tr th:each="d : ${diagnoses}">
+                            <tr th:each="d : ${diagnoses}" th:onclick="@{'/diagnosis/'+${d.id}}">
                                 <td th:text="${d.code}"></td>
                                 <td th:text="${d.name}"></td>
                                 <td th:text="${d.description}"></td>
                                 <td th:text="${d.category}"></td>
-                                <td th:text="${d.patientsCount}"></td>
                                 <td>
+                                    <a
+                                            th:href="@{'/patients/diagnose/'+${d.id}}"
+                                            th:text="${d.patientsCount}">
+                                    </a>
+                                </td>
+                                <td>
+                                    <!-- View button with view icon -->
+                                    <a th:href="@{'/diagnosis/'+${d.id}}">
+                                        <i class="fas fa-eye" style="font-weight: 400;"></i>
+                                    </a>
                                     <!-- Edit button with edit icon -->
                                     <a th:href="@{'/diagnosis/update/'+${d.id}}">
                                         <i class="fas fa-edit" style="font-weight: 400;"></i>

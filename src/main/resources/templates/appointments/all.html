@@ -38,12 +38,10 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a
-                                            th:if="${app?.treatment?.getId() != null}"
-                                            th:href="@{'/treatments/'+${app?.getTreatment()?.getId()}}"
-                                            th:text="${app.getTreatment().getName()}"></a>
-                                </td>
-                                <td>
+                                    <!-- View button with view icon -->
+                                    <a th:href="@{'/appointments/'+${app.id}}">
+                                        <i class="fas fa-eye" style="font-weight: 400;"></i>
+                                    </a>
                                     <!-- Edit button with edit icon -->
                                     <a th:href="@{'/appointments/update/'+${app.id}}">
                                         <i class="fas fa-edit" style="font-weight: 400;"></i>
@@ -62,25 +60,25 @@
                                 <div>
                                     <ul class="pagination">
                                         <li th:class="${currentPage == 0} ? 'disabled'">
-                                            <a th:href="@{'/appointments?page=0&size=' + ${size}}"><i class="fas fa-angle-double-left"></i></a>
+                                            <a th:href="@{'/appointments?page=0&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}"><i class="fas fa-angle-double-left"></i></a>
                                         </li>
                                         <li th:with="prevPage=${currentPage - 1}" th:class="${currentPage == 0} ? 'disabled'">
-                                            <a th:href="@{|'/appointments?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size}|}">
+                                            <a th:href="@{|'/appointments?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
                                                 <i class="fas fa-angle-left"></i>
                                             </a>
                                         </li>
                                         <li th:each="pageNumber : ${pageNumbers}">
-                                            <a th:href="@{'/appointments?page=' + ${pageNumber} + '&size=' + ${size}}"
+                                            <a th:href="@{'/appointments?page=' + ${pageNumber} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}"
                                             th:class="${pageNumber == currentPage} ? 'selected-page' : ''"
                                             th:text="${pageNumber + 1}"></a>
                                         </li>
                                         <li th:with="nextPage=${currentPage + 1}" th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                                            <a th:href="@{|'/appointments?page=' + ${nextPage} + '&size=' + ${size}|}">
+                                            <a th:href="@{|'/appointments?page=' + ${nextPage} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
                                                 <i class="fas fa-angle-right"></i>
                                             </a>
                                         </li>
                                         <li th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                                            <a th:href="@{|'/appointments?page=' + (${totalPages - 1}) + '&size=' + ${size}|}">
+                                            <a th:href="@{|'/appointments?page=' + (${totalPages - 1}) + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
                                                 <i class="fas fa-angle-double-right"></i>
                                             </a>
                                         </li>
@@ -89,9 +87,9 @@
                                 <div class="dropdown">
                                     <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
                                     <ul class="dropdown-menu">
-                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=5'}">5</a></li>
-                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=10'}">10</a></li>
-                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=20'}">20</a></li>
+                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=5 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">5</a></li>
+                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=10 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">10</a></li>
+                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=20 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">20</a></li>
                                     </ul>
                                 </div>
                             </div> 

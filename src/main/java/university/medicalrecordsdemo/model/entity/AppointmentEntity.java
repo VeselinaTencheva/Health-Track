@@ -39,8 +39,6 @@ public class AppointmentEntity extends BaseEntity {
     @JoinColumn(name = "diagnosis_id")
     private DiagnosisEntity diagnosis;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "treatment_id")
-    private TreatmentEntity treatment;
-
+    @Column(name = "treatment")
+    private String treatment;
 }

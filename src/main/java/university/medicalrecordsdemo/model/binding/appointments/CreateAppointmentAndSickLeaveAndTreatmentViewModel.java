@@ -38,9 +38,6 @@ public class CreateAppointmentAndSickLeaveAndTreatmentViewModel {
     @NotNull(message = "Diagnose is mandatory")
     private Long diagnosisId;
 
-    @NotEmptyIfPresent(message = "Treatment Name should be between 5 and 20 symbols",field = "treatmentName", minParam = "5", maxParam = "20")
-    private String treatmentName;
-
-    @NotEmptyIfPresent(message = "Treatment Description should be between 5 and 50 symbols", field = "treatmentDescription", minParam = "5", maxParam = "50")
-    private String treatmentDescription;
+    @NotEmptyIfPresent(message = "Treatment should be between 5 and 20 symbols",field = "treatmentName", minParam = "5", maxParam = "20")
+    private String treatment;
 }

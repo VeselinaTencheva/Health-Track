@@ -130,7 +130,7 @@ public class PhysicianServiceImpl implements PhysicianService {
         this.physicianRepository.deleteById(id);
     }
 
-    private PhysicianDto convertToPhysicianDTO(PhysicianEntity physician) {
+    public PhysicianDto convertToPhysicianDTO(PhysicianEntity physician) {
         return modelMapper.map(physician, PhysicianDto.class);
     }
 

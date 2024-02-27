@@ -6,8 +6,11 @@
 <main class="main">
     <side-nav th:replace="~{fragments :: side-nav}"></side-nav>
     <div class="main-container">
-        <div class="row d-flex py-4">
+        <div class="row d-flex w-100 justify-content-between py-4">
             <h1 class="font-weight-bold text-center" >View Sick Leave</h1>
+            <a th:href="@{'/sick-leaves/update/'+${sickLeave.id}}">
+                <i class="fas fa-edit" style="font-weight: 400;"></i>
+            </a>
         </div>
         <div class="section-white-container">
             <div class="row">
@@ -16,7 +19,7 @@
                         <div class="row py-2">
                             <div class="col">
                                 <label for="startDate">Start Date</label>
-                                <input readonly class="form-control" type="date" th:field="${sickLeave.startDate}" placeholder="Start Date" id="startDate">
+                                <input readonly class="form-control" type="date" th:value="${sickLeave.startDate}" placeholder="Start Date" id="startDate">
                             </div>
                             <div class="col">
                                 <label for="duration">Duration</label>

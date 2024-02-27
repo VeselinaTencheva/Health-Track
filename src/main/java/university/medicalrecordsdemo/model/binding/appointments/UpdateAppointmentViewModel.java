@@ -4,12 +4,10 @@ import university.medicalrecordsdemo.model.entity.DiagnosisEntity;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
 import university.medicalrecordsdemo.model.entity.PhysicianEntity;
 import university.medicalrecordsdemo.model.entity.SickLeaveEntity;
-import university.medicalrecordsdemo.model.entity.TreatmentEntity;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-// TODO generally take a look and fix the models 
 
 @Getter
 @Setter
@@ -30,5 +28,5 @@ public class UpdateAppointmentViewModel {
 
     private DiagnosisEntity diagnosis;
 
-    private TreatmentEntity treatment;
+    private String treatment;
 }

@@ -61,10 +61,6 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority(RoleType.ROLE_GENERAL_PRACTITIONER.name(),
                                                                 RoleType.ROLE_PHYSICIAN.name(),
                                                                 RoleType.ROLE_ADMIN.name())
-                                                .requestMatchers("/treatments")
-                                                .hasAnyAuthority(RoleType.ROLE_GENERAL_PRACTITIONER.name(),
-                                                                RoleType.ROLE_PHYSICIAN.name(),
-                                                                RoleType.ROLE_ADMIN.name())
                                                 .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
                                                 .requestMatchers("/register", "/login").anonymous().anyRequest()
                                                 .authenticated())
@@ -74,7 +70,11 @@ public class SecurityConfiguration {
                                 .exceptionHandling(exceptionHandling -> exceptionHandling
                                                 .accessDeniedPage("/unauthorized"))
                                 .logout(logout -> logout
-                                                .logoutSuccessUrl("/login"))
+                                        .logoutUrl("/logout") // Specify the logout URL
+                                        .logoutSuccessUrl("/login") // Redirect to login page after logout
+                                        .invalidateHttpSession(true) // Invalidate session
+                                        .deleteCookies("JSESSIONID") // Delete cookies
+                                )
                                 .httpBasic(withDefaults());
 
                 return http.build();

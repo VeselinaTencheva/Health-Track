@@ -15,6 +15,6 @@ public class UpdateAppointmentDto {
     private Long physicianId; // ID of the physician
     private Long sickLeaveId; // ID of the sick leave
     private Long diagnosisId; // ID of the diagnosis
-    private Long treatmentId; // ID of the treatment
+    private String treatment; // treatment 
 
 }

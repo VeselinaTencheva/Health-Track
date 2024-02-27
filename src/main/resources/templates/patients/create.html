@@ -13,9 +13,9 @@
                     <form class="w-100 d-flex flex-column" style="gap: 1rem;" action="#" th:action="@{/patients/create}" th:object="${patient}" method="post">
                         <div class="row d-flex">
                             <div class="col form-group">
-                                <label for="birthDate">Username:</label>
+                                <label for="birthDate">Email:</label>
                                 <input type="text" class="form-control" id="username" th:field="${patient.username}" name="username"
-                                        placeholder="Username">
+                                        placeholder="Email">
                                 <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</span>
                             </div>
             

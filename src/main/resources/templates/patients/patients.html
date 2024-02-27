@@ -40,6 +40,10 @@
                                     th:text="${patient.physicianFullName}"></td>
                             <td><a th:href="@{'/patients/'+${patient.id} + '/diagnoses'}">Diagnoses</a></td>
                             <td>
+                                 <!-- View button with view icon -->
+                                 <a th:href="@{'/patients/'+${patient.id}}">
+                                    <i class="fas fa-eye" style="font-weight: 400;"></i>
+                                </a>
                                 <!-- Edit button with edit icon -->
                                 <a th:href="@{'/patients/edit-patient/'+${patient.id}}">
                                     <i class="fas fa-edit" style="font-weight: 400;"></i>

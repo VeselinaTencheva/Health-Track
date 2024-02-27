@@ -5,15 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SickLeaveViewModel {
     private long id;
-    private LocalDate startDate;
+    private String startDate;
     private int duration;
 
     private long patientId;

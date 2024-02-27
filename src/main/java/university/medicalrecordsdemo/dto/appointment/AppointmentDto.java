@@ -9,17 +9,16 @@ import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
 import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.dto.sickLeave.SickLeaveDto;
-import university.medicalrecordsdemo.dto.treatment.TreatmentDto;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class AppointmentDto {
-    private String id;
+    private Long id;
     private LocalDate date;
     private PatientDto patient;
     private PhysicianDto physician;
     private SickLeaveDto sickLeave;
     private DiagnosisDto diagnosis;
-    private TreatmentDto treatment;
+    private String treatment;
 }

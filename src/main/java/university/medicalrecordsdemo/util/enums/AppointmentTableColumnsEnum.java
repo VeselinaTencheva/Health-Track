@@ -8,8 +8,7 @@ public enum AppointmentTableColumnsEnum {
     DIAGNOSIS("Diagnosis", "diagnosis"),
     PATIENT("Patient", "patient"),
     PHYSICIAN("Physician", "physician"),
-    SICK_LEAVE("Sick Leave Info", "sickLeave"),
-    TREATMENT("Treatment", "treatment");
+    SICK_LEAVE("Sick Leave Info", "sickLeave");
 
 
     private final String columnName;

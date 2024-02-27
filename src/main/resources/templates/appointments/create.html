@@ -24,7 +24,7 @@
                                         <label for="diagnosis">Diagnosis</label>
                                         <select class="form-control"  type="text" th:field="${appointment.diagnosisId}" id="diagnosis">
                                             <option value="">Select Diagnose</option>
-                                            <option th:each="diagnose : ${diagnosis}" th:value="${diagnose.id}" th:text="${diagnose.name}"></option>
+                                            <option th:each="diagnose : ${diagnoses}" th:value="${diagnose.id}" th:text="${diagnose.name}"></option>
                                         </select>
                                         <span class="text-danger" th:if="${#fields.hasErrors('diagnosisId')}"
                                             th:errors="${appointment.diagnosisId}">Diagnose Error</span>
@@ -63,16 +63,10 @@
                                 <h3>Treatment Info: </h3>
                                 <div class="row py-2">
                                     <div class="col">
-                                        <label for="treatmentName">Name</label>
-                                        <input class="form-control" type="text" th:field="*{treatmentName}" placeholder="Treatment Name" id="treatmentName">
-                                        <span class="text-danger" th:if="${#fields.hasErrors('treatmentName')}"
-                                        th:errors="${appointment.treatmentName}">Treatment Name Error</span>
-                                    </div>
-                                    <div class="col">
-                                        <label for="treatmentDescription">Description</label>
-                                        <input class="form-control" type="text" th:field="*{treatmentDescription}" placeholder="Treatment Description" id="treatmentDescription">
-                                        <span class="text-danger" th:if="${#fields.hasErrors('treatmentDescription')}"
-                                        th:errors="${appointment.treatmentDescription}">Treatment Description Error</span>
+                                        <label for="treatment">Treatment</label>
+                                        <input class="form-control" type="text" th:field="*{treatment}" placeholder="Treatment" id="treatment">
+                                        <span class="text-danger" th:if="${#fields.hasErrors('treatment')}"
+                                        th:errors="${appointment.treatment}">Treatment Error</span>
                                     </div>
                                 </div>
                             </div>

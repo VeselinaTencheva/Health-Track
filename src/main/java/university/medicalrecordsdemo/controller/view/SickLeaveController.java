@@ -19,6 +19,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,9 +97,8 @@ public class SickLeaveController {
 
     @GetMapping("/{id}")
     public String getSickLeaveById(Model model, @PathVariable Long id) {
-        model.addAttribute("sickLeave",
-                modelMapper.map(sickLeaveService.findById(id),
-                        UpdateSickLeaveViewModel.class));
+        SickLeaveViewModel sickLeave = convertToSickLeaveViewModel(sickLeaveService.findById(id));
+        model.addAttribute("sickLeave", sickLeave);
         return "/sick-leaves/view";
     }
 
@@ -118,20 +121,22 @@ public class SickLeaveController {
 
     @GetMapping("/update/{id}")
     public String editSickLeave(Model model, @PathVariable Long id) {
-        model.addAttribute("sickLeave",
-                modelMapper.map(sickLeaveService.findById(id),
-                        UpdateSickLeaveViewModel.class));
+        UpdateSickLeaveViewModel sickLeave = modelMapper.map(sickLeaveService.findById(id),
+        UpdateSickLeaveViewModel.class);
+        model.addAttribute("sickLeave", sickLeave);
         return "/sick-leaves/edit";
     }
 
     @PostMapping("/update/{id}")
-    public String editSickLeave(@PathVariable long id, @ModelAttribute("sickLeave") UpdateSickLeaveViewModel sickLeave,
+    public String editSickLeave(@PathVariable long id,@Valid @ModelAttribute("sickLeave") UpdateSickLeaveViewModel sickLeave,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/sick-leaves/edit";
         }
-        sickLeaveService.update(id, modelMapper.map(sickLeave,
-                UpdateSickLeaveDto.class));
+         
+        UpdateSickLeaveDto updateSickLeaveDto = modelMapper.map(sickLeave, UpdateSickLeaveDto.class);
+        updateSickLeaveDto.setStartDate(LocalDate.parse(sickLeave.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        sickLeaveService.update(id, updateSickLeaveDto);
         return "redirect:/sick-leaves";
     }
 

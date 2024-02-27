@@ -35,6 +35,10 @@
                         <td th:text="${ph.isGP}"></td>
                         <td th:text="${ph.patientsCount}"></td>
                         <td>
+                            <!-- View button with view icon -->
+                            <a th:href="@{'/physicians/'+${ph.id}}">
+                                <i class="fas fa-eye" style="font-weight: 400;"></i>
+                            </a>
                             <!-- Edit button with edit icon -->
                             <a th:href="@{'/physicians/update/'+${ph.id}}">
                                 <i class="fas fa-edit" style="font-weight: 400;"></i>

@@ -14,12 +14,12 @@
                         <form class="w-100 p-2" action="#" th:action="@{/sick-leaves/update/{id}(id=${id})}" th:object="${sickLeave}" method="post">
                             <div class="form-group">
                                 <div class="row py-2">
-                                    <div class="col">
-                                        <label for="startDate">Start Date</label>
-                                        <input class="form-control" type="date" th:field="${sickLeave.startDate}" placeholder="Start Date" id="startDate">
-                                        <span class="text-danger" th:if="${#fields.hasErrors('startDate')}"
-                                              th:errors="${sickLeave.startDate}">Sick Leave Start Date Error</span>
+                                    <div class="col form-group">
+                                        <label for="startDate">Start Date:</label>
+                                        <input type="date" class="form-control" id="startDate" th:field="${sickLeave.startDate}" name="startDate"/>
+                                        <span class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">Start Date Error</span>
                                     </div>
+                                    
                                 </div>
                                 <div class="row py-2">
                                     <div class="col">

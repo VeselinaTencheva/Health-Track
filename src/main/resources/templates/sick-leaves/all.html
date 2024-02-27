@@ -32,11 +32,14 @@
                                     <td th:text="${sl.Duration}"></td>
                                     <td><a th:href="@{'/appointments/'+${sl.appointmentId}}" th:text="${sl.appointmentId}" /></td>
                                     <td>
+                                        <!-- View button with view icon -->
+                                        <a th:href="@{'/sick-leaves/'+${sl.id}}">
+                                            <i class="fas fa-eye" style="font-weight: 400;"></i>
+                                        </a>
                                         <!-- Edit button with edit icon -->
                                         <a th:href="@{'/sick-leaves/update/'+${sl.id}}">
                                             <i class="fas fa-edit" style="font-weight: 400;"></i>
                                         </a>
-                                        
                                         <!-- Delete button with delete icon -->
                                         <a th:href="@{'/sick-leaves/delete/'+${sl.id}}">
                                             <i class="fas fa-trash-alt" style="font-weight: 400;"></i>

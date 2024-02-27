@@ -13,9 +13,9 @@
                     <form class="w-100 d-flex flex-column" style="gap: 1rem;" action="#"  th:action="@{/physicians/create}" th:object="${physician}" method="post">
                         <div class="row d-flex">
                             <div class="col form-group">
-                                <label for="username">Username:</label>
+                                <label for="username">Email:</label>
                                 <input type="text" class="form-control" id="username" th:field="${physician.username}" name="username"
-                                        placeholder="Username">
+                                        placeholder="Email">
                                 <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</span>
                             </div>
 
@@ -64,7 +64,6 @@
                                 <input type="date" class="form-control" id="birthDate" th:field="${physician.birthDate}" name="birthDate"/>
                                 <span class="text-danger" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">Birth Date Error</span>
                             </div>
-                            
                             <div class="col">
                                 <label for="specialties">Specialties</label>
                                 <div class="form-group mt-1" style="height: 120px; overflow: auto; width: 100%;">

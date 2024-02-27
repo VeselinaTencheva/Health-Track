@@ -3,36 +3,44 @@ package university.medicalrecordsdemo.model.binding.appointments;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import university.medicalrecordsdemo.model.entity.DiagnosisEntity;
-import university.medicalrecordsdemo.model.entity.PatientEntity;
-import university.medicalrecordsdemo.model.entity.PhysicianEntity;
-import university.medicalrecordsdemo.model.entity.SickLeaveEntity;
-import university.medicalrecordsdemo.model.entity.TreatmentEntity;
-
-import java.time.LocalDate;
+import university.medicalrecordsdemo.model.binding.diagnoses.DiagnoseViewModel;
+import university.medicalrecordsdemo.model.binding.patients.PatientViewModel;
+import university.medicalrecordsdemo.model.binding.physicians.PhysiciansViewModel;
+import university.medicalrecordsdemo.model.binding.sickLeaves.SickLeaveViewModel;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class AppointmentViewModel {
 
-    // Appointment Data
-    private LocalDate date;
+    private String date;
 
     private long id;
 
-    private PatientEntity patient;
+    private PatientViewModel patient;
 
-    private PhysicianEntity physician;
+    private PhysiciansViewModel physician;
 
-    private DiagnosisEntity diagnosis;
+    private DiagnoseViewModel diagnosis;
 
-    private TreatmentEntity treatment;
+    private String treatment;
 
-    private SickLeaveEntity sickLeave;
+    private SickLeaveViewModel sickLeave;
 
     public String getSickLeaveInfo() {
-        return this.sickLeave == null ? "" : this.sickLeave.getStartDate() + " - " + this.sickLeave.getDuration() + " days";
+        return this.sickLeave.getStartDate() == null ? "" : this.sickLeave.getStartDate() + " - " + this.sickLeave.getDuration() + " days";
+    }
+
+    public String getPatientInfo() {
+        return this.patient.getFirstName() + " " + this.patient.getLastName();
+    }
+
+    public String getPhysicianInfo() {
+        return this.physician.getFirstName() + " " + this.physician.getLastName();
+    }
+
+    public String getDiagnosisInfo() {
+        return this.diagnosis.getName();
     }
 
 }

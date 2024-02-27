@@ -5,7 +5,6 @@ import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
 import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.dto.sickLeave.SickLeaveDto;
-import university.medicalrecordsdemo.dto.treatment.TreatmentDto;
 import java.time.LocalDate;
 
 @Getter
@@ -24,6 +23,6 @@ public class CreateAppointmentViewModel {
 
     private DiagnosisDto diagnosis;
 
-    private TreatmentDto treatment;
+    private String treatment;
 
 }

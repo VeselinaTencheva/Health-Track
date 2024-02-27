@@ -238,7 +238,7 @@ public class PatientController {
         return "redirect:/patients";
     }
 
-    private PatientViewModel convertToPatientViewModel(PatientDto patientDTO) {
+    public PatientViewModel convertToPatientViewModel(PatientDto patientDTO) {
         final PatientViewModel patientViewModel = modelMapper.map(patientDTO, PatientViewModel.class);
         if (patientDTO.getGeneralPractitioner() != null) {
             patientViewModel.setPhysicianId(patientDTO.getGeneralPractitioner().getId());

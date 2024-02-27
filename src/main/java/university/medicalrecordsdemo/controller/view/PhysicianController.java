@@ -173,7 +173,7 @@ public class PhysicianController {
         return "redirect:/physicians";
     }
 
-    private PhysiciansViewModel convertToPhysiciansViewModel(PhysicianDto physicianDTO) {
+    public PhysiciansViewModel convertToPhysiciansViewModel(PhysicianDto physicianDTO) {
         final PhysiciansViewModel physiciansViewModel = modelMapper.map(physicianDTO, PhysiciansViewModel.class);
         physiciansViewModel.setGP(physicianDTO.getSpecialties().contains(SpecialtyType.GENERAL_PRACTICE));
         physiciansViewModel.setPatientsCount(physicianDTO.getPatients().size());

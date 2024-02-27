@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -62,7 +65,16 @@ public class IndexController {
     }
 
     @GetMapping("logout")
-    public String logout(Model model) {
+    public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
+        // Invalidate the session
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // Clear the authentication
+        SecurityContextHolder.clearContext();
+
         return "login";
     }
 
@@ -80,7 +92,7 @@ public class IndexController {
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("specialities", SpecialtyType.values());
-            return "/physicians/create";
+            return "/register";
         }
 
         LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :

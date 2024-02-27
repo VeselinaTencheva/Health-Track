@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class DiagnosisDto {
-    private String id;
+    private Long id;
     private String code;
     private String name;
     private String description;

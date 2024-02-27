@@ -101,11 +101,16 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     private DiagnosisDto convertToDiagnosisDto(DiagnosisEntity diagnosis) {
-        final Set<AppointmentEntity> appointments = diagnosis.getAppointments();
+        final Set<AppointmentEntity> appointments = diagnosis.getAppointments() != null ? diagnosis.getAppointments() : new HashSet<>();
+
         final Set<PatientEntity> patients = new HashSet<>();
-        appointments.forEach(appointment -> patients.add(appointment.getPatient()));
         final DiagnosisDto diagnosisDto = modelMapper.map(diagnosis, DiagnosisDto.class);
-        diagnosisDto.setPatientsCount(patients.size());
+        if (appointments.size() > 0) {
+            appointments.forEach(appointment -> patients.add(appointment.getPatient()));
+            diagnosisDto.setPatientsCount(patients.size());
+        } else {
+            diagnosisDto.setPatientsCount(0);
+        }
         
         return diagnosisDto;
     }

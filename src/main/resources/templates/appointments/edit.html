@@ -18,35 +18,31 @@
                                         <label for="date">Date</label>
                                         <input class="form-control" type="date" th:field="${appointment.date}"  id="date">
                                     </div>
-                                    <div class="col">
+                                    <!-- <div class="col">
                                         <label for="physician">Physician</label>
                                         <select class="form-control"  type="text" th:field="*{physician}" id="physician">
                                             <option value="">Select Physician</option>
                                             <option th:each="p : ${physicians}" th:value="${p.id}" th:text="${p.name}"
                                             ></option>
                                         </select>
-                                        <!--                                        <input class="form-control" type="text" th:field="*{physician}" placeholder="Physician" id="physician">-->
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="row py-2">
                                     <div class="col">
                                         <label for="diagnosis">Diagnose</label>
-                                        <select class="form-control"  type="text" th:field="*{diagnosis}" id="diagnosis">
-                                            <option value="">Select Diagnose</option>
-                                            <option th:each="d : ${diagnosis}" th:value="${d.id}" th:text="${d.name}"
+                                        <select class="form-control"  type="text" th:field="${appointment.diagnosisId}" id="diagnosis">
+                                            <option th:each="d : ${diagnosis}" th:value="${d.id}" th:text="${d.name}" th:selected="${d.id == appointment.diagnosisId}"
                                             ></option>
                                         </select>
-<!--                                        <input class="form-control" type="text" th:field="*{diagnosis}" placeholder="Diagnosis" id="diagnosis">-->
                                     </div>
-                                    <div class="col">
+                                    <!-- <div class="col">
                                         <label for="patient">Patient</label>
-                                        <select class="form-control"  type="text" th:field="*{patient}" id="patient">
+                                        <select class="form-control"  type="text" th:field="${appointment.patient}" id="patient">
                                             <option value="">Select Patient</option>
                                             <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.name}"
                                             ></option>
                                         </select>
-<!--                                        <input class="form-control" type="text" th:field="*{patient}" placeholder="Patient" id="patient">-->
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <h3>Sick Leave Info: </h3>
                                 <div class="row py-2">
@@ -63,12 +59,8 @@
                             <h3>Treatment Info: </h3>
                             <div class="row py-2">
                                 <div class="col">
-                                    <label for="treatment-name">Treatment Name</label>
-                                    <input class="form-control" type="text" th:field="*{treatmentName}" placeholder="Treatment Name" id="treatment-name">
-                                </div>
-                                <div class="col">
-                                    <label for="treatment-description">Treatment Description</label>
-                                    <input class="form-control" type="text" th:field="*{treatmentDescription}" placeholder="Treatment Description" id="treatment-description">
+                                    <label for="treatment">Treatment</label>
+                                    <input class="form-control" type="text" th:field="*{treatment}" placeholder="Treatment" id="treatment">
                                 </div>
                             </div>
                             <button type="submit" class="btn">Save</button>

@@ -91,28 +91,32 @@ public class SickLeaveController {
         model.addAttribute("pageNumbers", pageNumbers); 
         model.addAttribute("columnsEnum", SickLeaveTableColumnsEnum.values());
 
+        model.addAttribute("contentTemplate", "sick-leaves/all");
 
-        return "/sick-leaves/all";
+        return "layout";
     }
 
     @GetMapping("/{id}")
     public String getSickLeaveById(Model model, @PathVariable Long id) {
         SickLeaveViewModel sickLeave = convertToSickLeaveViewModel(sickLeaveService.findById(id));
         model.addAttribute("sickLeave", sickLeave);
-        return "/sick-leaves/view";
+        model.addAttribute("contentTemplate", "sick-leaves/view");
+        return "layout";
     }
 
     @GetMapping("/create")
     public String createSickLeave(Model model) {
         model.addAttribute("sickLeave", new CreateSickLeaveViewModel());
-        return "/sick-leaves/create";
+        model.addAttribute("contentTemplate", "sick-leaves/create");
+        return "layout";
     }
 
     @PostMapping("/create")
-    public String createSickLeave(@ModelAttribute("sickLeave") CreateSickLeaveViewModel sickLeave,
+    public String createSickLeave(Model model, @Valid @ModelAttribute("sickLeave") CreateSickLeaveViewModel sickLeave,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/sick-leaves/create";
+            model.addAttribute("contentTemplate", "sick-leaves/create");
+            return "layout";
         }
         sickLeaveService.create(modelMapper.map(sickLeave,
                 CreateSickLeaveDto.class));
@@ -124,14 +128,17 @@ public class SickLeaveController {
         UpdateSickLeaveViewModel sickLeave = modelMapper.map(sickLeaveService.findById(id),
         UpdateSickLeaveViewModel.class);
         model.addAttribute("sickLeave", sickLeave);
-        return "/sick-leaves/edit";
+        model.addAttribute("contentTemplate", "sick-leaves/edit");
+
+        return "layout";
     }
 
     @PostMapping("/update/{id}")
-    public String editSickLeave(@PathVariable long id,@Valid @ModelAttribute("sickLeave") UpdateSickLeaveViewModel sickLeave,
+    public String editSickLeave(Model model, @PathVariable long id,@Valid @ModelAttribute("sickLeave") UpdateSickLeaveViewModel sickLeave,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/sick-leaves/edit";
+            model.addAttribute("contentTemplate", "sick-leaves/edit");
+            return "layout";
         }
          
         UpdateSickLeaveDto updateSickLeaveDto = modelMapper.map(sickLeave, UpdateSickLeaveDto.class);

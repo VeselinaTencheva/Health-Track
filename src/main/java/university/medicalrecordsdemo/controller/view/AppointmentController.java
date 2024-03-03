@@ -130,9 +130,10 @@ public class AppointmentController {
         model.addAttribute("totalPages", appointmentsPage.getTotalPages());
         model.addAttribute("pageNumbers", pageNumbers); 
         model.addAttribute("columnsEnum", AppointmentTableColumnsEnum.values());
+        model.addAttribute("contentTemplate", "appointments/all");
 
 
-        return "appointments/all";
+        return "layout";
     }
 
     @GetMapping("/create")
@@ -150,7 +151,9 @@ public class AppointmentController {
         Set<PatientDto> patients = patientService.findAll();
 
         model.addAttribute("patients", patients);
-        return "/appointments/create";
+        model.addAttribute("contentTemplate", "appointments/create");
+
+        return "layout";
     }
 
     @PostMapping("/create")
@@ -163,7 +166,8 @@ public class AppointmentController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnosis", diagnosisService.findAll());
-            return "/appointments/create";
+            model.addAttribute("contentTemplate", "appointments/create");
+            return "layout";
         }
 
         // Fetch autheticated user to get the physician's specialties which correspond to the departments and then get diagnoses for those departments
@@ -212,7 +216,8 @@ public class AppointmentController {
         final AppointmentDto appointment = appointmentService.findById(id);
         final AppointmentViewModel appointmentViewModel = modelMapper.map(appointment, AppointmentViewModel.class);
         model.addAttribute("appointment", appointmentViewModel);
-        return "appointments/view";
+        model.addAttribute("contentTemplate", "appointments/view");
+        return "layout";
     }
 
 
@@ -231,7 +236,8 @@ public class AppointmentController {
         }
 
         model.addAttribute("appointment", updateAppointment);
-        return "/appointments/edit";
+        model.addAttribute("contentTemplate", "appointments/edit");
+        return "layout";
     }
 
     @PostMapping("/update/{id}")
@@ -243,7 +249,8 @@ public class AppointmentController {
             model.addAttribute("physicians", physicianService.findAll());
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnosis", diagnosisService.findAll());
-            return "/appointments/update";
+            model.addAttribute("contentTemplate", "appointments/edit");
+            return "layout";
         }
 
         System.out.println("Appointment: " + appointment);

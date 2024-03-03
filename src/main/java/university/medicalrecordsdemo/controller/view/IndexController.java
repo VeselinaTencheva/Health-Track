@@ -1,9 +1,5 @@
 package university.medicalrecordsdemo.controller.view;
 
-// import com.example.Medical.Records.v10.data.entity.DepartmentType;
-// import com.example.Medical.Records.v10.data.entity.physicians.Physician;
-// import com.example.Medical.Records.v10.data.view.model.physicians.CreatePhysicianAndGPViewModel;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
@@ -15,8 +11,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,24 +33,9 @@ public class IndexController {
 
     @GetMapping
     public String getIndex(Model model) {
-        // Get the authentication object
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        
-        // Get the logged user's first and last name
-
-        String email = null;
-        if (authentication != null && authentication.isAuthenticated()) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails) {
-                UserDetails userDetails = (UserDetails) principal;
-                email = userDetails.getUsername();
-            }
-        }
-        
         // Add the first and last name to the model
-        model.addAttribute("email", email);
-        
-        return "index";
+        model.addAttribute("contentTemplate", "index");
+        return "layout";
     }
 
     @GetMapping("login")

@@ -1,104 +1,94 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="~{fragments :: head}"></head>
-    <body>
-        <header th:replace="~{fragments :: header}"></header>
-        <main class="main">
-            <side-nav th:replace="~{fragments :: side-nav}"></side-nav>
-            <div class="main-container">
-                <div class="row d-flex">
-                    <h1 class="font-weight-bold text-center" >Create Patient</h1>
+<div th:fragment="content">
+    <div class="row d-flex">
+        <h1 class="font-weight-bold text-center" >Create Patient</h1>
+    </div>
+    <div class="section-white-container">
+        <form class="w-100 d-flex flex-column" style="gap: 1rem;" action="#" th:action="@{/patients/create}" th:object="${patient}" method="post">
+            <div class="row d-flex">
+                <div class="col form-group">
+                    <label for="birthDate">Email:</label>
+                    <input type="text" class="form-control" id="username" th:field="${patient.username}" name="username"
+                            placeholder="Email">
+                    <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</span>
                 </div>
-                <div class="section-white-container">
-                    <form class="w-100 d-flex flex-column" style="gap: 1rem;" action="#" th:action="@{/patients/create}" th:object="${patient}" method="post">
-                        <div class="row d-flex">
-                            <div class="col form-group">
-                                <label for="birthDate">Email:</label>
-                                <input type="text" class="form-control" id="username" th:field="${patient.username}" name="username"
-                                        placeholder="Email">
-                                <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</span>
-                            </div>
-            
-                            <div class="col form-group">
-                                <label for="birthDate">Password:</label>
-                                <input type="password" class="form-control" id="password" th:field="${patient.password}" name="password"
-                                        placeholder="Password">
-                                <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</span>
-                            </div>
 
-                            <div class="col form-group">
-                                <label for="birthDate">SSN:</label>
-                                <input type="text" class="form-control" id="ssn" th:field="${patient.ssn}" name="ssn" placeholder="Social Security Number"/>
-                                <span class="text-danger" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}">SSN Error</span>
-                            </div>
-                        </div>
-                        <div class="row d-flex">
-                            <div class="col form-group">
-                                <label for="birthDate">First Name:</label>
-                                <input type="text" class="form-control" id="firstName" th:field="${patient.firstName}" name="firstName"
-                                        placeholder="First Name">
-                                <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name Error</span>
-                            </div>
-            
-                            <div class="col form-group">
-                                <label for="birthDate">Last Name:</label>
-                                <input type="text" class="form-control" id="lastName" th:field="${patient.lastName}" name="lastName"
-                                        placeholder="Last Name">
-                                <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</span>
-                            </div>
+                <div class="col form-group">
+                    <label for="birthDate">Password:</label>
+                    <input type="password" class="form-control" id="password" th:field="${patient.password}" name="password"
+                            placeholder="Password">
+                    <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</span>
+                </div>
 
-                            <div class="col form-group">
-                                <label for="birthDate">Birth Date:</label>
-                                <input type="date" class="form-control" id="birthDate" th:field="${patient.birthDate}" name="birthDate"/>
-                                <span class="text-danger" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">Birth Date Error</span>
-                            </div>
-        
-                        </div>
-                        <div class="row d-flex">
-
-                            <div class="col form-group">
-                                <label>General Practitioner:</label>
-                                <select class="form-control"  type="text" th:field="${patient.generalPractitioner}" id="gp">
-                                    <option value="">Select General Practitioner</option>
-                                    <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.firstName + ' ' + physician.lastName}"
-                                    ></option>
-                                </select>
-                                <span class="text-danger" th:if="${#fields.hasErrors('generalPractitioner')}"
-                                        th:errors="${patient.generalPractitioner}">General Practitioner Error</span>
-                            </div>
-                            
-                            <div class="col form-group">
-                                <label>Gender:</label>
-                                <div class="form-check">
-                                    <input type="radio" id="male" th:field="${patient.gender}" name="gender" value="Male"/>
-                                    <label class="form-check-label" for="male">Male</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" id="female" th:field="${patient.gender}" name="gender" value="Female"/>
-                                    <label class="form-check-label" for="female">Female</label>
-                                </div>
-                                <span class="text-danger" th:if="${#fields.hasErrors('gender')}"
-                                    th:errors="${patient.gender}">Gender Error</span>
-                            </div>
-            
-                            <div class="col form-group">
-                                <label>Paid Insurance:</label>
-                                <div class="form-check">
-                                    <input type="radio" id="true" th:field="${patient.hasInsurance}" name="hasInsurance" value="True"/>
-                                    <label class="form-check-label" for="true">True</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" id="false" th:field="${patient.hasInsurance}" name="hasInsurance" value="False"/>
-                                    <label class="form-check-label" for="false">False</label>
-                                </div>
-                                <span class="text-danger" th:if="${#fields.hasErrors('hasInsurance')}"
-                                    th:errors="${patient.hasInsurance}">Has Insurance Error</span>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn w-25">Save</button>
-                    </form>
+                <div class="col form-group">
+                    <label for="birthDate">SSN:</label>
+                    <input type="text" class="form-control" id="ssn" th:field="${patient.ssn}" name="ssn" placeholder="Social Security Number"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}">SSN Error</span>
                 </div>
             </div>
-        </main>
-    </body>
-</html>
+            <div class="row d-flex">
+                <div class="col form-group">
+                    <label for="birthDate">First Name:</label>
+                    <input type="text" class="form-control" id="firstName" th:field="${patient.firstName}" name="firstName"
+                            placeholder="First Name">
+                    <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name Error</span>
+                </div>
+
+                <div class="col form-group">
+                    <label for="birthDate">Last Name:</label>
+                    <input type="text" class="form-control" id="lastName" th:field="${patient.lastName}" name="lastName"
+                            placeholder="Last Name">
+                    <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</span>
+                </div>
+
+                <div class="col form-group">
+                    <label for="birthDate">Birth Date:</label>
+                    <input type="date" class="form-control" id="birthDate" th:field="${patient.birthDate}" name="birthDate"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">Birth Date Error</span>
+                </div>
+
+            </div>
+            <div class="row d-flex">
+
+                <div class="col form-group">
+                    <label>General Practitioner:</label>
+                    <select class="form-control"  type="text" th:field="${patient.generalPractitioner}" id="gp">
+                        <option value="">Select General Practitioner</option>
+                        <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.firstName + ' ' + physician.lastName}"
+                        ></option>
+                    </select>
+                    <span class="text-danger" th:if="${#fields.hasErrors('generalPractitioner')}"
+                            th:errors="${patient.generalPractitioner}">General Practitioner Error</span>
+                </div>
+                
+                <div class="col form-group">
+                    <label>Gender:</label>
+                    <div class="form-check">
+                        <input type="radio" id="male" th:field="${patient.gender}" name="gender" value="Male"/>
+                        <label class="form-check-label" for="male">Male</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" id="female" th:field="${patient.gender}" name="gender" value="Female"/>
+                        <label class="form-check-label" for="female">Female</label>
+                    </div>
+                    <span class="text-danger" th:if="${#fields.hasErrors('gender')}"
+                        th:errors="${patient.gender}">Gender Error</span>
+                </div>
+
+                <div class="col form-group">
+                    <label>Paid Insurance:</label>
+                    <div class="form-check">
+                        <input type="radio" id="true" th:field="${patient.hasInsurance}" name="hasInsurance" value="True"/>
+                        <label class="form-check-label" for="true">True</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" id="false" th:field="${patient.hasInsurance}" name="hasInsurance" value="False"/>
+                        <label class="form-check-label" for="false">False</label>
+                    </div>
+                    <span class="text-danger" th:if="${#fields.hasErrors('hasInsurance')}"
+                        th:errors="${patient.hasInsurance}">Has Insurance Error</span>
+                </div>
+            </div>
+            <button type="submit" class="btn w-25">Save</button>
+        </form>
+    </div>
+</div>

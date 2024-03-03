@@ -61,23 +61,27 @@ public class DiagnosisController {
         model.addAttribute("totalPages", diagnosisPage.getTotalPages());
         model.addAttribute("pageNumbers", pageNumbers); 
         model.addAttribute("columnsEnum", DiagnosisTableColumnsEnum.values());
+        model.addAttribute("contentTemplate", "diagnoses/all");
 
-
-        return "diagnoses/all";
+        return "layout";
     }
 
     @GetMapping("/create")
     public String createDiagnosis(Model model) {
         model.addAttribute("departments", DepartmentType.values());
         model.addAttribute("diagnosis", new CreateDiagnoseViewModel());
-        return "/diagnoses/create";
+        model.addAttribute("contentTemplate", "diagnoses/create");
+
+        return "layout";
     }
 
     @GetMapping("/{id}")
     public String getDiagnoseById(Model model, @PathVariable Long id) {
         model.addAttribute("diagnose", modelMapper.map(diagnosisService.findById(id),
                 DiagnoseViewModel.class));
-        return "diagnoses/view";
+        model.addAttribute("contentTemplate", "diagnoses/view");
+
+        return "layout";
     }
 
     @PostMapping("/create")
@@ -85,7 +89,9 @@ public class DiagnosisController {
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("departments", DepartmentType.values());
-            return "/diagnoses/create";
+            model.addAttribute("contentTemplate", "diagnoses/create");
+
+            return "layout";
         }
         diagnosisService.create(modelMapper.map(diagnosis, DiagnosisDto.class));
         return "redirect:/diagnosis";
@@ -97,7 +103,9 @@ public class DiagnosisController {
         model.addAttribute("diagnosis",
                 modelMapper.map(diagnosisService.findById(id),
                         UpdateDiagnoseViewModel.class));
-        return "/diagnoses/edit";
+        model.addAttribute("contentTemplate", "diagnoses/edit");
+
+        return "layout";
     }
 
     @PostMapping("/update/{id}")
@@ -105,7 +113,9 @@ public class DiagnosisController {
     @Valid @ModelAttribute("diagnosis") UpdateDiagnoseViewModel diagnosis, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("departments", DepartmentType.values());
-            return "/diagnoses/edit";
+            model.addAttribute("contentTemplate", "diagnoses/edit");
+
+            return "layout";
         }
         diagnosisService.update(id, modelMapper.map(diagnosis,
                 UpdateDiagnosisDto.class));

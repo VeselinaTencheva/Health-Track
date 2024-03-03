@@ -101,9 +101,9 @@ public class PhysicianController {
         model.addAttribute("totalPages", physiciansPage.getTotalPages());
         model.addAttribute("pageNumbers", pageNumbers); 
         model.addAttribute("columnsEnum", PhysicianTableColumnsEnum.values());
+        model.addAttribute("contentTemplate", "physicians/all");
 
-
-        return "physicians/all";
+        return "layout";
     }
     
 
@@ -112,14 +112,18 @@ public class PhysicianController {
         PhysiciansViewModel physician = convertToPhysiciansViewModel(physicianService.findById(id));
         model.addAttribute("physician", physician);
         model.addAttribute("departments", DepartmentType.values());
-        return "physicians/view";
+        model.addAttribute("contentTemplate", "physicians/view");
+
+        return "layout";
     }
 
     @GetMapping("/create")
     public String showCreatePhysicianForm(Model model) {
         model.addAttribute("specialities", SpecialtyType.values());
         model.addAttribute("physician", new CreatePhysicianViewModel());
-        return "/physicians/create";
+        model.addAttribute("contentTemplate", "physicians/create");
+
+        return "layout";
     }
 
     @PostMapping("/create")
@@ -127,7 +131,9 @@ public class PhysicianController {
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("specialities", SpecialtyType.values());
-            return "/physicians/create";
+            model.addAttribute("contentTemplate", "physicians/create");
+
+            return "layout";
         }
 
         LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
@@ -145,7 +151,9 @@ public class PhysicianController {
     public String showEditPhysicianForm(Model model, @PathVariable Long id) {
         model.addAttribute("physician", modelMapper.map(physicianService.findById(id), UpdatePhysicianViewModel.class));
         model.addAttribute("specialities", SpecialtyType.values());
-        return "/physicians/edit";
+        model.addAttribute("contentTemplate", "physicians/edit");
+
+        return "layout";
     }
 
     @PostMapping("/update/{id}")
@@ -154,7 +162,9 @@ public class PhysicianController {
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("specialities", SpecialtyType.values());
-            return "/physicians/edit";
+            model.addAttribute("contentTemplate", "physicians/edit");
+
+        return "layout";
         }
         LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
         LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);

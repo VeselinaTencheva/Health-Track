@@ -104,9 +104,10 @@ public class PatientController {
         model.addAttribute("pageNumbers", pageNumbers); 
         model.addAttribute("columnsEnum", PatientTableColumnsEnum.values());
         model.addAttribute("url", "patients");
+        model.addAttribute("contentTemplate", "patients/patients");
 
+        return "layout";
 
-        return "patients/patients";
     }
 
     @GetMapping("/diagnose/{diagnoseId}")
@@ -175,8 +176,9 @@ public class PatientController {
         PatientViewModel patient = convertToPatientViewModel(patientService.findById(id));
         
         model.addAttribute("patient", patient);
+        model.addAttribute("contentTemplate", "patients/view-patient");
 
-        return "patients/view-patient";
+        return "layout";
     }
 
     @GetMapping("/create")
@@ -184,7 +186,9 @@ public class PatientController {
         model.addAttribute("patient", new CreatePatientViewModel());
         Set<PhysicianDto> gpPhysicians = physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE);
         model.addAttribute("physicians", gpPhysicians);
-        return "/patients/create";
+        model.addAttribute("contentTemplate", "patients/create");
+        return "layout";
+
     }
 
     @PostMapping("/create")
@@ -193,7 +197,8 @@ public class PatientController {
         if (bindingResult.hasErrors()) {
             Set<PhysicianDto> gpPhysicians = physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE);
             model.addAttribute("physicians", gpPhysicians);
-            return "/patients/create";
+            model.addAttribute("contentTemplate", "patients/create");
+            return "layout";
         }
 
         LocalDate birthDate = patient.getBirthDate() == null || patient.getBirthDate().isEmpty() ? null :
@@ -217,7 +222,10 @@ public class PatientController {
 
         model.addAttribute("patient", updatePatientViewModel);
         model.addAttribute("physicians", physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE));
-        return "/patients/edit-patient";
+
+        model.addAttribute("contentTemplate", "patients/edit-patient");
+
+        return "layout";
     }
 
     @PostMapping("/update/{id}")
@@ -225,7 +233,8 @@ public class PatientController {
             @Valid @ModelAttribute("patient") UpdatePatientViewModel patient, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("physicians", physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE));
-            return "/patients/edit-patient";
+            model.addAttribute("contentTemplate", "patients/edit-patient");
+            return "layout";
         }
 
         patientService.update(id, modelMapper.map(patient, UpdatePatientDto.class));

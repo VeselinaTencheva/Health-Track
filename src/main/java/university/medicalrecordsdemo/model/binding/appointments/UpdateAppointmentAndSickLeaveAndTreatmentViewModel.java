@@ -40,6 +40,6 @@ public class UpdateAppointmentAndSickLeaveAndTreatmentViewModel {
     private Long diagnosisId;
 
     @NotEmptyIfPresent(message = "Treatment should be between 5 and 20 symbols",field = "treatment", minParam = "5", maxParam = "20")
-    private String treatmentName;
+    private String treatment;
 }
     

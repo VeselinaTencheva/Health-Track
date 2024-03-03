@@ -1,102 +1,92 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head}"></head>
-<body>
-    <header th:replace="~{fragments :: header}"></header>
-    <main class="main">
-        <side-nav th:replace="~{fragments :: side-nav}"></side-nav>
-        <div class="main-container">
-            <div class="row d-flex py-4">
-                <h1 class="font-weight-bold text-center" >Appointments List</h1>
-            </div>
-            <div class="section-white-container">
-                <div class="row d-flex justify-content-end">
-                    <a href="/appointments/create" class="btn mb-2">Add Appointment</a>
-                </div>
-                <div class="row">
-                        <h3 th:unless="${appointments} and ${appointments.size()}">There are no registered Appointments!</h3>
-                        <table th:if="${appointments.size()>0}" class="table table-hover">
-                            <th:block th:each="column :  ${columnsEnum}">
-                                <th>
-                                    <a th:href="@{'/appointments?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=' + ${column} + '&sortDirection=' + ${sortField.toString() == column.toString() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
-                                        <span th:text="${column.columnDiplayValue}"></span>
-                                        <i th:class="${sortField.toString() == column.toString() ? (sortDirection == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down') : 'fas fa-sort'}"></i>
-                                    </a>
-                                </th>
-                            </th:block>
-                            <th>Actions</th>
-                            <tr th:each="app : ${appointments}">
-                                <td th:text="${app.date}"></td>
-                                <td><a th:href="@{'/diagnosis/'+${app.diagnosis.id}}" th:text="${app.diagnosis.name}" /></td>
-                                <td><a th:href="@{'/patients/'+${app.patient.id}}"  th:text="${app.patient.firstName + ' ' + app.patient.lastName}" /></td>
-                                <td><a th:href="@{'/physicians/'+${app.physician.id}}" th:text="${app.physician.firstName + ' ' + app.physician.lastName}" /></td>
-                                <td>
-                                    <a
-                                            th:if="${app?.sickLeave?.getId() != null}"
-                                            th:href="@{'/sick-leaves/'+${app?.sickLeave?.getId()}}"
-                                            th:text="${app.getSickLeaveInfo()}">
-                                    </a>
-                                </td>
-                                <td>
-                                    <!-- View button with view icon -->
-                                    <a th:href="@{'/appointments/'+${app.id}}">
-                                        <i class="fas fa-eye" style="font-weight: 400;"></i>
-                                    </a>
-                                    <!-- Edit button with edit icon -->
-                                    <a th:href="@{'/appointments/update/'+${app.id}}">
-                                        <i class="fas fa-edit" style="font-weight: 400;"></i>
-                                    </a>
-                                    
-                                    <!-- Delete button with delete icon -->
-                                    <a th:href="@{'/appointments/delete/'+${app.id}}">
-                                        <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                         <!-- Pagination controls -->
-                        <div class="pagination-container">
-                            <div class="pagination-container">
-                                <div>
-                                    <ul class="pagination">
-                                        <li th:class="${currentPage == 0} ? 'disabled'">
-                                            <a th:href="@{'/appointments?page=0&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}"><i class="fas fa-angle-double-left"></i></a>
-                                        </li>
-                                        <li th:with="prevPage=${currentPage - 1}" th:class="${currentPage == 0} ? 'disabled'">
-                                            <a th:href="@{|'/appointments?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
-                                                <i class="fas fa-angle-left"></i>
-                                            </a>
-                                        </li>
-                                        <li th:each="pageNumber : ${pageNumbers}">
-                                            <a th:href="@{'/appointments?page=' + ${pageNumber} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}"
-                                            th:class="${pageNumber == currentPage} ? 'selected-page' : ''"
-                                            th:text="${pageNumber + 1}"></a>
-                                        </li>
-                                        <li th:with="nextPage=${currentPage + 1}" th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                                            <a th:href="@{|'/appointments?page=' + ${nextPage} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
-                                                <i class="fas fa-angle-right"></i>
-                                            </a>
-                                        </li>
-                                        <li th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                                            <a th:href="@{|'/appointments?page=' + (${totalPages - 1}) + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
-                                                <i class="fas fa-angle-double-right"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown">
-                                    <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
-                                    <ul class="dropdown-menu">
-                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=5 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">5</a></li>
-                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=10 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">10</a></li>
-                                        <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=20 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">20</a></li>
-                                    </ul>
-                                </div>
-                            </div> 
-                        </div>
-                </div>
-            </div>
+<div th:fragment="content">
+    <div class="row d-flex py-4">
+        <h1 class="font-weight-bold text-center" >Appointments List</h1>
+    </div>
+    <div class="section-white-container">
+        <div class="row d-flex justify-content-end">
+            <a href="/appointments/create" class="btn mb-2">Add Appointment</a>
         </div>
-    </main>
-</body>
-</html>
+        <div class="row">
+                <h3 th:unless="${appointments} and ${appointments.size()}">There are no registered Appointments!</h3>
+                <table th:if="${appointments.size()>0}" class="table table-hover">
+                    <th:block th:each="column :  ${columnsEnum}">
+                        <th>
+                            <a th:href="@{'/appointments?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=' + ${column} + '&sortDirection=' + ${sortField.toString() == column.toString() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
+                                <span th:text="${column.columnDiplayValue}"></span>
+                                <i th:class="${sortField.toString() == column.toString() ? (sortDirection == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down') : 'fas fa-sort'}"></i>
+                            </a>
+                        </th>
+                    </th:block>
+                    <th>Actions</th>
+                    <tr th:each="app : ${appointments}">
+                        <td th:text="${app.date}"></td>
+                        <td><a th:href="@{'/diagnosis/'+${app.diagnosis.id}}" th:text="${app.diagnosis.name}" /></td>
+                        <td><a th:href="@{'/patients/'+${app.patient.id}}"  th:text="${app.patient.firstName + ' ' + app.patient.lastName}" /></td>
+                        <td><a th:href="@{'/physicians/'+${app.physician.id}}" th:text="${app.physician.firstName + ' ' + app.physician.lastName}" /></td>
+                        <td>
+                            <a
+                                    th:if="${app?.sickLeave?.getId() != null}"
+                                    th:href="@{'/sick-leaves/'+${app?.sickLeave?.getId()}}"
+                                    th:text="${app.getSickLeaveInfo()}">
+                            </a>
+                        </td>
+                        <td>
+                            <!-- View button with view icon -->
+                            <a th:href="@{'/appointments/'+${app.id}}">
+                                <i class="fas fa-eye" style="font-weight: 400;"></i>
+                            </a>
+                            <!-- Edit button with edit icon -->
+                            <a th:href="@{'/appointments/update/'+${app.id}}">
+                                <i class="fas fa-edit" style="font-weight: 400;"></i>
+                            </a>
+                            
+                            <!-- Delete button with delete icon -->
+                            <a th:href="@{'/appointments/delete/'+${app.id}}">
+                                <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                    <!-- Pagination controls -->
+                <div class="pagination-container">
+                    <div class="pagination-container">
+                        <div>
+                            <ul class="pagination">
+                                <li th:class="${currentPage == 0} ? 'disabled'">
+                                    <a th:href="@{'/appointments?page=0&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}"><i class="fas fa-angle-double-left"></i></a>
+                                </li>
+                                <li th:with="prevPage=${currentPage - 1}" th:class="${currentPage == 0} ? 'disabled'">
+                                    <a th:href="@{|'/appointments?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li th:each="pageNumber : ${pageNumbers}">
+                                    <a th:href="@{'/appointments?page=' + ${pageNumber} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}"
+                                    th:class="${pageNumber == currentPage} ? 'selected-page' : ''"
+                                    th:text="${pageNumber + 1}"></a>
+                                </li>
+                                <li th:with="nextPage=${currentPage + 1}" th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a th:href="@{|'/appointments?page=' + ${nextPage} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a th:href="@{|'/appointments?page=' + (${totalPages - 1}) + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}|}">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="dropdown">
+                            <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=5 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">5</a></li>
+                                <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=10 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">10</a></li>
+                                <li><a th:href="@{'/appointments?page=' + ${currentPage} + '&size=20 + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}'}">20</a></li>
+                            </ul>
+                        </div>
+                    </div> 
+                </div>
+        </div>
+    </div>
+</div>

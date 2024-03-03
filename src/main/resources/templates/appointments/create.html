@@ -1,80 +1,70 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="~{fragments :: head}"></head>
-    <body>
-        <header th:replace="~{fragments :: header}"></header>
-        <main>
-            <side-nav th:replace="~{fragments :: side-nav}"></side-nav>
-            <div class="main-container">
-                <div class="row d-flex py-4">
-                    <h1 class="font-weight-bold text-center" >Create Appointment</h1>
-                </div>
-                <div class="section-white-container">
-                    <div class="row">
-                        <form class="w-100 p-2" action="#" th:action="@{/appointments/create}" th:object="${appointment}" method="post">
-                            <div class="form-group">
-                                <div class="row py-2">
-                                    <div class="col">
-                                        <label for="date">Date</label>
-                                        <input class="form-control" type="date" th:value="${appointment.date}" placeholder="Date" id="date">
-                                        <span class="text-danger" th:if="${#fields.hasErrors('date')}"
-                                              th:errors="${appointment.date}">Date Error</span>
-                                    </div>
-                                    <div class="col">
-                                        <label for="diagnosis">Diagnosis</label>
-                                        <select class="form-control"  type="text" th:field="${appointment.diagnosisId}" id="diagnosis">
-                                            <option value="">Select Diagnose</option>
-                                            <option th:each="diagnose : ${diagnoses}" th:value="${diagnose.id}" th:text="${diagnose.name}"></option>
-                                        </select>
-                                        <span class="text-danger" th:if="${#fields.hasErrors('diagnosisId')}"
-                                            th:errors="${appointment.diagnosisId}">Diagnose Error</span>
-                                    </div>
-                                </div>
-                                <div class="row py-2">
-                                    <div class="col">
-                                        <label for="patient">Patient</label>
-                                        <select class="form-control" type="text" th:field="${appointment.patientId}" id="patient">
-                                            <option value="">Select Patient</option>
-                                            <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.firstName + ' ' + patient.lastName}"></option>
-                                        </select>
-                                        <span class="text-danger" th:if="${#fields.hasErrors('patientId')}"
-                                              th:errors="${appointment.patientId}">Patient Error</span>
+<div th:fragment="content">
+    <div class="row d-flex py-4">
+        <h1 class="font-weight-bold text-center" >Create Appointment</h1>
+    </div>
+    <div class="section-white-container">
+        <div class="row">
+            <form class="w-100 p-2" action="#" th:action="@{/appointments/create}" th:object="${appointment}" method="post">
+                <div class="form-group">
+                    <div class="row py-2">
+                        <div class="col">
+                            <label for="date">Date</label>
+                            <input class="form-control" type="date" th:value="${appointment.date}" placeholder="Date" id="date">
+                            <span class="text-danger" th:if="${#fields.hasErrors('date')}"
+                                    th:errors="${appointment.date}">Date Error</span>
+                        </div>
+                        <div class="col">
+                            <label for="diagnosis">Diagnosis</label>
+                            <select class="form-control"  type="text" th:field="${appointment.diagnosisId}" id="diagnosis">
+                                <option value="">Select Diagnose</option>
+                                <option th:each="diagnose : ${diagnoses}" th:value="${diagnose.id}" th:text="${diagnose.name}"></option>
+                            </select>
+                            <span class="text-danger" th:if="${#fields.hasErrors('diagnosisId')}"
+                                th:errors="${appointment.diagnosisId}">Diagnose Error</span>
+                        </div>
+                    </div>
+                    <div class="row py-2">
+                        <div class="col">
+                            <label for="patient">Patient</label>
+                            <select class="form-control" type="text" th:field="${appointment.patientId}" id="patient">
+                                <option value="">Select Patient</option>
+                                <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.firstName + ' ' + patient.lastName}"></option>
+                            </select>
+                            <span class="text-danger" th:if="${#fields.hasErrors('patientId')}"
+                                    th:errors="${appointment.patientId}">Patient Error</span>
 <!--                                        <input class="form-control" type="text" th:field="*{patient}" placeholder="Patient" id="patient">-->
-                                    </div>
-                                </div>
-                                <h3>Sick Leave Info: </h3>
+                        </div>
+                    </div>
+                    <h3>Sick Leave Info: </h3>
 <!--                                <input type="checkbox" th:name="addSickLeave" placeholder="Add Sick Leave"-->
 <!--                                       th:checked="${addSickLeave}"-->
 <!--                                       id="hasInsurance">-->
-                                <div class="row py-2">
-                                    <div class="col">
-                                        <label for="start-date">Start Date</label>
-                                        <input class="form-control" type="date" th:value="${appointment.sickLeaveStartDate}" placeholder="Start Date" id="start-date">
-                                        <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveStartDate')}"
-                                        th:errors="${appointment.sickLeaveStartDate}">Sick Leave Start Date Error</span>
-                                    </div>                                    
-                                    <div class="col">
-                                        <label for="duration">Duration</label>
-                                        <input class="form-control" type="text" th:field="*{sickLeaveDuration}" placeholder="Duration" id="duration">
-                                        <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveDuration')}"
-                                        th:errors="${appointment.sickLeaveDuration}">Sick Leave Duration Error</span>
-                                    </div>
-                                </div>
-                                <h3>Treatment Info: </h3>
-                                <div class="row py-2">
-                                    <div class="col">
-                                        <label for="treatment">Treatment</label>
-                                        <input class="form-control" type="text" th:field="*{treatment}" placeholder="Treatment" id="treatment">
-                                        <span class="text-danger" th:if="${#fields.hasErrors('treatment')}"
-                                        th:errors="${appointment.treatment}">Treatment Error</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn w-25">Save</button>
-                        </form>
+                    <div class="row py-2">
+                        <div class="col">
+                            <label for="start-date">Start Date</label>
+                            <input class="form-control" type="date" th:value="${appointment.sickLeaveStartDate}" placeholder="Start Date" id="start-date">
+                            <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveStartDate')}"
+                            th:errors="${appointment.sickLeaveStartDate}">Sick Leave Start Date Error</span>
+                        </div>                                    
+                        <div class="col">
+                            <label for="duration">Duration</label>
+                            <input class="form-control" type="text" th:field="*{sickLeaveDuration}" placeholder="Duration" id="duration">
+                            <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveDuration')}"
+                            th:errors="${appointment.sickLeaveDuration}">Sick Leave Duration Error</span>
+                        </div>
+                    </div>
+                    <h3>Treatment Info: </h3>
+                    <div class="row py-2">
+                        <div class="col">
+                            <label for="treatment">Treatment</label>
+                            <input class="form-control" type="text" th:field="*{treatment}" placeholder="Treatment" id="treatment">
+                            <span class="text-danger" th:if="${#fields.hasErrors('treatment')}"
+                            th:errors="${appointment.treatment}">Treatment Error</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
-    </body>
-</html>
+                <button type="submit" class="btn w-25">Save</button>
+            </form>
+        </div>
+    </div>
+</div>

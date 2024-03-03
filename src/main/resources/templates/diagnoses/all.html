@@ -1,101 +1,91 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="~{fragments :: head}"></head>
-    <body>
-        <header th:replace="~{fragments :: header}"></header>
-        <main class="main">
-            <side-nav th:replace="~{fragments :: side-nav}"></side-nav>
-            <div class="main-container">
-                <div class="row d-flex py-4">
-                    <h1 class="font-weight-bold text-center" >Diagnoses List</h1>
-                </div>
-                <div class="section-white-container">
-                    <div class="row d-flex justify-content-end">
-                        <a class="btn mb-2" href="/diagnosis/create">Add Diagnosis</a>
-                    </div>
-                    <div class="row">
-                        <h3 th:unless="${diagnoses} and ${diagnoses.size()}">There are no registered Diagnoses!</h3>
-                        <table th:if="${diagnoses.size()>0}" class="table table-hover">
-                            <th:block th:each="column :  ${columnsEnum}">
-                                <th>
-                                    <a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=' + ${column} + '&sortDirection=' + ${sortField.toString() == column.toString() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
-                                        <span th:text="${column.columnDiplayValue}"></span>
-                                        <i th:class="${sortField.toString() == column.toString() ? (sortDirection == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down') : 'fas fa-sort'}"></i>
-                                    </a>
-                                </th>
-                            </th:block>
-                            <th>Patients</th>
-                            <th>Actions</th>
-                            <tr th:each="d : ${diagnoses}" th:onclick="@{'/diagnosis/'+${d.id}}">
-                                <td th:text="${d.code}"></td>
-                                <td th:text="${d.name}"></td>
-                                <td th:text="${d.description}"></td>
-                                <td th:text="${d.category}"></td>
-                                <td>
-                                    <a
-                                            th:href="@{'/patients/diagnose/'+${d.id}}"
-                                            th:text="${d.patientsCount}">
-                                    </a>
-                                </td>
-                                <td>
-                                    <!-- View button with view icon -->
-                                    <a th:href="@{'/diagnosis/'+${d.id}}">
-                                        <i class="fas fa-eye" style="font-weight: 400;"></i>
-                                    </a>
-                                    <!-- Edit button with edit icon -->
-                                    <a th:href="@{'/diagnosis/update/'+${d.id}}">
-                                        <i class="fas fa-edit" style="font-weight: 400;"></i>
-                                    </a>
-                                    
-                                    <!-- Delete button with delete icon -->
-                                    <a th:href="@{'/diagnosis/delete/'+${d.id}}">
-                                        <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                        <!-- Pagination controls -->
-                <div class="pagination-container">
-                    <div class="pagination-container">
-                        <div>
-                            <ul class="pagination">
-                                <li th:class="${currentPage == 0} ? 'disabled'">
-                                    <a th:href="@{'/diagnosis?page=0&size=' + ${size}}"><i class="fas fa-angle-double-left"></i></a>
-                                </li>
-                                <li th:with="prevPage=${currentPage - 1}" th:class="${currentPage == 0} ? 'disabled'">
-                                    <a th:href="@{|'/diagnosis?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size}|}">
-                                        <i class="fas fa-angle-left"></i>
-                                    </a>
-                                </li>
-                                <li th:each="pageNumber : ${pageNumbers}">
-                                    <a th:href="@{'/diagnosis?page=' + ${pageNumber} + '&size=' + ${size}}"
-                                       th:class="${pageNumber == currentPage} ? 'selected-page' : ''"
-                                       th:text="${pageNumber + 1}"></a>
-                                </li>
-                                <li th:with="nextPage=${currentPage + 1}" th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                                    <a th:href="@{|'/diagnosis?page=' + ${nextPage} + '&size=' + ${size}|}">
-                                        <i class="fas fa-angle-right"></i>
-                                    </a>
-                                </li>
-                                <li th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                                    <a th:href="@{|'/diagnosis?page=' + (${totalPages - 1}) + '&size=' + ${size}|}">
-                                        <i class="fas fa-angle-double-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
-                            <ul class="dropdown-menu">
-                                <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=5'}">5</a></li>
-                                <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=10'}">10</a></li>
-                                <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=20'}">20</a></li>
-                            </ul>
-                        </div>
-                    </div> 
-                    </div>
-                </div>
+<div th:fragment="content">
+    <div class="row d-flex py-4">
+        <h1 class="font-weight-bold text-center" >Diagnoses List</h1>
+    </div>
+    <div class="section-white-container">
+        <div class="row d-flex justify-content-end">
+            <a class="btn mb-2" href="/diagnosis/create">Add Diagnosis</a>
+        </div>
+        <div class="row">
+            <h3 th:unless="${diagnoses} and ${diagnoses.size()}">There are no registered Diagnoses!</h3>
+            <table th:if="${diagnoses.size()>0}" class="table table-hover">
+                <th:block th:each="column :  ${columnsEnum}">
+                    <th>
+                        <a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=' + ${column} + '&sortDirection=' + ${sortField.toString() == column.toString() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
+                            <span th:text="${column.columnDiplayValue}"></span>
+                            <i th:class="${sortField.toString() == column.toString() ? (sortDirection == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down') : 'fas fa-sort'}"></i>
+                        </a>
+                    </th>
+                </th:block>
+                <th>Patients</th>
+                <th>Actions</th>
+                <tr th:each="d : ${diagnoses}" th:onclick="@{'/diagnosis/'+${d.id}}">
+                    <td th:text="${d.code}"></td>
+                    <td th:text="${d.name}"></td>
+                    <td th:text="${d.description}"></td>
+                    <td th:text="${d.category}"></td>
+                    <td>
+                        <a
+                                th:href="@{'/patients/diagnose/'+${d.id}}"
+                                th:text="${d.patientsCount}">
+                        </a>
+                    </td>
+                    <td>
+                        <!-- View button with view icon -->
+                        <a th:href="@{'/diagnosis/'+${d.id}}">
+                            <i class="fas fa-eye" style="font-weight: 400;"></i>
+                        </a>
+                        <!-- Edit button with edit icon -->
+                        <a th:href="@{'/diagnosis/update/'+${d.id}}">
+                            <i class="fas fa-edit" style="font-weight: 400;"></i>
+                        </a>
+                        
+                        <!-- Delete button with delete icon -->
+                        <a th:href="@{'/diagnosis/delete/'+${d.id}}">
+                            <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <!-- Pagination controls -->
+    <div class="pagination-container">
+        <div class="pagination-container">
+            <div>
+                <ul class="pagination">
+                    <li th:class="${currentPage == 0} ? 'disabled'">
+                        <a th:href="@{'/diagnosis?page=0&size=' + ${size}}"><i class="fas fa-angle-double-left"></i></a>
+                    </li>
+                    <li th:with="prevPage=${currentPage - 1}" th:class="${currentPage == 0} ? 'disabled'">
+                        <a th:href="@{|'/diagnosis?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size}|}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}">
+                        <a th:href="@{'/diagnosis?page=' + ${pageNumber} + '&size=' + ${size}}"
+                            th:class="${pageNumber == currentPage} ? 'selected-page' : ''"
+                            th:text="${pageNumber + 1}"></a>
+                    </li>
+                    <li th:with="nextPage=${currentPage + 1}" th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a th:href="@{|'/diagnosis?page=' + ${nextPage} + '&size=' + ${size}|}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a th:href="@{|'/diagnosis?page=' + (${totalPages - 1}) + '&size=' + ${size}|}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </main>
-    </body>
-</html>
+            <div class="dropdown">
+                <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=5'}">5</a></li>
+                    <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=10'}">10</a></li>
+                    <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=20'}">20</a></li>
+                </ul>
+            </div>
+        </div> 
+        </div>
+    </div>
+</div>

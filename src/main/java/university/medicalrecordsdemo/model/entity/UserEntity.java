@@ -23,7 +23,7 @@ import jakarta.persistence.Table;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class UserEntity extends BaseEntity implements UserDetails {
 

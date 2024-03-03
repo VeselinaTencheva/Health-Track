@@ -23,7 +23,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.modelmapper:modelmapper:2.4.4'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.7.5'
 	implementation 'mysql:mysql-connector-java:8.0.26' // Use the appropriate version
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	compileOnly 'org.springframework.boot:spring-boot-devtools'

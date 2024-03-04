@@ -10,10 +10,10 @@ public enum DiagnosisTableColumnsEnum {
     CATEGORY("category", "Category");
 
     private final String columnName;
-    private final String columnDiplayValue;
+    private final String columnDisplayValue;
 
     private DiagnosisTableColumnsEnum(String columnName, String columnDisplayValue) {
-        this.columnDiplayValue = columnDisplayValue;
+        this.columnDisplayValue = columnDisplayValue;
         this.columnName = columnName;
     }
 }

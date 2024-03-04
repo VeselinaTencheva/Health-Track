@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         return diagnosisDtos;
     }
 
+    // TODO remove after confirming that the new method works
     @Override
     public Page<DiagnosisDto> findAllByPageAndSort(int page, int size, DiagnosisTableColumnsEnum sortField, String sortDirection) {
         Sort.Direction direction = Sort.Direction.ASC;
@@ -60,6 +62,12 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         Sort sort = Sort.by(direction, sortFieldString);
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         Page<DiagnosisEntity> diagnosisPage = diagnosisRepository.findAll(pageRequest);
+        return diagnosisPage.map(this::convertToDiagnosisDto);
+    }
+
+    @Override
+    public Page<DiagnosisDto> findAllByPageAndSort(Pageable pageable) {
+        Page<DiagnosisEntity> diagnosisPage = diagnosisRepository.findAll(pageable);
         return diagnosisPage.map(this::convertToDiagnosisDto);
     }
 

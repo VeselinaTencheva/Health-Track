@@ -11,8 +11,8 @@
             <table th:if="${diagnoses.size()>0}" class="table table-hover">
                 <th:block th:each="column :  ${columnsEnum}">
                     <th>
-                        <a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=' + ${column} + '&sortDirection=' + ${sortField.toString() == column.toString() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
-                            <span th:text="${column.columnDiplayValue}"></span>
+                        <a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=' + ${page.getSize()} + '&sortField=' + ${column.getColumnName()} + '&sortDirection=' + ${sortField.toString() == column.getColumnName() && sortDirection == 'asc' ? 'desc' : 'asc'}}">
+                            <span th:text="${column.columnDisplayValue}"></span>
                             <i th:class="${sortField.toString() == column.toString() ? (sortDirection == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down') : 'fas fa-sort'}"></i>
                         </a>
                     </th>
@@ -47,45 +47,28 @@
                     </td>
                 </tr>
             </table>
-            <!-- Pagination controls -->
-    <div class="pagination-container">
+        </div>
+        <!-- Pagination controls -->
         <div class="pagination-container">
-            <div>
-                <ul class="pagination">
-                    <li th:class="${currentPage == 0} ? 'disabled'">
-                        <a th:href="@{'/diagnosis?page=0&size=' + ${size}}"><i class="fas fa-angle-double-left"></i></a>
-                    </li>
-                    <li th:with="prevPage=${currentPage - 1}" th:class="${currentPage == 0} ? 'disabled'">
-                        <a th:href="@{|'/diagnosis?page=' + ${prevPage >= 0 ? prevPage : 0} + '&size=' + ${size}|}">
-                            <i class="fas fa-angle-left"></i>
-                        </a>
-                    </li>
-                    <li th:each="pageNumber : ${pageNumbers}">
-                        <a th:href="@{'/diagnosis?page=' + ${pageNumber} + '&size=' + ${size}}"
-                            th:class="${pageNumber == currentPage} ? 'selected-page' : ''"
-                            th:text="${pageNumber + 1}"></a>
-                    </li>
-                    <li th:with="nextPage=${currentPage + 1}" th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                        <a th:href="@{|'/diagnosis?page=' + ${nextPage} + '&size=' + ${size}|}">
-                            <i class="fas fa-angle-right"></i>
-                        </a>
-                    </li>
-                    <li th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                        <a th:href="@{|'/diagnosis?page=' + (${totalPages - 1}) + '&size=' + ${size}|}">
-                            <i class="fas fa-angle-double-right"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <ul class="pagination">
+                <li th:class="${page.isFirst()} ? 'disabled' : ''">
+                    <a th:href="@{/diagnosis(page=0, size=${page.getSize()})}"><i class="fas fa-angle-double-left"></i></a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, page.getTotalPages() - 1)}" th:class="${i == page.getNumber()} ? 'active' : ''">
+                    <a th:href="@{/diagnosis(page=${i}, size=${page.getSize()})}" th:text="${i + 1}">1</a>
+                </li>
+                <li th:class="${page.isLast()} ? 'disabled' : ''">
+                    <a th:href="@{/diagnosis(page=${page.getTotalPages() - 1}, size=${page.getSize()})}"><i class="fas fa-angle-double-right"></i></a>
+                </li>
+            </ul>
             <div class="dropdown">
                 <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
                 <ul class="dropdown-menu">
-                    <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=5'}">5</a></li>
-                    <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=10'}">10</a></li>
-                    <li><a th:href="@{'/diagnosis?page=' + ${currentPage} + '&size=20'}">20</a></li>
+                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=5'}">5</a></li>
+                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=10'}">10</a></li>
+                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=20'}">20</a></li>
                 </ul>
             </div>
-        </div> 
         </div>
     </div>
 </div>

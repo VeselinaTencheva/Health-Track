@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
-    private final PatientServiceImpl patientService;
+    private final PatientServiceImpl patientServiceImpl;
     private final PhysicianServiceImpl physicianServiceImpl;
     private final ModelMapper modelMapper;
 
@@ -106,7 +106,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         // You can map related objects if needed
         // For example, map patientEntity to PatientDTO
-        PatientDto patientDTO = patientService.convertToPatientDto(appointment.getPatient());
+        PatientDto patientDTO = patientServiceImpl.convertToPatientDto(appointment.getPatient());
         appointmentDTO.setPatient(patientDTO);
 
         // Similarly, map physicianEntity to PhysicianDTO

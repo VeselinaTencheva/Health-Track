@@ -2,8 +2,48 @@
     <div class="row d-flex justify-content-center py-4 w-100 ">
         <h1 class="font-weight-bold text-center" >My Profile</h1>
         <div class="section-white-container">
-            <div class="row ">
-               <!-- <user-profile-details th:replace="~{fragments :: user-profile-details}"> </user-profile-details> -->
+            <div class="row d-flex">
+                <div class="col form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" readonly class="form-control" id="username" th:field="${user.username}" name="username"
+                            placeholder="Username">
+                </div>
+
+                <div class="col form-group">
+                    <label for="ssn">SSN:</label>
+                    <input type="text" readonly class="form-control" id="ssn" th:field="${user.ssn}" name="ssn" placeholder="Social Security Number"/>
+                </div>
+
+                <div class="col form-group">
+                    <label for="birthDate">Birth Date:</label>
+                    <input type="date" readonly class="form-control" id="birthDate" th:field="${user.birthDate}" name="birthDate"/>
+                </div>
+            </div>
+            <div class="row d-flex">
+                <div class="col form-group">
+                    <label for="firstName">First Name:</label>
+                    <input readonly ="text" class="form-control" id="firstName" th:field="${user.firstName}" name="firstName"
+                            placeholder="First Name">
+                </div>
+
+                <div class="col form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input readonly ="text" class="form-control" id="lastName" th:field="${user.lastName}" name="lastName"
+                            placeholder="Last Name">
+                </div>
+
+                <div class="col form-group">
+                    <label for="gender">Gender:</label>
+                    <div class="form-check">
+                        <input disabled type="radio" id="male" th:field="${user.gender}" name="gender" value="Male"/>
+                        <label class="form-check-label" for="male">Male</label>
+                    </div>
+                    <div class="form-check">
+                        <input disabled type="radio" id="female" th:field="${user.gender}" name="gender" value="Female"/>
+                        <label class="form-check-label" for="female">Female</label>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

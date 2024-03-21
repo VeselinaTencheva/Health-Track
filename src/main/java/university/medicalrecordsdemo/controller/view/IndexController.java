@@ -1,11 +1,16 @@
 package university.medicalrecordsdemo.controller.view;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
+import university.medicalrecordsdemo.dto.user.UserDto;
 import university.medicalrecordsdemo.model.binding.physicians.CreatePhysicianViewModel;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.service.physician.PhysicianService;
+import university.medicalrecordsdemo.service.user.UserService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -29,10 +34,20 @@ import jakarta.validation.Valid;
 @RequestMapping("/")
 public class IndexController {
     private PhysicianService physicianService;
+    private UserService userService;
     private ModelMapper modelMapper;
 
     @GetMapping
     public String getIndex(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                final String username = ((UserDetails) principal).getUsername();
+                UserDto userDetails = userService.findUserByUserName(username);
+                model.addAttribute("user", userDetails);
+            }
+        }
         // Add the first and last name to the model
         model.addAttribute("contentTemplate", "index");
         return "layout";

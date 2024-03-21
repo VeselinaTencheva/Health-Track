@@ -13,10 +13,9 @@ public class GlobalControllerAdvice {
     public String userEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            // Assuming the principal is a UserDetails object
             Object principal = authentication.getPrincipal();
             if (principal instanceof UserDetails) {
-                return ((UserDetails) principal).getUsername(); // Or getEmail(), depending on your UserDetails implementation
+                return ((UserDetails) principal).getUsername();
             }
         }
         return "Guest";

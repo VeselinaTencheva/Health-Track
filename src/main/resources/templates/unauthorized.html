@@ -3,9 +3,15 @@
 <head th:replace="~{fragments :: head}">
 </head>
 <body>
-<header th:replace="~{fragments :: header}"></header>
-<div class="container col-9">
-    <h1>Unfortunately you are not authorized to be here!</h1>
-</div>
+    <header th:replace="~{fragments :: header}"></header>
+    <main class="main">
+        <div class="main-container">
+            <div class="unauthorized-image" >
+            </div>
+            <h1>Sorry!</h1>
+            <p>You are not authorized to access this page. Please check your login credentials or contact the administrator for access.</p>
+            <a href="/" th:href="@{/}">Go to Homepage</a>
+        </div>
+    </main>
 </body>
 </html>

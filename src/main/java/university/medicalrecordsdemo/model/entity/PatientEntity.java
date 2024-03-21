@@ -2,6 +2,7 @@ package university.medicalrecordsdemo.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -29,7 +30,7 @@ public class PatientEntity extends UserEntity {
     @JoinColumn(name = "physician_id")
     private PhysicianEntity physician;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("patient")
     private Set<AppointmentEntity> appointments;
 

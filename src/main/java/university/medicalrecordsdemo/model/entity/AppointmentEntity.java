@@ -1,5 +1,6 @@
 package university.medicalrecordsdemo.model.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "appointment")
 public class AppointmentEntity extends BaseEntity {
@@ -41,4 +43,11 @@ public class AppointmentEntity extends BaseEntity {
 
     @Column(name = "treatment")
     private String treatment;
+
+    public AppointmentEntity(LocalDate date, PatientEntity patient, PhysicianEntity physician, String treatment) {
+        this.date = date;
+        this.patient = patient;
+        this.physician = physician;
+        this.treatment = treatment;
+    }
 }

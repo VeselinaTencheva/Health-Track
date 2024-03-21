@@ -114,8 +114,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentDTO.setPhysician(physicianDTO);
 
         // Map diagnosisEntity to DiagnosisDTO
-        DiagnosisDto diagnosisDTO = modelMapper.map(appointment.getDiagnosis(), DiagnosisDto.class);
-        appointmentDTO.setDiagnosis(diagnosisDTO);
+        if (appointment.getDiagnosis() != null) {
+            // return appointmentDTO;
+            DiagnosisDto diagnosisDTO = modelMapper.map(appointment.getDiagnosis(), DiagnosisDto.class);
+            appointmentDTO.setDiagnosis(diagnosisDTO);
+        }
 
         if (appointment.getSickLeave() != null) {
             SickLeaveDto sickLeaveDTO = modelMapper.map(appointment.getSickLeave(), SickLeaveDto.class);

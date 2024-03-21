@@ -1,9 +1,12 @@
 package university.medicalrecordsdemo.service.user;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -138,7 +141,18 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        return user;
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        user.getRoles().forEach(role -> {
+            // Add role as authority
+            authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+            // Add privileges as authorities
+            authorities.addAll(role.getPrivileges().stream()
+                    .map(privilege -> new SimpleGrantedAuthority(privilege.getName().name())) // Ensure this matches your PrivilegeEntity structure
+                    .collect(Collectors.toSet()));
+        });        
+
+        return new User(user.getUsername(), user.getPassword(), authorities);
     }
 
     private UserDto convertToUserDTO(UserEntity user) {

@@ -6,9 +6,11 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -65,7 +67,14 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        roles.forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getAuthority())); // Add role as authority
+            role.getPrivileges().forEach(privilege -> {
+                authorities.add(new SimpleGrantedAuthority(privilege.getName().name())); // Add privileges as authorities
+            });
+        });
+        return authorities;
     }
 
     @Override

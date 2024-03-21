@@ -52,21 +52,21 @@
         <div class="pagination-container">
             <ul class="pagination">
                 <li th:class="${page.isFirst()} ? 'disabled' : ''">
-                    <a th:href="@{/diagnosis(page=0, size=${page.getSize()})}"><i class="fas fa-angle-double-left"></i></a>
+                    <a th:href="@{/diagnosis(page=0, size=${page.getSize()}, sortField=${sortField}, sortDirection=${sortDirection})}"><i class="fas fa-angle-double-left"></i></a>
                 </li>
                 <li th:each="i : ${#numbers.sequence(0, page.getTotalPages() - 1)}" th:class="${i == page.getNumber()} ? 'active' : ''">
-                    <a th:href="@{/diagnosis(page=${i}, size=${page.getSize()})}" th:text="${i + 1}">1</a>
+                    <a th:href="@{/diagnosis(page=${i}, size=${page.getSize()}, sortField=${sortField}, sortDirection=${sortDirection})}" th:text="${i + 1}">1</a>
                 </li>
                 <li th:class="${page.isLast()} ? 'disabled' : ''">
-                    <a th:href="@{/diagnosis(page=${page.getTotalPages() - 1}, size=${page.getSize()})}"><i class="fas fa-angle-double-right"></i></a>
+                    <a th:href="@{/diagnosis(page=${page.getTotalPages() - 1}, size=${page.getSize()}, sortField=${sortField}, sortDirection=${sortDirection})}"><i class="fas fa-angle-double-right"></i></a>
                 </li>
             </ul>
             <div class="dropdown">
                 <div class="dropdown-toggle" data-toggle="dropdown">Page Size: <span th:text="${size}"></span></div>
                 <ul class="dropdown-menu">
-                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=5'}">5</a></li>
-                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=10'}">10</a></li>
-                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=20'}">20</a></li>
+                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=5' + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">5</a></li>
+                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=10' + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">10</a></li>
+                    <li><a th:href="@{'/diagnosis?page=' + ${page.getNumber()} + '&size=20' + '&sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">20</a></li>
                 </ul>
             </div>
         </div>

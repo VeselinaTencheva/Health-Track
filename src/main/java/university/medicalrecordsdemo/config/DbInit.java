@@ -120,7 +120,7 @@ public class DbInit implements CommandLineRunner {
                         appointmentRepository.deleteAll();
                 }
 
-                final List<AppointmentEntity> appointments = appointmentRepository.findAll();
+                List<AppointmentEntity> appointments = appointmentRepository.findAll();
                 for (AppointmentEntity appointment : appointments) {
                         appointment.getPatient().getAppointments().remove(appointment);
                         appointment.getPhysician().getAppointments().remove(appointment);
@@ -135,20 +135,23 @@ public class DbInit implements CommandLineRunner {
                         appointmentRepository.delete(appointment);
                 }
 
-                // List<AppointmentEntity> appointments = Arrays.asList(
-                //         new AppointmentEntity("01/01/2021", "08:00", "09:00", "General checkup", "John Doe", "Jane Smith", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "09:00", "10:00", "General checkup", "Michael Johnson", "Emily Brown", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "10:00", "11:00", "General checkup", "David Wilson", "Sarah Martinez", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "11:00", "12:00", "General checkup", "Christopher Lopez", "Amanda Garcia", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "12:00", "13:00", "General checkup", "James Perez", "Jessica Rodriguez", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "13:00", "14:00", "General checkup", "John Doe", "Jane Smith", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "14:00", "15:00", "General checkup", "Michael Johnson", "Emily Brown", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "15:00", "16:00", "General checkup", "David Wilson", "Sarah Martinez", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "16:00", "17:00", "General checkup", "Christopher Lopez", "Amanda Garcia", "General Practitioner"),
-                //         new AppointmentEntity("01/01/2021", "17:00", "18:00", "General checkup", "James Perez", "Jessica Rodriguez", "General Practitioner")
-                // );
+                final List<PatientEntity> patients = patientRepository.findAll();
+                final List<PhysicianEntity> physicians = physicianRepository.findAll();
 
-                // appointmentRepository.saveAll(appointments);
+                appointments = Arrays.asList(
+                        new AppointmentEntity(LocalDate.of(2020, 1, 1), patients.get(0), physicians.get(0), "General checkup"),
+                        new AppointmentEntity(LocalDate.of(2020, 2, 2), patients.get(1), physicians.get(1), "Follow-up appointment"),
+                        new AppointmentEntity(LocalDate.of(2020, 3, 3), patients.get(2), physicians.get(2), "Annual physical"),
+                        new AppointmentEntity(LocalDate.of(2020, 4, 4), patients.get(3), physicians.get(3), "Consultation"),
+                        new AppointmentEntity(LocalDate.of(2020, 5, 5), patients.get(4), physicians.get(4), "General checkup"),
+                        new AppointmentEntity(LocalDate.of(2020, 6, 6), patients.get(0), physicians.get(0), "Follow-up appointment"),
+                        new AppointmentEntity(LocalDate.of(2020, 7, 7), patients.get(1), physicians.get(1), "Annual physical"),
+                        new AppointmentEntity(LocalDate.of(2020, 8, 8), patients.get(2), physicians.get(2),  "Consultation"),
+                        new AppointmentEntity(LocalDate.of(2020, 9, 9), patients.get(3), physicians.get(3), "General checkup"),
+                        new AppointmentEntity(LocalDate.of(2020, 10, 10), patients.get(4), physicians.get(4), "Follow-up appointment")
+                );
+
+                appointmentRepository.saveAll(appointments);
         }
 
         @Transactional
@@ -199,24 +202,29 @@ public class DbInit implements CommandLineRunner {
                 }
 
                 final PrivilegeEntity readPatient = createPrivilegeIfNotFound(PrivilegeType.READ_PATIENT);
+                final PrivilegeEntity readAllPatients = createPrivilegeIfNotFound(PrivilegeType.READ_ALL_PATIENTS);
                 final PrivilegeEntity readPhysician = createPrivilegeIfNotFound(PrivilegeType.READ_PHYSICIAN);
                 final PrivilegeEntity writePatient = createPrivilegeIfNotFound(PrivilegeType.WRITE_PATIENT);
                 final PrivilegeEntity writePhysician = createPrivilegeIfNotFound(PrivilegeType.WRITE_PHYSICIAN);
+                final PrivilegeEntity readAllPhysicians = createPrivilegeIfNotFound(PrivilegeType.READ_ALL_PHYSICIANS);
                 final PrivilegeEntity readDiagnosis = createPrivilegeIfNotFound(PrivilegeType.READ_DIAGNOSIS);
                 final PrivilegeEntity writeDiagnosis = createPrivilegeIfNotFound(PrivilegeType.WRITE_DIAGNOSIS);
+                final PrivilegeEntity readAllDiagnoses = createPrivilegeIfNotFound(PrivilegeType.READ_ALL_DIAGNOSES);
                 final PrivilegeEntity readSickLeave = createPrivilegeIfNotFound(PrivilegeType.READ_SICK_LEAVE);
                 final PrivilegeEntity writeSickLeave = createPrivilegeIfNotFound(PrivilegeType.WRITE_SICK_LEAVE);
+                final PrivilegeEntity readAllSickLeaves = createPrivilegeIfNotFound(PrivilegeType.READ_ALL_SICK_LEAVES);
                 final PrivilegeEntity readVisitation = createPrivilegeIfNotFound(PrivilegeType.READ_VISITATION);
                 final PrivilegeEntity writeVisitation = createPrivilegeIfNotFound(PrivilegeType.WRITE_VISITATION);
+                final PrivilegeEntity readAllVisitations = createPrivilegeIfNotFound(PrivilegeType.READ_ALL_VISITATIONS);
 
                 createRoleIfNotFound(RoleType.ROLE_ADMIN,
-                        new HashSet<>(Arrays.asList(readPatient, readDiagnosis, readPhysician, readVisitation, readSickLeave, writePatient, writeDiagnosis, writePhysician, writeVisitation, writeSickLeave)));
+                        new HashSet<>(Arrays.asList(readAllVisitations, readAllSickLeaves, readAllDiagnoses, readAllPhysicians, readAllPatients,readPatient, readDiagnosis, readPhysician, readVisitation, readSickLeave, writePatient, writeDiagnosis, writePhysician, writeVisitation, writeSickLeave)));
                 createRoleIfNotFound(RoleType.ROLE_PATIENT,
-                        new HashSet<>(Arrays.asList(readPatient, readPhysician, writePatient, readDiagnosis, readSickLeave, readVisitation)));
+                        new HashSet<>(Arrays.asList(readAllVisitations, readAllSickLeaves, readPatient, readPhysician, writePatient, readDiagnosis, readSickLeave, readVisitation)));
                 createRoleIfNotFound(RoleType.ROLE_PHYSICIAN,
-                        new HashSet<>(Arrays.asList(readPatient, readDiagnosis, readPhysician, readVisitation, readSickLeave, writePhysician, writeDiagnosis, writeVisitation, writeSickLeave)));
+                        new HashSet<>(Arrays.asList(readAllVisitations, readAllSickLeaves, readAllDiagnoses, readAllPatients, readPatient, readDiagnosis, readPhysician, readVisitation, readSickLeave, writePhysician, writeDiagnosis, writeVisitation, writeSickLeave)));
                 createRoleIfNotFound(RoleType.ROLE_GENERAL_PRACTITIONER,
-                        new HashSet<>(Arrays.asList(readPatient, readDiagnosis, writePatient, readPhysician, readVisitation, readSickLeave, writeDiagnosis, writeVisitation, writeSickLeave, writePhysician)));
+                        new HashSet<>(Arrays.asList(readAllVisitations,readAllSickLeaves, readAllDiagnoses, readAllPhysicians, readAllPatients, readPatient, readDiagnosis, writePatient, readPhysician, readVisitation, readSickLeave, writeDiagnosis, writeVisitation, writeSickLeave, writePhysician)));
         }
 
         @Transactional
@@ -252,12 +260,13 @@ public class DbInit implements CommandLineRunner {
                         physicianRepository.deleteAll();
                 }
                 final RoleEntity physicianRole = roleRepository.findByAuthority(RoleType.ROLE_PHYSICIAN);
+                final RoleEntity generalPractitionerRole = roleRepository.findByAuthority(RoleType.ROLE_GENERAL_PRACTITIONER);
                 List<PhysicianEntity> physicians = Arrays.asList(
-                        new PhysicianEntity("1234567890", "John", "Doe", "Male", LocalDate.of(1980, 1, 1), "john@example.com", encoder.encode("password"), "MD123456", new HashSet<>(Arrays.asList(SpecialtyType.ALLERGY_AND_IMMUNOLOGY)), physicianRole),
+                        new PhysicianEntity("1234567890", "John", "Doe", "Male", LocalDate.of(1980, 1, 1), "john@example.com", encoder.encode("password"), "MD123456", new HashSet<>(Arrays.asList(SpecialtyType.ALLERGY_AND_IMMUNOLOGY, SpecialtyType.GENERAL_PRACTICE)), generalPractitionerRole),
                         new PhysicianEntity("2345678901", "Jane", "Smith", "Female", LocalDate.of(1985, 2, 2), "jane@example.com", encoder.encode("password"), "MD234567", new HashSet<>(Arrays.asList(SpecialtyType.ANATOMIC_PATHOLOGY)), physicianRole),
                         new PhysicianEntity("3456789012", "Michael", "Johnson", "Male", LocalDate.of(1975, 3, 3), "michael@example.com", encoder.encode("password"), "MD345678", new HashSet<>(Arrays.asList(SpecialtyType.ANESTHESIOLOGIST)), physicianRole),
                         new PhysicianEntity("4567890123", "Emily", "Brown", "Female", LocalDate.of(1990, 4, 4), "emily@example.com", encoder.encode("password"), "MD456789", new HashSet<>(Arrays.asList(SpecialtyType.CLINICAL_IMMUNOLOGY)), physicianRole),
-                        new PhysicianEntity("5678901234", "David", "Martinez", "Male", LocalDate.of(1982, 5, 5), "david@example.com", encoder.encode("password"), "MD567890", new HashSet<>(Arrays.asList(SpecialtyType.CLINICAL_PATHOLOGY)), physicianRole),
+                        new PhysicianEntity("5678901234", "David", "Martinez", "Male", LocalDate.of(1982, 5, 5), "david@example.com", encoder.encode("password"), "MD567890", new HashSet<>(Arrays.asList(SpecialtyType.CLINICAL_PATHOLOGY, SpecialtyType.GENERAL_PRACTICE)), generalPractitionerRole),
                         new PhysicianEntity("6789012345", "Jessica", "Garcia", "Female", LocalDate.of(1978, 6, 6), "jessica@example.com", encoder.encode("password"), "MD678901", new HashSet<>(Arrays.asList(SpecialtyType.COAGULATION_DISORDERS)), physicianRole),
                         new PhysicianEntity("7890123456", "Christopher", "Lopez", "Male", LocalDate.of(1987, 7, 7), "christopher@example.com", encoder.encode("password"), "MD789012", new HashSet<>(Arrays.asList(SpecialtyType.COLORECTAL_SURGERY)), physicianRole),
                         new PhysicianEntity("8901234567", "Amanda", "Perez", "Female", LocalDate.of(1980, 8, 8), "amanda@example.com", encoder.encode("password"), "MD890123", new HashSet<>(Arrays.asList(SpecialtyType.COSMETIC_DERMATOLOGY)), physicianRole),

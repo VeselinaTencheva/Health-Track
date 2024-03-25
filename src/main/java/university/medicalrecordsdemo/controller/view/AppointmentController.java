@@ -35,6 +35,8 @@ import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.dto.sickLeave.CreateSickLeaveDto;
 import university.medicalrecordsdemo.dto.sickLeave.SickLeaveDto;
+import university.medicalrecordsdemo.dto.sickLeave.UpdateSickLeaveDto;
+import university.medicalrecordsdemo.dto.user.UserDto;
 import university.medicalrecordsdemo.model.binding.appointments.AppointmentViewModel;
 import university.medicalrecordsdemo.model.binding.appointments.CreateAppointmentAndSickLeaveAndTreatmentViewModel;
 import university.medicalrecordsdemo.model.binding.appointments.CreateAppointmentViewModel;
@@ -43,8 +45,8 @@ import university.medicalrecordsdemo.model.binding.patients.PatientViewModel;
 import university.medicalrecordsdemo.model.binding.physicians.PhysiciansViewModel;
 import university.medicalrecordsdemo.model.binding.sickLeaves.CreateSickLeaveViewModel;
 import university.medicalrecordsdemo.model.binding.sickLeaves.SickLeaveViewModel;
+import university.medicalrecordsdemo.model.binding.sickLeaves.UpdateSickLeaveViewModel;
 import university.medicalrecordsdemo.model.entity.DepartmentType;
-import university.medicalrecordsdemo.model.entity.PhysicianEntity;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.service.appointment.AppointmentService;
 import university.medicalrecordsdemo.service.diagnosis.DiagnosisService;
@@ -146,6 +148,21 @@ public class AppointmentController {
         viewModel.setDate(LocalDate.now());
         viewModel.setSickLeaveStartDate(LocalDate.now());
 
+        final UserDto user = fetchLoggedUser();
+        if (user != null ) {
+            try {
+                PhysicianDto physician = physicianService.findById(user.getId());
+                viewModel.setPhysicianId(physician.getId());
+                model.addAttribute("showSelectPhysician", false);
+
+            } catch (IllegalArgumentException e) {
+                Set<PhysicianDto> physicians = physicianService.findAll();
+                model.addAttribute("physicians", physicians);
+                model.addAttribute("showSelectPhysician", true);
+            }
+        }
+
+
         model.addAttribute("appointment", viewModel);
 
         Set<PatientDto> patients = patientService.findAll();
@@ -160,31 +177,26 @@ public class AppointmentController {
     public String createAppointment(Model model,
             @Valid @ModelAttribute("appointment") CreateAppointmentAndSickLeaveAndTreatmentViewModel appointment,
             BindingResult bindingResult) {
-        // if (appointment.getSickLeaveStartDate() != null) {
-        //     appointment.setSickLeaveStartDate(null);
-        // }
         if (bindingResult.hasErrors()) {
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnosis", diagnosisService.findAll());
             model.addAttribute("contentTemplate", "appointments/create");
+            final UserDto user = fetchLoggedUser();
+            if (user != null ) {
+                try {
+                    physicianService.findById(user.getId());
+                    model.addAttribute("showSelectPhysician", false);
+                } catch (IllegalArgumentException e) {
+                    Set<PhysicianDto> physicians = physicianService.findAll();
+                    model.addAttribute("showSelectPhysician", true);
+                    model.addAttribute("physicians", physicians);
+                }
+            }
+
+            Set<DiagnosisDto> diagnoses = this.fetchSpecialtiesByLoggedUser();
+            model.addAttribute("diagnoses", diagnoses);
             return "layout";
         }
-
-        // Fetch autheticated user to get the physician's specialties which correspond to the departments and then get diagnoses for those departments
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        PhysicianDto physician= null;
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Get username or user details from authentication object
-            String username = authentication.getName();
-            // Alternatively, you can cast the principal to UserDetails
-            if (authentication.getPrincipal() instanceof UserDetails) {
-                physician = physicianService.findById(userService.findUserByUserName(username).getId());
-            }
-        }
-
-        // System.out.println("Physician: " + physicianDto);
-
 
         SickLeaveDto appointmentSickLeaveDto = null;
         if (appointment.getSickLeaveDuration() > 0) {
@@ -196,6 +208,7 @@ public class AppointmentController {
 
         final DiagnosisDto diagnosis = diagnosisService.findById(appointment.getDiagnosisId());
         final PatientDto patient = patientService.findById(appointment.getPatientId());
+        final PhysicianDto physician = physicianService.findById(appointment.getPhysicianId());
         CreateAppointmentViewModel createAppointmentViewModel = new CreateAppointmentViewModel(
                 appointment.getDate(),
                 patient,
@@ -228,12 +241,21 @@ public class AppointmentController {
         final AppointmentDto appointment = appointmentService.findById(id);
         final UpdateAppointmentAndSickLeaveAndTreatmentViewModel updateAppointment = new UpdateAppointmentAndSickLeaveAndTreatmentViewModel();
         updateAppointment.setDate(appointment.getDate());
-        updateAppointment.setDiagnosisId(appointment.getDiagnosis().getId());
+        if (appointment.getDiagnosis() != null)  {
+            updateAppointment.setDiagnosis(appointment.getDiagnosis().getId());
+        }
         updateAppointment.setPatientId(appointment.getPatient().getId());
+        updateAppointment.setPhysicianId(appointment.getPhysician().getId());
         if (appointment.getSickLeave() != null) {
             updateAppointment.setSickLeaveStartDate(appointment.getSickLeave().getStartDate());
             updateAppointment.setSickLeaveDuration(appointment.getSickLeave().getDuration());
         }
+
+        final Set<PhysicianDto> physicians = physicianService.findAll();
+        model.addAttribute("physicians", physicians);
+
+        final Set<PatientDto> patients = patientService.findAll();
+        model.addAttribute("patients", patients);
 
         model.addAttribute("appointment", updateAppointment);
         model.addAttribute("contentTemplate", "appointments/edit");
@@ -250,10 +272,33 @@ public class AppointmentController {
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnosis", diagnosisService.findAll());
             model.addAttribute("contentTemplate", "appointments/edit");
+
+            Set<DiagnosisDto> diagnoses = this.fetchSpecialtiesByLoggedUser();
+            model.addAttribute("diagnoses", diagnoses);
             return "layout";
         }
 
-        System.out.println("Appointment: " + appointment);
+
+        AppointmentDto currentAppointment = appointmentService.findById(id);
+
+        // Handle sick leave logic
+        SickLeaveDto updatedSickLeave = null;
+        if (appointment.getSickLeaveDuration() > 0) {
+            if (currentAppointment.getSickLeave() == null) {
+                // Scenario 1: Adding a new sick leave
+                CreateSickLeaveViewModel createSickLeaveViewModel = modelMapper.map(appointment, CreateSickLeaveViewModel.class);
+                CreateSickLeaveDto createSickLeaveDTO = modelMapper.map(createSickLeaveViewModel, CreateSickLeaveDto.class);
+                updatedSickLeave = sickLeaveService.create(createSickLeaveDTO);
+            } else {
+                // Scenario 3: Updating existing sick leave
+                UpdateSickLeaveViewModel updateSickLeaveViewModel = modelMapper.map(appointment, UpdateSickLeaveViewModel.class);
+                UpdateSickLeaveDto updateSickLeaveDTO = modelMapper.map(updateSickLeaveViewModel, UpdateSickLeaveDto.class);
+                updatedSickLeave = sickLeaveService.update(currentAppointment.getSickLeave().getId(), updateSickLeaveDTO);
+            }
+        } else if (currentAppointment.getSickLeave() != null) {
+            // Scenario 2: Removing existing sick leave
+            sickLeaveService.delete(currentAppointment.getSickLeave().getId());
+        }
         return "redirect:/appointments";
     
     // AppointmentViewModel currentAppointment = this.modelMapper
@@ -333,27 +378,42 @@ public class AppointmentController {
     // updateTreatmentDTO);
     // }
     }
+
+    private UserDto fetchLoggedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof UserDetails) {
+                String username = ((UserDetails) principal).getUsername();
+                UserDto user = userService.findUserByUserName(username);
+                return user;
+            }
+
+            return null;
+        }
+        return null;
+    }
     
 
     private Set<DiagnosisDto> fetchSpecialtiesByLoggedUser() {
         // Fetch autheticated user to get the physician's specialties which correspond to the departments and then get diagnoses for those departments
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Get the principal (user) from the Authentication object
-            Object principal = authentication.getPrincipal();
-
-            if (principal instanceof PhysicianEntity) {
-                PhysicianEntity physician = (PhysicianEntity) principal;
+        final UserDto user = fetchLoggedUser();
+        if (user != null ) {
+            try {
+                PhysicianDto physician = physicianService.findById(user.getId());
                 Set<SpecialtyType> specialties = physician.getSpecialties();
                 Set<DepartmentType> departments = specialties.stream()
                     .map(SpecialtyType::getDepartment)
                     .collect(Collectors.toSet());
-
-                // Pass department types to the diagnosis service to retrieve diagnoses for those departments
+            
                 return diagnosisService.findAllByCategory(departments);
+            } catch (IllegalArgumentException e) {
+                return diagnosisService.findAll();
             }
         }
+
         return null;
     }
 
@@ -386,177 +446,3 @@ public class AppointmentController {
     }
 }
 
-// @PostMapping("/create")
-// public String createAppointment(Model model,
-// @Valid @ModelAttribute("appointment")
-// CreateAppointmentAndSickLeaveAndTreatmentViewModel appointment,
-// BindingResult bindingResult) {
-// if (bindingResult.hasErrors()) {
-// model.addAttribute("physicians", physicianService.findAll());
-// model.addAttribute("patients", patientService.findAll());
-// model.addAttribute("diagnosis", diagnosisService.findAll());
-// return "/appointments/create";
-// }
-
-// SickLeaveDTO appointmentSickLeave = null;
-// TreatmentDTO appointmentTreatment = null;
-// if (appointment.getSickLeaveDuration() > 0) {
-// CreateSickLeaveViewModel createSickLeaveViewModel =
-// modelMapper.map(appointment,
-// CreateSickLeaveViewModel.class);
-// CreateSickLeaveDTO createSickLeaveDTO =
-// modelMapper.map(createSickLeaveViewModel, CreateSickLeaveDTO.class);
-// appointmentSickLeave = sickLeaveService.create(createSickLeaveDTO);
-// }
-
-// if (appointment.getTreatmentName() != null &&
-// !appointment.getTreatmentName().equals("")) {
-// CreateTreatmentViewModel createTreatmentViewModel = new
-// CreateTreatmentViewModel(
-// appointment.getTreatmentName(), appointment.getTreatmentDescription());
-// CreateTreatmentDTO createTreatmentDTO =
-// modelMapper.map(createTreatmentViewModel, CreateTreatmentDTO.class);
-// appointmentTreatment = treatmentService.create(createTreatmentDTO);
-// }
-
-// //
-// SickLeave sickLeave = appointmentSickLeave != null ?
-// modelMapper.map(appointmentSickLeave, SickLeave.class)
-// : null;
-// Treatment treatment = appointmentTreatment != null ?
-// modelMapper.map(appointmentTreatment, Treatment.class)
-// : null;
-
-// CreateAppointmentViewModel createAppointmentViewModel = new
-// CreateAppointmentViewModel(
-// appointment.getDate(),
-// appointment.getPatient(),
-// appointment.getPhysician(),
-// sickLeave,
-// appointment.getDiagnosis(),
-// treatment);
-
-// CreateAppointmentDTO appointmentDTO =
-// modelMapper.map(createAppointmentViewModel, CreateAppointmentDTO.class);
-// appointmentService.create(appointmentDTO);
-// return "redirect:/appointments";
-// }
-
-// @GetMapping("/update/{id}")
-// public String editAppointment(Model model, @PathVariable Long id) {
-// model.addAttribute("physicians", physicianService.findAll());
-// model.addAttribute("patients", patientService.findAll());
-// model.addAttribute("diagnosis", diagnosisService.findAll());
-// model.addAttribute("treatments", treatmentService.findAll());
-// model.addAttribute("appointment",
-// modelMapper.map(appointmentService.findById(id),
-// UpdateAppointmentAndSickLeaveAndTreatmentViewModel.class));
-// return "/appointments/edit";
-// }
-
-// @PostMapping("/update/{id}")
-// public String editAppointment(Model model, @PathVariable long id,
-// @Valid @ModelAttribute("appointment")
-// UpdateAppointmentAndSickLeaveAndTreatmentViewModel appointment,
-// BindingResult bindingResult) {
-// if (bindingResult.hasErrors()) {
-// model.addAttribute("physicians", physicianService.findAll());
-// model.addAttribute("patients", patientService.findAll());
-// model.addAttribute("diagnosis", diagnosisService.findAll());
-// model.addAttribute("treatments", treatmentService.findAll());
-// return "/appointments/update";
-// }
-
-// AppointmentViewModel currentAppointment = this.modelMapper
-// .map(this.appointmentService.findById(appointment.getId()),
-// AppointmentViewModel.class);
-// SickLeaveDTO prevAppointmentSickLeave =
-// modelMapper.map(currentAppointment.getSickLeave(), SickLeaveDTO.class);
-// TreatmentDTO prevAppointmentTreatment =
-// modelMapper.map(currentAppointment.getTreatment(), TreatmentDTO.class);
-
-// // Set Sick Leave Object
-// if (prevAppointmentSickLeave == null && appointment.getSickLeaveDuration() >
-// 0) {
-// // create a new sick leave object if there is no sick leave added to the
-// // appointment before edit
-// CreateSickLeaveViewModel createSickLeaveViewModel =
-// modelMapper.map(appointment,
-// CreateSickLeaveViewModel.class);
-// CreateSickLeaveDTO createSickLeaveDTO =
-// modelMapper.map(createSickLeaveViewModel, CreateSickLeaveDTO.class);
-// prevAppointmentSickLeave = sickLeaveService.create(createSickLeaveDTO);
-// } else if (prevAppointmentSickLeave != null &&
-// (appointment.getSickLeaveDuration() > 0)) {
-// // if prevAppointmentSickLeave had a value, but it had been deleted on edit
-// this.sickLeaveService.delete(prevAppointmentSickLeave.getId());
-// prevAppointmentSickLeave = null;
-// } else if (prevAppointmentSickLeave != null &&
-// !(appointment.getSickLeaveDuration() > 0)) {
-// if
-// (!prevAppointmentSickLeave.getStartDate().equals(appointment.getSickLeaveStartDate())
-// || prevAppointmentSickLeave.getDuration() !=
-// appointment.getSickLeaveDuration()) {
-// UpdateSickLeaveViewModel updateSickLeaveViewModel =
-// modelMapper.map(appointment,
-// UpdateSickLeaveViewModel.class);
-// UpdateSickLeaveDTO updateSickLeaveDTO =
-// modelMapper.map(updateSickLeaveViewModel,
-// UpdateSickLeaveDTO.class);
-// prevAppointmentSickLeave =
-// sickLeaveService.update(prevAppointmentSickLeave.getId(),
-// updateSickLeaveDTO);
-// }
-// }
-
-// // Set Treatment Object
-// if (prevAppointmentTreatment == null && appointment.getTreatmentName() !=
-// null
-// && !appointment.getTreatmentName().isEmpty()) {
-// // create a new Treatment object if there is no Treatment added to the
-// // appointment before edit
-// CreateTreatmentViewModel createTreatmentViewModel = new
-// CreateTreatmentViewModel(
-// appointment.getTreatmentName(), appointment.getTreatmentDescription());
-// CreateTreatmentDTO createTreatmentDTO =
-// modelMapper.map(createTreatmentViewModel, CreateTreatmentDTO.class);
-// prevAppointmentTreatment = treatmentService.create(createTreatmentDTO);
-// } else if (prevAppointmentTreatment != null &&
-// appointment.getTreatmentName().isEmpty()) {
-// // if prevAppointmentTreatment had a value, but it had been deleted on edit
-// this.treatmentService.delete(prevAppointmentTreatment.getId());
-// prevAppointmentTreatment = null;
-// } else if (prevAppointmentTreatment != null &&
-// !appointment.getTreatmentName().isEmpty()) {
-// if
-// (!prevAppointmentTreatment.getName().equals(appointment.getTreatmentName())
-// ||
-// prevAppointmentTreatment.getDescription().equals(appointment.getTreatmentDescription()))
-// {
-// UpdateTreatmentViewModel updateTreatmentViewModel = new
-// UpdateTreatmentViewModel(
-// appointment.getTreatmentName(), appointment.getTreatmentDescription());
-// UpdateTreatmentDTO updateTreatmentDTO =
-// modelMapper.map(updateTreatmentViewModel,
-// UpdateTreatmentDTO.class);
-// prevAppointmentTreatment =
-// treatmentService.update(prevAppointmentTreatment.getId(),
-// updateTreatmentDTO);
-// }
-// }
-
-// UpdateAppointmentViewModel updateAppointmentViewModel = new
-// UpdateAppointmentViewModel(
-// appointment.getDate(),
-// appointment.getPatient(),
-// appointment.getPhysician(),
-// modelMapper.map(prevAppointmentSickLeave, SickLeave.class),
-// appointment.getDiagnosis(),
-// modelMapper.map(prevAppointmentTreatment, Treatment.class));
-
-// appointmentService.update(id, modelMapper.map(updateAppointmentViewModel,
-// UpdateAppointmentDTO.class));
-// return "redirect:/appointments";
-// }
-
-// }

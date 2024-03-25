@@ -13,8 +13,6 @@
                             <span class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">Start Date Error</span>
                         </div>
                         
-                    </div>
-                    <div class="row py-2">
                         <div class="col">
                             <label for="duration">Duration</label>
                             <input class="form-control" type="text" th:field="${sickLeave.duration}" placeholder="Duration" id="duration">

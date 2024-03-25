@@ -1,6 +1,6 @@
 <div th:fragment="content">
     <div class="row d-flex py-4">
-        <h1 class="font-weight-bold text-center" >Create Appointment</h1>
+        <h1 class="font-weight-bold text-center" >Log Visitation</h1>
     </div>
     <div class="section-white-container">
         <div class="row">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="row py-2">
-                        <div class="col">
+                        <div class="col-6">
                             <label for="patient">Patient</label>
                             <select class="form-control" type="text" th:field="${appointment.patientId}" id="patient">
                                 <option value="">Select Patient</option>
@@ -32,31 +32,37 @@
                             </select>
                             <span class="text-danger" th:if="${#fields.hasErrors('patientId')}"
                                     th:errors="${appointment.patientId}">Patient Error</span>
-<!--                                        <input class="form-control" type="text" th:field="*{patient}" placeholder="Patient" id="patient">-->
+                        </div>
+                        <div class="col" th:if="${showSelectPhysician}">
+                            <label for="patient">Physician</label>
+                            <select class="form-control" type="text" th:field="${appointment.physicianId}" id="physician">
+                                <option value="">Select Physician</option>t
+                                <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.firstName + ' ' + physician.lastName}"></option>
+                            </select>
+                            <span class="text-danger" th:if="${#fields.hasErrors('physicianId')}"
+                                    th:errors="${appointment.physicianId}">physician Error</span>
+                        </div>
+                        <div th:if="${!showSelectPhysician}">
+                            <input type="hidden" th:field="${appointment.physicianId}" />
                         </div>
                     </div>
-                    <h3>Sick Leave Info: </h3>
-<!--                                <input type="checkbox" th:name="addSickLeave" placeholder="Add Sick Leave"-->
-<!--                                       th:checked="${addSickLeave}"-->
-<!--                                       id="hasInsurance">-->
+                    <h3>Sick Leave Info:</h3>
                     <div class="row py-2">
                         <div class="col">
                             <label for="start-date">Start Date</label>
                             <input class="form-control" type="date" th:value="${appointment.sickLeaveStartDate}" placeholder="Start Date" id="start-date">
-                            <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveStartDate')}"
-                            th:errors="${appointment.sickLeaveStartDate}">Sick Leave Start Date Error</span>
-                        </div>                                    
+                            <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveStartDate')}" th:errors="${appointment.sickLeaveStartDate}">Sick Leave Start Date Error</span>
+                        </div>
                         <div class="col">
                             <label for="duration">Duration</label>
                             <input class="form-control" type="text" th:field="*{sickLeaveDuration}" placeholder="Duration" id="duration">
-                            <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveDuration')}"
-                            th:errors="${appointment.sickLeaveDuration}">Sick Leave Duration Error</span>
+                            <span class="text-danger" th:if="${#fields.hasErrors('sickLeaveDuration')}" th:errors="${appointment.sickLeaveDuration}">Sick Leave Duration Error</span>
                         </div>
                     </div>
                     <h3>Treatment Info: </h3>
                     <div class="row py-2">
                         <div class="col">
-                            <label for="treatment">Treatment</label>
+                            <label for="treatment">Describe the treatment</label>
                             <input class="form-control" type="text" th:field="*{treatment}" placeholder="Treatment" id="treatment">
                             <span class="text-danger" th:if="${#fields.hasErrors('treatment')}"
                             th:errors="${appointment.treatment}">Treatment Error</span>

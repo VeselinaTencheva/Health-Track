@@ -222,9 +222,9 @@ public class DbInit implements CommandLineRunner {
                 createRoleIfNotFound(RoleType.ROLE_PATIENT,
                         new HashSet<>(Arrays.asList(readAllVisitations, readAllSickLeaves, readPatient, readPhysician, writePatient, readDiagnosis, readSickLeave, readVisitation)));
                 createRoleIfNotFound(RoleType.ROLE_PHYSICIAN,
-                        new HashSet<>(Arrays.asList(readAllVisitations, readAllSickLeaves, readAllDiagnoses, readAllPatients, readPatient, readDiagnosis, readPhysician, readVisitation, readSickLeave, writePhysician, writeDiagnosis, writeVisitation, writeSickLeave)));
+                        new HashSet<>(Arrays.asList(readAllVisitations, readAllSickLeaves, readAllDiagnoses, readAllPatients, readPatient, readDiagnosis, readPhysician, readVisitation, readSickLeave, writePhysician, writeVisitation, writeSickLeave)));
                 createRoleIfNotFound(RoleType.ROLE_GENERAL_PRACTITIONER,
-                        new HashSet<>(Arrays.asList(readAllVisitations,readAllSickLeaves, readAllDiagnoses, readAllPhysicians, readAllPatients, readPatient, readDiagnosis, writePatient, readPhysician, readVisitation, readSickLeave, writeDiagnosis, writeVisitation, writeSickLeave, writePhysician)));
+                        new HashSet<>(Arrays.asList(readAllVisitations,readAllSickLeaves, readAllDiagnoses, readAllPhysicians, readAllPatients, readPatient, readDiagnosis, writePatient, readPhysician, readVisitation, readSickLeave, writeVisitation, writeSickLeave, writePhysician)));
         }
 
         @Transactional

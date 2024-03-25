@@ -52,11 +52,11 @@
                 <div class="col-4 form-group">
                     <label>Gender:</label>
                     <div class="form-check">
-                        <input type="radio" readonly id="male" th:field="${patient.gender}" name="gender" value="Male"/>
+                        <input type="radio" disabled id="male" th:field="${patient.gender}" name="gender" value="Male"/>
                         <label class="form-check-label" for="male">Male</label>
                     </div>
                     <div class="form-check">
-                        <input type="radio" readonly id="female" th:field="${patient.gender}" name="gender" value="Female"/>
+                        <input type="radio" disabled id="female" th:field="${patient.gender}" name="gender" value="Female"/>
                         <label class="form-check-label" for="female">Female</label>
                     </div>
                 </div>
@@ -64,11 +64,11 @@
                 <div class="col-4 form-group">
                     <label>Paid Insurance:</label>
                     <div class="form-check">
-                        <input type="radio" readonly id="true" th:field="${patient.hasInsurance}" name="hasInsurance" value="True"/>
+                        <input type="radio" disabled id="true" th:field="${patient.hasInsurance}" name="hasInsurance" value="True"/>
                         <label class="form-check-label" for="true">True</label>
                     </div>
                     <div class="form-check">
-                        <input type="radio" readonly id="false" th:field="${patient.hasInsurance}" name="hasInsurance" value="False"/>
+                        <input type="radio" disabled id="false" th:field="${patient.hasInsurance}" name="hasInsurance" value="False"/>
                         <label class="form-check-label" for="false">False</label>
                     </div>
                 </div>

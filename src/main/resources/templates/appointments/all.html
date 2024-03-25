@@ -1,13 +1,13 @@
 <div th:fragment="content">
     <div class="row d-flex py-4">
-        <h1 class="font-weight-bold text-center" >Appointments List</h1>
+        <h1 class="font-weight-bold text-center" >Visitation List</h1>
     </div>
     <div class="section-white-container">
         <div class="row d-flex justify-content-end">
-            <a href="/appointments/create" class="btn mb-2">Add Appointment</a>
+            <a href="/appointments/create" class="btn mb-2">Log Visitation</a>
         </div>
         <div class="row">
-                <h3 th:unless="${appointments} and ${appointments.size()}">There are no registered Appointments!</h3>
+                <h3 th:unless="${appointments} and ${appointments.size()}">There are no registered visitations!</h3>
                 <table th:if="${appointments.size()>0}" class="table table-hover">
                     <th:block th:each="column :  ${columnsEnum}">
                         <th>
@@ -20,9 +20,9 @@
                     <th>Actions</th>
                     <tr th:each="app : ${appointments}">
                         <td th:text="${app.date}"></td>
-                        <td><a th:href="@{'/diagnosis/'+${app.diagnosis.id}}" th:text="${app.diagnosis.name}" /></td>
                         <td><a th:href="@{'/patients/'+${app.patient.id}}"  th:text="${app.patient.firstName + ' ' + app.patient.lastName}" /></td>
                         <td><a th:href="@{'/physicians/'+${app.physician.id}}" th:text="${app.physician.firstName + ' ' + app.physician.lastName}" /></td>
+                        <td><a th:if="${app?.diagnosis?.getId() != null}" th:href="@{'/diagnosis/'+${app.diagnosis.id}}" th:text="${app.diagnosis.name}" /></td>
                         <td>
                             <a
                                     th:if="${app?.sickLeave?.getId() != null}"

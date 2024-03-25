@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class SickLeaveDto {
-    private String id;
+    private Long id;
     private LocalDate startDate;
     private int duration;
     private AppointmentDto appointmentDto;

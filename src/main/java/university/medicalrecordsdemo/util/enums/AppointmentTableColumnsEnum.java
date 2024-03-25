@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum AppointmentTableColumnsEnum {
     DATE("Date", "date"),
-    DIAGNOSIS("Diagnosis", "diagnosis"),
     PATIENT("Patient", "patient"),
     PHYSICIAN("Physician", "physician"),
+    DIAGNOSIS("Diagnosis", "diagnosis"),
     SICK_LEAVE("Sick Leave Info", "sickLeave");
 
 

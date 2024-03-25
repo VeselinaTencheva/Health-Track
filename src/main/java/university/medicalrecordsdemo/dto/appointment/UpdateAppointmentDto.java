@@ -5,16 +5,20 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
+import university.medicalrecordsdemo.dto.patient.PatientDto;
+import university.medicalrecordsdemo.dto.physician.PhysicianDto;
+import university.medicalrecordsdemo.dto.sickLeave.SickLeaveDto;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class UpdateAppointmentDto {
     private LocalDate date;
-    private Long patientId; // ID of the patient
-    private Long physicianId; // ID of the physician
-    private Long sickLeaveId; // ID of the sick leave
-    private Long diagnosisId; // ID of the diagnosis
-    private String treatment; // treatment 
+    private PatientDto patient;
+    private PhysicianDto physician;
+    private SickLeaveDto sickLeave;
+    private DiagnosisDto diagnosis;
+    private String treatment;
 
 }

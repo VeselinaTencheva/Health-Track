@@ -27,6 +27,9 @@ public class CreateAppointmentAndSickLeaveAndTreatmentViewModel {
     @NotNull(message = "Patient is mandatory")
     private Long patientId;
 
+    @NotNull(message = "Physician is mandatory")
+    private Long physicianId;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @FutureOrPresent(message = "Date must be in the future or present")
     private LocalDate sickLeaveStartDate = LocalDate.now();

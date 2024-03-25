@@ -1,7 +1,7 @@
 package university.medicalrecordsdemo.config;
 
 import lombok.AllArgsConstructor;
-import university.medicalrecordsdemo.model.entity.RoleType;
+import university.medicalrecordsdemo.model.entity.PrivilegeType;
 import university.medicalrecordsdemo.service.user.UserService;
 
 import org.springframework.context.annotation.Bean;
@@ -38,45 +38,33 @@ public class SecurityConfiguration {
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-                http
-                                .authorizeHttpRequests(authorize -> authorize
-                                                .requestMatchers("/appointments")
-                                                .hasAnyAuthority(RoleType.ROLE_PATIENT.name(),
-                                                                RoleType.ROLE_GENERAL_PRACTITIONER.name(),
-                                                                RoleType.ROLE_PHYSICIAN.name(),
-                                                                RoleType.ROLE_ADMIN.name())
-                                                .requestMatchers("/patients")
-                                                .hasAnyAuthority(RoleType.ROLE_GENERAL_PRACTITIONER.name(),
-                                                                RoleType.ROLE_PHYSICIAN.name(),
-                                                                RoleType.ROLE_ADMIN.name())
-                                                .requestMatchers("/physicians")
-                                                .hasAnyAuthority(RoleType.ROLE_GENERAL_PRACTITIONER.name(),
-                                                                RoleType.ROLE_PHYSICIAN.name(),
-                                                                RoleType.ROLE_ADMIN.name())
-                                                .requestMatchers("/diagnosis")
-                                                .hasAnyAuthority(RoleType.ROLE_GENERAL_PRACTITIONER.name(),
-                                                                RoleType.ROLE_PHYSICIAN.name(),
-                                                                RoleType.ROLE_ADMIN.name())
-                                                .requestMatchers("/sick-leaves")
-                                                .hasAnyAuthority(RoleType.ROLE_GENERAL_PRACTITIONER.name(),
-                                                                RoleType.ROLE_PHYSICIAN.name(),
-                                                                RoleType.ROLE_ADMIN.name())
-                                                .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
-                                                .requestMatchers("/register", "/login").anonymous().anyRequest()
-                                                .authenticated())
-                                .formLogin(formLogin -> formLogin
-                                                .loginPage("/login")
-                                                .permitAll())
-                                .exceptionHandling(exceptionHandling -> exceptionHandling
-                                                .accessDeniedPage("/unauthorized"))
-                                .logout(logout -> logout
-                                        .logoutUrl("/logout") // Specify the logout URL
-                                        .logoutSuccessUrl("/login") // Redirect to login page after logout
-                                        .invalidateHttpSession(true) // Invalidate session
-                                        .deleteCookies("JSESSIONID") // Delete cookies
-                                )
-                                .httpBasic(withDefaults());
-
-                return http.build();
+            http
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/appointments")
+                        .hasAuthority(PrivilegeType.READ_ALL_VISITATIONS.name())
+                        .requestMatchers("/patients")
+                        .hasAuthority(PrivilegeType.READ_ALL_PATIENTS.name())
+                        .requestMatchers("/physicians")
+                        .hasAuthority(PrivilegeType.READ_ALL_PHYSICIANS.name())
+                        .requestMatchers("/diagnosis")
+                        .hasAuthority(PrivilegeType.READ_ALL_DIAGNOSES.name())
+                        .requestMatchers("/sick-leaves")
+                        .hasAuthority(PrivilegeType.READ_ALL_SICK_LEAVES.name())
+                        .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
+                        .requestMatchers("/register", "/login").anonymous().anyRequest()
+                        .authenticated())
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .permitAll())
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedPage("/unauthorized"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID"))
+                .httpBasic(withDefaults());
+        
+            return http.build();
         }
 }

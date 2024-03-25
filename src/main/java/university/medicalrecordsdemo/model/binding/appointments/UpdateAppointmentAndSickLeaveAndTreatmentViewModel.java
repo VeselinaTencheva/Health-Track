@@ -22,11 +22,13 @@ public class UpdateAppointmentAndSickLeaveAndTreatmentViewModel {
 
     @NotNull(message = "Date is mandatory")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent(message = "Date must be in the future or present")
     private LocalDate date = LocalDate.now();
 
     @NotNull(message = "Patient is mandatory")
     private Long patientId;
+
+    @NotNull(message = "Physician is mandatory")
+    private Long physicianId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @FutureOrPresent(message = "Date must be in the future or present")
@@ -37,7 +39,7 @@ public class UpdateAppointmentAndSickLeaveAndTreatmentViewModel {
     private int sickLeaveDuration;
 
     @NotNull(message = "Diagnose is mandatory")
-    private Long diagnosisId;
+    private Long diagnosis;
 
     @NotEmptyIfPresent(message = "Treatment should be between 5 and 20 symbols",field = "treatment", minParam = "5", maxParam = "20")
     private String treatment;

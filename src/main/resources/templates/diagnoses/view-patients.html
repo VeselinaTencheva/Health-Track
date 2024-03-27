@@ -1,0 +1,40 @@
+<div th:fragment="content">
+    <div class="row d-flex py-4">
+        <h1 class="font-weight-bold text-center" th:text="${diagnose.name} + ': Patient List'"></h1>
+    </div>
+    <div class="section-white-container">
+        <div class="row">
+            <h3 th:unless="${patients} and ${patients.size()}">There are no registered patients!</h3>
+            <table th:if="${patients.size()>0}" class="table table-hover">
+                <th:block th:each="column :  ${columnsEnum}">
+                    <th>
+                        <a>
+                            <span th:text="${column.columnDiplayValue}"></span>
+                        </a>
+                    </th>
+                </th:block>
+                <th>Diagnoses</th>
+                <th>Actions</th>
+                <tr th:each="patient : ${patients}">
+                    <td th:text="${patient.getFullname()}"></td>
+                    <td th:text="${patient.username}"></td>
+                    <td th:text="${patient.ssn}"></td>
+                    <td th:text="${patient.birthDate}"></td>
+                    <td th:text="${patient.gender}"></td>
+                    <td th:text="${patient.hasInsurance}"></td>
+                    <td><a
+                            th:if="${patient?.physicianId != null}"
+                            th:href="@{'/physicians/'+${patient.physicianId}}"
+                            th:text="${patient.physicianFullName}"></td>
+                    <td><a th:href="@{'/patients/'+${patient.id}+'/diagnosis'}">Diagnoses</a></td>
+                    <td>
+                            <!-- View button with view icon -->
+                            <a th:href="@{'/patients/'+${patient.id}}">
+                            <i class="fas fa-eye" style="font-weight: 400;"></i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

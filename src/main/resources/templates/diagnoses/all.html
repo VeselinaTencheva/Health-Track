@@ -24,12 +24,7 @@
                     <td th:text="${d.name}"></td>
                     <td th:text="${d.description}"></td>
                     <td th:text="${d.category}"></td>
-                    <td>
-                        <a
-                                th:href="@{'/patients/diagnose/'+${d.id}}"
-                                th:text="${d.patientsCount}">
-                        </a>
-                    </td>
+                    <td><a th:href="@{'/diagnosis/'+${d.id}+'/patients'}" th:text="${d.patientsCount}"></a></td>
                     <td>
                         <!-- View button with view icon -->
                         <a th:href="@{'/diagnosis/'+${d.id}}">

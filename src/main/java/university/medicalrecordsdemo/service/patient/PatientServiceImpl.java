@@ -36,11 +36,9 @@ public class PatientServiceImpl implements PatientService {
     private final PhysicianService physicianService;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
+
     @Autowired
     private PasswordEncoder encoder;
-
-    // private final DiagnosisService diagnosisService;
-    // private final AppointmentService appointmentService;
 
     @Override
     public Set<PatientDto> findAll() {
@@ -63,32 +61,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Page<PatientDto> findAllByDiagnoseAndPageAndSort(Long diagnoseId, int page, int size,
-            PatientTableColumnsEnum sortField, String sortDirection) {
-        Sort.Direction direction = Sort.Direction.ASC;
-        if ("desc".equalsIgnoreCase(sortDirection)) {
-            direction = Sort.Direction.DESC;
-        }
-        final String sortFieldString = sortField.getColumnName().toString();
-        Sort sort = Sort.by(direction, sortFieldString);
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
-        List<AppointmentEntity> appointments = appointmentRepository.findByDiagnosisId(diagnoseId);
-
-        Page<PatientEntity> patientPage = patientRepository.findAllByAppointmentsIn(pageRequest, appointments);
-
-        return patientPage.map(this::convertToPatientDto);
-    }
-
-    @Override
     public Set<PatientDto> findAllByDiagnose(Long diagnoseId) {
         List<AppointmentEntity> appointments = appointmentRepository.findByDiagnosisId(diagnoseId);
-
-        List<PatientEntity> patients = patientRepository.findAllByAppointmentsIn(appointments);
-
-        return patients
-            .stream()
-            .map(this::convertToPatientDto)
-            .collect(Collectors.toSet());
+        Set<PatientDto> patients = patientRepository.findAllByAppointmentsIn(appointments).stream().map(this::convertToPatientDto)
+                .collect(Collectors.toSet());
+        
+        return patients;
     }
 
     @Override
@@ -97,19 +75,6 @@ public class PatientServiceImpl implements PatientService {
         Page<PatientEntity> patientPage = patientRepository.findAll(pageRequest);
         return patientPage.map(this::convertToPatientDto);
     }
-
-    // @Override
-    // public Set<DiagnosisDto> findAllDiagnosesPerPatient(long id) {
-    // List<AppointmentDto> appointmentsDTO = appointmentService
-    // .findAppointmentsByPatient(modelMapper.map(findById(id),
-    // PatientEntity.class));
-    // List<AppointmentEntity> appointments = appointmentsDTO.stream()
-    // .map((appointmentDTO) -> modelMapper.map(appointmentDTO, Appointment.class))
-    // .collect(Collectors.toList());
-    // List<DiagnosisDto> diagnoses =
-    // diagnosisService.findAllByAppointments(appointments);
-    // return diagnoses;
-    // }
 
     @Override
     public PatientDto findById(Long id) {

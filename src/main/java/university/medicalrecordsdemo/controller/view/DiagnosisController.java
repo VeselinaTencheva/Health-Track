@@ -6,9 +6,13 @@ import university.medicalrecordsdemo.dto.diagnosis.UpdateDiagnosisDto;
 import university.medicalrecordsdemo.model.binding.diagnoses.CreateDiagnoseViewModel;
 import university.medicalrecordsdemo.model.binding.diagnoses.DiagnoseViewModel;
 import university.medicalrecordsdemo.model.binding.diagnoses.UpdateDiagnoseViewModel;
+import university.medicalrecordsdemo.model.binding.patients.PatientViewModel;
 import university.medicalrecordsdemo.model.entity.DepartmentType;
 import university.medicalrecordsdemo.service.diagnosis.DiagnosisService;
+import university.medicalrecordsdemo.service.patient.PatientService;
 import university.medicalrecordsdemo.util.enums.DiagnosisTableColumnsEnum;
+import university.medicalrecordsdemo.util.enums.PatientTableColumnsEnum;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,6 +34,7 @@ import java.util.stream.IntStream;
 @RequestMapping("/diagnosis")
 public class DiagnosisController {
     private DiagnosisService diagnosisService;
+    private PatientService patientService;
     private ModelMapper modelMapper;
 
     private static final String DEFAULT_SORT_FIELD = "name";
@@ -47,6 +53,22 @@ public class DiagnosisController {
         setupModelAttributes(model, diagnoseViewModels, "diagnoses/all", sortField, sortDirection);
         return "layout";
     }
+
+    @GetMapping("/{id}/patients")
+    public String getPatientsPerDiagnosis(Model model, @PathVariable Long id) {
+        DiagnoseViewModel diagnose = convertToDiagnoseViewModel(diagnosisService.findById(id));
+        List<PatientViewModel> patients = patientService.findAllByDiagnose(id)
+                .stream()
+                .map(patient -> modelMapper.map(patient, PatientViewModel.class))
+                .collect(Collectors.toList());
+        model.addAttribute("columnsEnum", PatientTableColumnsEnum.values());
+        model.addAttribute("patients", patients);
+        model.addAttribute("diagnose", diagnose);
+        model.addAttribute("contentTemplate", "diagnoses/view-patients");
+
+        return "layout";
+    }
+    
 
     @GetMapping("/create")
     public String createDiagnosis(Model model) {

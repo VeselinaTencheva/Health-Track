@@ -21,5 +21,7 @@ public interface AppointmentService {
 
     Set<AppointmentDto> findAppointmentsByPatient(PatientDto patient);
 
+    Set<AppointmentDto> findAppointmentsByPatientId(Long patientId);
+
     void delete(Long id);
 }

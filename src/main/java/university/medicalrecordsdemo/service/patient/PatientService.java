@@ -13,8 +13,6 @@ public interface PatientService {
 
     Page<PatientDto> findAllByPageAndSort(int page, int size, PatientTableColumnsEnum sortField, String sortDirection);
 
-    Page<PatientDto> findAllByDiagnoseAndPageAndSort(Long diagnoseId, int page, int size, PatientTableColumnsEnum sortField, String sortDirection);
-
     Set<PatientDto> findAllByDiagnose(Long diagnoseId);
     
     Page<PatientDto> findAllByPage(int page, int size);

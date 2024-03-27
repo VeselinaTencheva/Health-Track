@@ -31,7 +31,7 @@
                             th:if="${patient?.physicianId != null}"
                             th:href="@{'/physicians/'+${patient.physicianId}}"
                             th:text="${patient.physicianFullName}"></td>
-                    <td><a th:href="@{'/patients/'+${patient.id} + '/diagnoses'}">Diagnoses</a></td>
+                    <td><a th:href="@{'/patients/'+${patient.id}+'/diagnosis'}">Diagnoses</a></td>
                     <td>
                             <!-- View button with view icon -->
                             <a th:href="@{'/patients/'+${patient.id}}">

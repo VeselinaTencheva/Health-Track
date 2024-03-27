@@ -24,6 +24,8 @@ public interface DiagnosisService {
 
     DiagnosisDto findById(Long id);
 
+    Set<DiagnosisDto> findAllByPatient(Long patientId);
+
     DiagnosisDto create(DiagnosisDto diagnosis);
 
     DiagnosisDto update(Long id, UpdateDiagnosisDto diagnosis);

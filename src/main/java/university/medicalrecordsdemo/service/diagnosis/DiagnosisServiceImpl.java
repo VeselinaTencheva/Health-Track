@@ -3,6 +3,7 @@ package university.medicalrecordsdemo.service.diagnosis;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.HashSet;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import university.medicalrecordsdemo.repository.AppointmentRepository;
 import university.medicalrecordsdemo.repository.DiagnosisRepository;
 import university.medicalrecordsdemo.util.enums.DiagnosisTableColumnsEnum;
 import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
@@ -27,7 +29,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     private final DiagnosisRepository diagnosisRepository;
 
-    // private final AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
     // private final PatientRepository patientRepository;
     private final ModelMapper modelMapper;
 
@@ -84,6 +86,23 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
         return diagnoses;
     }
+
+    @Override
+    public Set<DiagnosisDto> findAllByPatient(Long patientId) {
+        List<AppointmentEntity> appointments = appointmentRepository.findByPatientId(patientId);
+        Set<DiagnosisDto> diagnosis = new HashSet<>();
+        appointments.forEach(appointment -> {
+
+            final DiagnosisEntity diagnose = diagnosisRepository.findByAppointments(appointment);
+            if (diagnose != null){
+                final DiagnosisDto diagnosisDto = convertToDiagnosisDto(diagnose);
+                diagnosis.add(diagnosisDto);
+            }
+        });
+        
+        return diagnosis;
+    }
+    
 
     @Override
     public DiagnosisDto findById(Long id) {

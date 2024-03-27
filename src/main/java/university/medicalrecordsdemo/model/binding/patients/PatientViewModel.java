@@ -11,6 +11,7 @@ public class PatientViewModel extends UserViewModel {
     private boolean hasInsurance;
     private long physicianId;
     private String physicianFullName;
+    private int diagnosisCount;
 
     public String getFullname() {
         return this.getFirstName() + " " + this.getLastName();

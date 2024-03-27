@@ -1,6 +1,7 @@
 package university.medicalrecordsdemo.service.patient;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.patient.*;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.model.entity.AppointmentEntity;
+import university.medicalrecordsdemo.model.entity.DiagnosisEntity;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
 import university.medicalrecordsdemo.model.entity.PhysicianEntity;
 import university.medicalrecordsdemo.model.entity.RoleEntity;
@@ -137,6 +139,20 @@ public class PatientServiceImpl implements PatientService {
         if (patient.getPhysician() != null) {
             final PhysicianDto physicianDto = modelMapper.map(patient.getPhysician(), PhysicianDto.class);
             patientDto.setGeneralPractitioner(physicianDto);
+        }
+
+        final Set<AppointmentEntity> appointments = patient.getAppointments() != null ? patient.getAppointments() : new HashSet<>();
+
+        final Set<DiagnosisEntity> diagnosis = new HashSet<>();
+        if (appointments.size() > 0) {
+            appointments.forEach(appointment -> {
+                if (appointment.getDiagnosis() != null) {
+                    diagnosis.add(appointment.getDiagnosis());
+                }
+            });
+            patientDto.setDiagnosisCount(diagnosis.size());
+        } else {
+            patientDto.setDiagnosisCount(0);
         }
         return patientDto;
     }

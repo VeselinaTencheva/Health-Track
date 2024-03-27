@@ -12,5 +12,5 @@ import university.medicalrecordsdemo.dto.user.UserDto;
 public class PatientDto extends UserDto {
     private boolean hasInsurance;
     private PhysicianDto generalPractitioner;
-
+    private int diagnosisCount;
 }

@@ -41,26 +41,6 @@ public class PhysicianServiceImpl implements PhysicianService {
         return physicianRepository.findAll().stream()
                 .map(this::convertToPhysicianDTO)
                 .collect(Collectors.toSet());
-        // return physicianRepository
-        // .findAll()
-        // .stream()
-        // .map(physician -> {
-        // PhysicianDTO physicianDTO = convertToPhysicianDTO(physician);
-        // boolean isGp = true;
-        // int patientsCount = 0;
-        // try {
-        // GeneralPractitioner generalPractitioner = this.generalPractitionerService
-        // .findById(physicianDTO.getId());
-        // patientsCount =
-        // patientRepository.findDistinctByGeneralPractitioner(generalPractitioner).size();
-        // } catch (IllegalArgumentException e) {
-        // isGp = false;
-        // }
-        // physicianDTO.setGP(isGp);
-        // physicianDTO.setPatientsCount(patientsCount);
-        // return physicianDTO;
-        // })
-        // .collect(Collectors.toList());
     }
 
     @Override

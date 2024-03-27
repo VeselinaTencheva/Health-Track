@@ -30,11 +30,11 @@
                                 <i class="fas fa-eye" style="font-weight: 400;"></i>
                             </a>
                             <!-- Edit button with edit icon -->
-                            <a th:href="@{'/sick-leaves/update/'+${sl.id}}">
+                            <a th:href="@{'/sick-leaves/update/'+${sl.id}}" sec:authorize="hasAuthority('WRITE_SICK_LEAVE')">
                                 <i class="fas fa-edit" style="font-weight: 400;"></i>
                             </a>
                             <!-- Delete button with delete icon -->
-                            <a th:href="@{'/sick-leaves/delete/'+${sl.id}}">
+                            <a th:href="@{'/sick-leaves/delete/'+${sl.id}}" sec:authorize="hasAuthority('WRITE_SICK_LEAVE')">
                                 <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
                             </a>
                         </td>

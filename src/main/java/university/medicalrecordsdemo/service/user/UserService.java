@@ -26,5 +26,7 @@ public interface UserService extends UserDetailsService // extends UserDetailsSe
 
     UserEntity findUserById(Long id);
 
+    public Long fetchUserIdFromUsername(String username);
+
     void deleteUser(UserEntity user);
 }

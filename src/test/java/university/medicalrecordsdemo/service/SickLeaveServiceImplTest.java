@@ -46,7 +46,7 @@ class SickLeaveServiceImplTest {
         sickLeaveEntity.setDuration(14);
 
         sickLeaveDto = new SickLeaveDto();
-        sickLeaveDto.setId("1");
+        sickLeaveDto.setId(1L);
         sickLeaveDto.setStartDate(LocalDate.of(2022, 1, 1));
         sickLeaveDto.setDuration(14);
     }

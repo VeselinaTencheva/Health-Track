@@ -1,7 +1,7 @@
 <div th:fragment="content">
     <div class="row d-flex w-100 justify-content-between py-4">
         <h1 class="font-weight-bold text-center" >View Physician</h1>
-        <a th:href="@{'/physicians/update/'+${physician.id}}">
+        <a th:href="@{'/physicians/update/'+${physician.id}}" sec:authorize="hasAuthority('WRITE_PHYSICIAN')"></a>
             <i class="fas fa-edit" style="font-weight: 400;"></i>
         </a>
     </div>
@@ -40,11 +40,6 @@
                             placeholder="Last Name">
                     <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</span>
                 </div>
-<!-- 
-                <div class="col form-group">
-                    <label for="gp">General Practitioner:</label>
-                    <input type="text" readonly class="form-control" id="gp" th:field="${physician.physicianFullName}" name="physicianFullName" placeholder="General Practitioner Name"/>
-                </div> -->
 
                 <div class="col-4 form-group">
                     <label>Gender:</label>

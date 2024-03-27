@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
     <title>Health Track</title>
     <meta charset="UTF-8">
@@ -34,61 +34,5 @@
         <a href="#">About</a>
     </div>
 </side-nav>
-
-<user-profile-details>
-    <div class="form-group">
-        <div class="row py-2">
-            <div class="col">
-                <!-- TODO think about what to add in this section maybe some chart features?? -->
-                <!-- <label for="name">Name</label> -->
-                <!-- <input class="form-control" type="text" th:field="${patient.name}" placeholder="Name" id="name">
-                <span class="text-danger" th:if="${#fields.hasErrors('name')}"
-                      th:errors="${patient.name}">Name Error</span> -->
-            </div>
-            <!-- <div class="col">
-                <label for="ssn">SSN</label>
-                <input class="form-control" type="text" th:field="${patient.ssn}" placeholder="SSN" id="ssn">
-                <span class="text-danger" th:if="${#fields.hasErrors('ssn')}"
-                      th:errors="${patient.ssn}">SSN Error</span>
-            </div> -->
-        </div>
-        <!-- <div class="row py-2">
-            <div class="col">
-                <label for="password">Password</label>
-                <input class="form-control" type="passwordt" th:field="${patient.password}" placeholder="Password" id="password">
-                <span class="text-danger" th:if="${#fields.hasErrors('password')}"
-                      th:errors="${patient.password}">Password Error</span>
-            </div>
-            <div class="col">
-                <label for="confirm-password">Confirm Password</label>
-                <input class="form-control" type="password" th:field="${patient.confirmPassword}" placeholder="Confirm Password" id="confirm-password">
-                <span class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}"
-                      th:errors="${patient.confirmPassword}">Password Error</span>
-            </div>
-        </div>
-        <div class="row py-2">
-            <div class="col">
-                <label for="gp">General Practitioner</label>
-                <select class="form-control"  type="text" th:field="${patient.generalPractitioner}" id="gp">
-                    <option value="">Select General Practitioner</option>
-                    <option th:each="physician : ${physicians}" th:value="${physician.id}" th:text="${physician.name}"
-                    ></option>
-                </select>
-                <span class="text-danger" th:if="${#fields.hasErrors('generalPractitioner')}"
-                      th:errors="${patient.generalPractitioner}">General Practitioner Error</span> -->
-                <!--                                        <input class="form-control" type="text" th:field="*{generalPractitioner}" placeholder="General Practitioner" id="gp">-->
-            <!-- </div>
-            <div class="col">
-                <label for="hasInsurance">Paid Insurance</label>
-                <select class="form-control"  type="text" th:field="${patient.hasInsurance}" id="hasInsurance">
-                    <option value="true">True</option>
-                    <option value="false">False</option>
-                </select>
-            </div>
-        </div> -->
-    </div>
-    <!-- <button type="submit" class="btn btn-info">Save</button> -->
-    </form>
-</user-profile-details>
 
 </html>

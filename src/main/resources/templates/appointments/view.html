@@ -1,7 +1,7 @@
 <div th:fragment="content">
     <div class="row d-flex w-100 justify-content-between py-4">
         <h1 class="font-weight-bold text-center" >View Appointments</h1>
-        <a th:href="@{'/appointments/update/'+${appointment.id}}">
+        <a th:href="@{'/appointments/update/'+${appointment.id}}" sec:authorize="hasAuthority('WRITE_VISITATION')">
             <i class="fas fa-edit" style="font-weight: 400;"></i>
         </a>
     </div>

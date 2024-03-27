@@ -10,6 +10,10 @@ import university.medicalrecordsdemo.util.enums.SickLeaveTableColumnsEnum;
 public interface SickLeaveService {
     Set<SickLeaveDto> findAll();
 
+    Page<SickLeaveDto> findAllByPhysicianId(Long physicianId, int page, int size, SickLeaveTableColumnsEnum sortField, String sortDirection);
+
+    Page<SickLeaveDto> findAllByPatientId(Long patientId, int page, int size, SickLeaveTableColumnsEnum sortField, String sortDirection);
+
     SickLeaveDto findById(Long id);
 
     Page<SickLeaveDto> findAllByPageAndSort(int page, int size, SickLeaveTableColumnsEnum sortField, String sortDirection);

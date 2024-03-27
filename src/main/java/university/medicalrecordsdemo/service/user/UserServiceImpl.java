@@ -155,6 +155,11 @@ public class UserServiceImpl implements UserService {
         return new User(user.getUsername(), user.getPassword(), authorities);
     }
 
+    @Override
+    public Long fetchUserIdFromUsername(String username) {
+        return userRepository.findByUsername(username).getId();
+    }
+
     private UserDto convertToUserDTO(UserEntity user) {
         return modelMapper.map(user, UserDto.class);
     }

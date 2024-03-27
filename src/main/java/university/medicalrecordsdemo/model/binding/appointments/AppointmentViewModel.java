@@ -40,6 +40,9 @@ public class AppointmentViewModel {
     }
 
     public String getDiagnosisInfo() {
+        if (this.diagnosis == null) {
+            return "";
+        }
         return this.diagnosis.getName();
     }
 

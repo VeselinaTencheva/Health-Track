@@ -31,7 +31,6 @@ public class UpdateAppointmentAndSickLeaveAndTreatmentViewModel {
     private Long physicianId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent(message = "Date must be in the future or present")
     private LocalDate sickLeaveStartDate = LocalDate.now();
 
     @Min(value = 0, message = "Sick Duration Days must be at least 1 day")

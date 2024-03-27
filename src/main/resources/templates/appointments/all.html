@@ -4,7 +4,7 @@
     </div>
     <div class="section-white-container">
         <div class="row d-flex justify-content-end">
-            <a href="/appointments/create" class="btn mb-2">Log Visitation</a>
+            <a href="/appointments/create" class="btn mb-2" sec:authorize="hasAuthority('WRITE_VISITATION')">Log Visitation</a>
         </div>
         <div class="row">
                 <h3 th:unless="${appointments} and ${appointments.size()}">There are no registered visitations!</h3>

@@ -2,10 +2,15 @@ package university.medicalrecordsdemo.service.appointment;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.appointment.AppointmentDto;
 import university.medicalrecordsdemo.dto.appointment.CreateAppointmentDto;
@@ -16,11 +21,13 @@ import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.dto.sickLeave.SickLeaveDto;
 import university.medicalrecordsdemo.model.entity.AppointmentEntity;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
+import university.medicalrecordsdemo.model.entity.RoleType;
 import university.medicalrecordsdemo.repository.AppointmentRepository;
 import university.medicalrecordsdemo.service.patient.PatientServiceImpl;
 import university.medicalrecordsdemo.service.physician.PhysicianServiceImpl;
 import university.medicalrecordsdemo.util.enums.AppointmentTableColumnsEnum;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,6 +38,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final PatientServiceImpl patientServiceImpl;
     private final PhysicianServiceImpl physicianServiceImpl;
     private final ModelMapper modelMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Set<AppointmentDto> findAll() {
@@ -50,6 +59,87 @@ public class AppointmentServiceImpl implements AppointmentService {
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         Page<AppointmentEntity> patientPage = appointmentRepository.findAll(pageRequest);
         return patientPage.map(this::convertToAppointmentDto);
+    }
+
+    public Page<AppointmentDto> findAppointmentsDynamically(Long userId, RoleType roleType, Pageable pageable) {
+        String sortProperty = "date";
+        String sortOrder = "ASC";
+
+        if (pageable.getSort().isSorted()) {
+            Sort.Order order = pageable.getSort().iterator().next();
+            sortProperty = order.getProperty();
+            sortOrder = order.getDirection().isAscending() ? "DESC" : "ASC";
+        }
+
+        String whereClause = "";
+        Long totalRecords = 0L;
+        if (RoleType.ROLE_PATIENT.equals(roleType)) {
+            whereClause = "WHERE a.patient_id = " + userId + " ";
+            totalRecords = appointmentRepository.countAppointmentsByPatientId(userId);
+        } else if (RoleType.ROLE_PHYSICIAN.equals(roleType) || RoleType.ROLE_GENERAL_PRACTITIONER.equals(roleType)) {
+            whereClause = "WHERE a.physician_id = " + userId +" ";
+            totalRecords = appointmentRepository.countAppointmentsByPhysicianId(userId);
+        } else {
+            totalRecords = appointmentRepository.count();
+        }
+        
+        String orderByString = "";
+        if (AppointmentTableColumnsEnum.PATIENT.getColumnName().equals(sortProperty)) {
+            orderByString = "CONCAT(upa.first_name, ' ', upa.last_name) " + sortOrder;
+        } else if (AppointmentTableColumnsEnum.PHYSICIAN.getColumnName().equals(sortProperty)) {
+            orderByString = "CONCAT(uph.first_name, ' ', uph.last_name) " + sortOrder;
+        } else if (AppointmentTableColumnsEnum.DATE.getColumnName().equals(sortProperty)) {
+            orderByString = "a.date " + sortOrder;
+        } else if (AppointmentTableColumnsEnum.DIAGNOSIS.getColumnName().equals(sortProperty)) {
+            orderByString = "d.name " + sortOrder;
+        } else if (AppointmentTableColumnsEnum.SICK_LEAVE.getColumnName().equals(sortProperty)) {
+            orderByString = "sk.start_date " + sortOrder + ", sk.duration " + sortOrder;
+        } else {
+            orderByString = "a.date " + sortOrder;
+        }
+
+        // Adjust this query to match your actual database schema and relationships
+        String sql = "SELECT a.* FROM appointment a " +
+                     "LEFT JOIN patient pa ON pa.id = a.patient_id " +
+                     "LEFT JOIN user upa ON upa.id = pa.id " +
+                     "LEFT JOIN physician ph ON ph.id = a.physician_id " +
+                     "LEFT JOIN user uph ON uph.id = ph.id " +
+                     "LEFT JOIN sick_leave sk ON sk.id = a.sick_leave_id " +
+                     "LEFT JOIN diagnosis d ON d.id = a.diagnosis_id " +
+                     whereClause + 
+                     "ORDER BY " + orderByString;
+
+        Query query = entityManager.createNativeQuery(sql, AppointmentEntity.class);
+
+        // Manual pagination
+        int pageSize = pageable.getPageSize();
+        int firstResult = (int) pageable.getOffset();
+        query.setFirstResult(firstResult);
+        query.setMaxResults(pageSize);
+
+        @SuppressWarnings("unchecked")
+        List<AppointmentEntity> result = query.getResultList();
+
+        List<AppointmentDto> dtos = result.stream()
+                                        .map(this::convertToAppointmentDto)
+                                        .collect(Collectors.toList());
+
+        
+        return new PageImpl<>(dtos, pageable, totalRecords);
+    }
+
+    @Override
+    public Page<AppointmentDto> findAllByUserId(Long userId, RoleType roleType, int page, int size, AppointmentTableColumnsEnum sortField, String sortDirection) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortDirection)) {
+            direction = Sort.Direction.DESC;
+        }
+        String sortFieldString = sortField.getColumnName();
+        Sort sort = Sort.by(direction, sortFieldString);
+
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+        return findAppointmentsDynamically(userId, roleType, pageRequest);
     }
 
     @Override

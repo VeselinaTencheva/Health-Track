@@ -1,7 +1,6 @@
 package university.medicalrecordsdemo.controller.view;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,9 +8,8 @@ import java.util.stream.IntStream;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -47,6 +45,7 @@ import university.medicalrecordsdemo.model.binding.sickLeaves.CreateSickLeaveVie
 import university.medicalrecordsdemo.model.binding.sickLeaves.SickLeaveViewModel;
 import university.medicalrecordsdemo.model.binding.sickLeaves.UpdateSickLeaveViewModel;
 import university.medicalrecordsdemo.model.entity.DepartmentType;
+import university.medicalrecordsdemo.model.entity.RoleType;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.service.appointment.AppointmentService;
 import university.medicalrecordsdemo.service.diagnosis.DiagnosisService;
@@ -74,68 +73,46 @@ public class AppointmentController {
 
     private static final String DEFAULT_SORT_FIELD = "DATE";
 
-    @GetMapping
-    public String getAppointments(Model model,
+     @GetMapping
+    public String getAppointments(Authentication authentication, Model model,
                                 @RequestParam(name = "page", defaultValue = "0") int page,
                                 @RequestParam(name = "size", defaultValue = "5") int size,
                                 @RequestParam(name = "sortField", defaultValue = DEFAULT_SORT_FIELD) String sortField,
                                 @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection) {
-        Page<AppointmentViewModel> appointmentsPage;
-        List<Integer> pageNumbers;
+        
+        Page<AppointmentViewModel> appointmentPage = fetchAppointmentsBasedOnRole(authentication, page, size, sortField, sortDirection);
+        
+        List<Integer> pageNumbers = IntStream.rangeClosed(0, appointmentPage.getTotalPages() - 1)
+                                              .boxed()
+                                              .collect(Collectors.toList());
 
-        List<AppointmentViewModel> appointmentsViewModels = appointmentService.findAll()
-                            .stream()
-                            .map(this::convertToAppointmentViewModel)
-                            .collect(Collectors.toList());
-                            
-        AppointmentTableColumnsEnum sortFieldEnum = AppointmentTableColumnsEnum.valueOf(sortField);
-    
-        if ("desc".equalsIgnoreCase(sortDirection)) {
-            if (AppointmentTableColumnsEnum.DATE.equals(sortFieldEnum)) {
-                appointmentsViewModels.sort(Comparator.comparing(AppointmentViewModel::getDate).reversed());
-            } else if (AppointmentTableColumnsEnum.PATIENT.equals(sortFieldEnum)) {
-                appointmentsViewModels.sort(Comparator.comparing(AppointmentViewModel::getPatientInfo).reversed());
-            } else if (AppointmentTableColumnsEnum.PHYSICIAN.equals(sortFieldEnum)) {
-                appointmentsViewModels.sort(Comparator.comparing(AppointmentViewModel::getPhysicianInfo).reversed());
-            } else if (AppointmentTableColumnsEnum.DIAGNOSIS.equals(sortFieldEnum)) {
-                appointmentsViewModels.sort(Comparator.comparing(AppointmentViewModel::getDiagnosisInfo).reversed());
-            }
-        } else {
-            if (AppointmentTableColumnsEnum.DATE.equals(sortFieldEnum)) {
-                appointmentsViewModels.sort(Comparator.comparing(AppointmentViewModel::getDate));
-            } else if (AppointmentTableColumnsEnum.PATIENT.equals(sortFieldEnum)) {
-                appointmentsViewModels.sort(Comparator.comparing(AppointmentViewModel::getPatientInfo));
-            } else if (AppointmentTableColumnsEnum.PHYSICIAN.equals(sortFieldEnum)) {
-                appointmentsViewModels.sort(Comparator.comparing(AppointmentViewModel::getPhysicianInfo));
-            } else if (AppointmentTableColumnsEnum.DIAGNOSIS.equals(sortFieldEnum)) {
-                appointmentsViewModels.sort(Comparator.comparing(AppointmentViewModel::getDiagnosisInfo));
-            }
-        }
-
-        int start = page * size; // Calculate the start index
-        int end = Math.min(start + size, appointmentsViewModels.size()); // Calculate the end index
-        List<AppointmentViewModel> subset = appointmentsViewModels.subList(start, end); // Get the sublist
-
-        appointmentsPage = new PageImpl<>(subset, PageRequest.of(page, size), appointmentsViewModels.size());
-
-        pageNumbers = IntStream.rangeClosed(0, appointmentsPage.getTotalPages() - 1)
-                            .boxed()
-                            .collect(Collectors.toList());
-
-        model.addAttribute("appointmentsPage", appointmentsPage);
+        model.addAttribute("appointmentPage", appointmentPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDirection", sortDirection);
         model.addAttribute("size", size);
-        model.addAttribute("appointments", appointmentsPage.getContent());
+        model.addAttribute("appointments", appointmentPage.getContent());
         model.addAttribute("firstPage", 0);
-        model.addAttribute("totalPages", appointmentsPage.getTotalPages());
-        model.addAttribute("pageNumbers", pageNumbers); 
+        model.addAttribute("totalPages", appointmentPage.getTotalPages());
+        model.addAttribute("pageNumbers", pageNumbers);
         model.addAttribute("columnsEnum", AppointmentTableColumnsEnum.values());
         model.addAttribute("contentTemplate", "appointments/all");
 
-
         return "layout";
+    }
+
+    private Page<AppointmentViewModel> fetchAppointmentsBasedOnRole(Authentication authentication, int page, int size, String sortField, String sortDirection) {
+        Page<AppointmentDto> appointmentDtoPage;
+        RoleType roleType = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .filter(auth -> auth.startsWith("ROLE_"))
+            .findFirst()
+            .map(RoleType::valueOf)
+            .orElseThrow(() -> new IllegalArgumentException("No valid role found"));
+        Long userId = userService.fetchUserIdFromUsername(authentication.getName());
+        appointmentDtoPage = appointmentService.findAllByUserId(userId, roleType, page, size, AppointmentTableColumnsEnum.valueOf(sortField), sortDirection);
+
+        return appointmentDtoPage.map(this::convertToAppointmentViewModel);
     }
 
     @GetMapping("/create")
@@ -217,7 +194,6 @@ public class AppointmentController {
                 diagnosis,
                 appointment.getTreatment());
 
-        // CreateAppointmentViewModel createAppointmentViewModel = new CreateAppointmentViewModel();
 
         CreateAppointmentDto appointmentDTO = modelMapper.map(createAppointmentViewModel, CreateAppointmentDto.class);
         appointmentService.create(appointmentDTO);
@@ -293,6 +269,7 @@ public class AppointmentController {
                 // Scenario 3: Updating existing sick leave
                 UpdateSickLeaveViewModel updateSickLeaveViewModel = modelMapper.map(appointment, UpdateSickLeaveViewModel.class);
                 UpdateSickLeaveDto updateSickLeaveDTO = modelMapper.map(updateSickLeaveViewModel, UpdateSickLeaveDto.class);
+                updateSickLeaveDTO.setStartDate(LocalDate.parse(updateSickLeaveViewModel.getStartDate()));
                 updatedSickLeave = sickLeaveService.update(currentAppointment.getSickLeave().getId(), updateSickLeaveDTO);
             }
         } else if (currentAppointment.getSickLeave() != null) {

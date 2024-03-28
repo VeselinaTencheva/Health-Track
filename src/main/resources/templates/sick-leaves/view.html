@@ -1,8 +1,11 @@
 <div th:fragment="content">
-    <div class="row d-flex w-100 justify-content-between py-4">
-        <h1 class="font-weight-bold text-center" >View Sick Leave</h1>
-        <a th:href="@{'/sick-leaves/update/'+${sickLeave.id}}">
+    <div class="row d-flex w-100 py-4" style="gap: 0.5rem;">
+        <h1 class="font-weight-bold text-center mr-auto" >View Sick Leave</h1>
+        <a th:href="@{'/sick-leaves/update/'+${sickLeave.id}}" sec:authorize="hasAuthority('WRITE_SICK_LEAVE')">
             <i class="fas fa-edit" style="font-weight: 400;"></i>
+        </a>
+        <a th:href="@{'/sick-leaves/delete/'+${sickLeave.id}}" sec:authorize="hasAuthority('WRITE_SICK_LEAVE')">
+            <i class="fas fa-trash-alt" style="font-weight: 400;"></i>
         </a>
     </div>
     <div class="section-white-container">

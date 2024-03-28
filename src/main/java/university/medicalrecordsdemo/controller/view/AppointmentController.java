@@ -28,6 +28,7 @@ import org.springframework.validation.BindingResult;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.appointment.AppointmentDto;
 import university.medicalrecordsdemo.dto.appointment.CreateAppointmentDto;
+import university.medicalrecordsdemo.dto.appointment.UpdateAppointmentDto;
 import university.medicalrecordsdemo.dto.diagnosis.DiagnosisDto;
 import university.medicalrecordsdemo.dto.patient.PatientDto;
 import university.medicalrecordsdemo.dto.physician.PhysicianDto;
@@ -263,7 +264,9 @@ public class AppointmentController {
                 // Scenario 1: Adding a new sick leave
                 CreateSickLeaveViewModel createSickLeaveViewModel = modelMapper.map(appointment, CreateSickLeaveViewModel.class);
                 CreateSickLeaveDto createSickLeaveDTO = modelMapper.map(createSickLeaveViewModel, CreateSickLeaveDto.class);
-                sickLeaveService.create(createSickLeaveDTO);
+                currentAppointment.setSickLeave(sickLeaveService.create(createSickLeaveDTO));
+                UpdateAppointmentDto updateAppointmentDTO = modelMapper.map(currentAppointment, UpdateAppointmentDto.class);
+                appointmentService.update(currentAppointment.getId(), updateAppointmentDTO);
             } else {
                 // Scenario 3: Updating existing sick leave
                 UpdateSickLeaveViewModel updateSickLeaveViewModel = modelMapper.map(appointment, UpdateSickLeaveViewModel.class);

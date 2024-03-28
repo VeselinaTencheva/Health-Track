@@ -23,6 +23,7 @@ import university.medicalrecordsdemo.model.entity.AppointmentEntity;
 import university.medicalrecordsdemo.model.entity.PatientEntity;
 import university.medicalrecordsdemo.model.entity.RoleType;
 import university.medicalrecordsdemo.repository.AppointmentRepository;
+import university.medicalrecordsdemo.repository.SickLeaveRepository;
 import university.medicalrecordsdemo.service.patient.PatientServiceImpl;
 import university.medicalrecordsdemo.service.physician.PhysicianServiceImpl;
 import university.medicalrecordsdemo.util.enums.AppointmentTableColumnsEnum;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
+    private final SickLeaveRepository sickLeaveRepository;
     private final PatientServiceImpl patientServiceImpl;
     private final PhysicianServiceImpl physicianServiceImpl;
     private final ModelMapper modelMapper;
@@ -158,15 +160,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         AppointmentEntity appointmentEntity = this.appointmentRepository.save(appointment);
         AppointmentDto appointmentDto = convertToAppointmentDto(appointmentEntity);
         return appointmentDto;
-        // Appointment appointment = modelMapper.map(createAppointmentDto,
-        // Appointment.class);
-        // if (appointment.getSickLeave().getDuration() <= 0 &&
-        // appointment.getSickLeave().getStartDate() == null) {
-        // appointment.setSickLeave(null);
-        // }
-        // if (appointment.getTreatment().getName() == null) {
-        // appointment.setTreatment(null);
-        // }
     }
 
     @Override
@@ -195,25 +188,28 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void delete(Long id) {
-        this.appointmentRepository.deleteById(id);
+        AppointmentEntity appointment = this.appointmentRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid appointment ID: " + id));
+
+        if (appointment != null) {
+            if (appointment.getSickLeave() != null) {
+                sickLeaveRepository.delete(appointment.getSickLeave());
+            }
+            appointmentRepository.delete(appointment);
+        }
     }
 
     private AppointmentDto convertToAppointmentDto(AppointmentEntity appointment) {
-        // Map AppointmentEntity to AppointmentDTO
         AppointmentDto appointmentDTO = modelMapper.map(appointment, AppointmentDto.class);
 
-        // You can map related objects if needed
-        // For example, map patientEntity to PatientDTO
         PatientDto patientDTO = patientServiceImpl.convertToPatientDto(appointment.getPatient());
         appointmentDTO.setPatient(patientDTO);
 
-        // Similarly, map physicianEntity to PhysicianDTO
         PhysicianDto physicianDTO = physicianServiceImpl.convertToPhysicianDTO(appointment.getPhysician());
         appointmentDTO.setPhysician(physicianDTO);
 
-        // Map diagnosisEntity to DiagnosisDTO
         if (appointment.getDiagnosis() != null) {
-            // return appointmentDTO;
             DiagnosisDto diagnosisDTO = modelMapper.map(appointment.getDiagnosis(), DiagnosisDto.class);
             appointmentDTO.setDiagnosis(diagnosisDTO);
         }

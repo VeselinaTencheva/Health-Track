@@ -13,11 +13,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import university.medicalrecordsdemo.dto.appointment.AppointmentDto;
 import university.medicalrecordsdemo.dto.sickLeave.*;
+import university.medicalrecordsdemo.model.entity.AppointmentEntity;
 import university.medicalrecordsdemo.model.entity.SickLeaveEntity;
+import university.medicalrecordsdemo.repository.AppointmentRepository;
 import university.medicalrecordsdemo.repository.SickLeaveRepository;
 import university.medicalrecordsdemo.util.enums.SickLeaveTableColumnsEnum;
 import jakarta.persistence.Query;
@@ -27,6 +30,7 @@ import jakarta.persistence.Query;
 public class SickLeaveServiceImpl implements SickLeaveService {
 
     private final SickLeaveRepository sickLeaveRepository;
+    private final AppointmentRepository appointmentRepository;
     private final ModelMapper modelMapper;
 
     @PersistenceContext
@@ -176,7 +180,16 @@ public class SickLeaveServiceImpl implements SickLeaveService {
 
     @Override
     public void delete(Long id) {
-        this.sickLeaveRepository.deleteById(id);
+        SickLeaveEntity sickLeave = sickLeaveRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Sick leave not found with ID: " + id));
+
+        AppointmentEntity appointment = appointmentRepository.findBySickLeaveId(sickLeave.getId());
+        if (appointment != null) {
+            appointment.setSickLeave(null);
+            appointmentRepository.save(appointment);
+        }
+
+        sickLeaveRepository.delete(sickLeave);
     }
 
     private SickLeaveDto convertToSickLeaveDto(SickLeaveEntity sickLeave) {

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -33,8 +32,8 @@ public class AppointmentEntity extends BaseEntity {
     @JoinColumn(name = "physician_id")
     private PhysicianEntity physician;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "sickLeave_id", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "sick_leave_id")
     private SickLeaveEntity sickLeave;
 
     @ManyToOne()

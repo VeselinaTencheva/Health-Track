@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
@@ -25,7 +24,7 @@ public class SickLeaveEntity extends BaseEntity {
     @Column(name = "duration", nullable = false)
     private int duration;
 
-    @OneToOne(mappedBy = "sickLeave", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "sickLeave")
     private AppointmentEntity appointment;
 
 }

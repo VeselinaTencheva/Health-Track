@@ -5,13 +5,11 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class NotEmptyIfPresentValidator implements ConstraintValidator<NotEmptyIfPresent, String> {
     
-    private String field;
     private String minParam;
     private String maxParam;
 
     @Override
     public void initialize(NotEmptyIfPresent constraintAnnotation) {
-        this.field = constraintAnnotation.field();
         this.minParam = constraintAnnotation.minParam();
         this.maxParam = constraintAnnotation.maxParam();
     }

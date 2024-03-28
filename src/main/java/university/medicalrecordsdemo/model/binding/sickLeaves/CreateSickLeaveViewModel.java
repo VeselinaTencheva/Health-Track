@@ -23,7 +23,6 @@ public class CreateSickLeaveViewModel {
     @FutureOrPresent(message = "Start Date must be in the future or present")
     private LocalDate startDate = LocalDate.now();;
 
-    // TODO add validation for null or alphabetical symbols
     @Min(value = 1, message = "Duration must be at least 1 day")
     @Max(value = 180, message = "Duration must be maximum 180 days")
     private int duration;

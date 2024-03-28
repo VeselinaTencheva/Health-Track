@@ -133,8 +133,7 @@ public class PhysicianServiceImpl implements PhysicianService {
             roles.add(roleEntity);
         }
 
-        physicianEntity.setPassword(encoder.encode(physicianDto.getPassword())); // TODO investigate why it is not
-                                                                                 // encoding automatically
+        physicianEntity.setPassword(encoder.encode(physicianDto.getPassword()));
 
         physicianEntity.setRoles(roles);
         return physicianEntity;

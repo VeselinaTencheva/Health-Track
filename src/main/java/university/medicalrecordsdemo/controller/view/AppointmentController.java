@@ -258,19 +258,18 @@ public class AppointmentController {
         AppointmentDto currentAppointment = appointmentService.findById(id);
 
         // Handle sick leave logic
-        SickLeaveDto updatedSickLeave = null;
         if (appointment.getSickLeaveDuration() > 0) {
             if (currentAppointment.getSickLeave() == null) {
                 // Scenario 1: Adding a new sick leave
                 CreateSickLeaveViewModel createSickLeaveViewModel = modelMapper.map(appointment, CreateSickLeaveViewModel.class);
                 CreateSickLeaveDto createSickLeaveDTO = modelMapper.map(createSickLeaveViewModel, CreateSickLeaveDto.class);
-                updatedSickLeave = sickLeaveService.create(createSickLeaveDTO);
+                sickLeaveService.create(createSickLeaveDTO);
             } else {
                 // Scenario 3: Updating existing sick leave
                 UpdateSickLeaveViewModel updateSickLeaveViewModel = modelMapper.map(appointment, UpdateSickLeaveViewModel.class);
                 UpdateSickLeaveDto updateSickLeaveDTO = modelMapper.map(updateSickLeaveViewModel, UpdateSickLeaveDto.class);
                 updateSickLeaveDTO.setStartDate(LocalDate.parse(updateSickLeaveViewModel.getStartDate()));
-                updatedSickLeave = sickLeaveService.update(currentAppointment.getSickLeave().getId(), updateSickLeaveDTO);
+                    sickLeaveService.update(currentAppointment.getSickLeave().getId(), updateSickLeaveDTO);
             }
         } else if (currentAppointment.getSickLeave() != null) {
             // Scenario 2: Removing existing sick leave

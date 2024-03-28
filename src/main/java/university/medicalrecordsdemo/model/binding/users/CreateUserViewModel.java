@@ -47,6 +47,6 @@ public abstract class CreateUserViewModel {
 
     private boolean isEnabled = true;
 
-    private Set<RoleEntity> roles; // TODO maybe change to RoleViewModel
+    private Set<RoleEntity> roles;
 
 }

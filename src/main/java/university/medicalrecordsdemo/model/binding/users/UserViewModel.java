@@ -35,5 +35,5 @@ public class UserViewModel extends BaseViewModel {
 
     private boolean isEnabled = true;
 
-    private Set<RoleEntity> roles; // TODO maybe change to RoleViewModel
+    private Set<RoleEntity> roles;
 }

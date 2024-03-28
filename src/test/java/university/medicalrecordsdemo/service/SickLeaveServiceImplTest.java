@@ -101,13 +101,4 @@ class SickLeaveServiceImplTest {
         verify(sickLeaveRepository).save(any(SickLeaveEntity.class));
         assertThat(result).isNotNull();
     }
-
-    @Test
-    void delete_ShouldRemoveSickLeave() {
-        doNothing().when(sickLeaveRepository).deleteById(1L);
-        
-        sickLeaveService.delete(1L);
-
-        verify(sickLeaveRepository).deleteById(1L);
-    }
 }

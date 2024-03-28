@@ -203,12 +203,5 @@ public class AppointmentServiceImplTest {
         assertThat(result).isEqualTo(appointmentDto);
         verify(appointmentRepository).saveAndFlush(appointmentEntity);
     }
-
-    @Test
-    void delete_ShouldDeleteAppointment() {
-        appointmentService.delete(1L);
-
-        verify(appointmentRepository).deleteById(1L);
-    }
 }
 

@@ -95,16 +95,24 @@ class DiagnosisServiceImplTest {
         int size = 2;
         DiagnosisTableColumnsEnum sortField = DiagnosisTableColumnsEnum.NAME;
         String sortDirection = "ASC";
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, sortField.getColumnName()));
-        Page<DiagnosisEntity> diagnosisPage = new PageImpl<>(List.of(new DiagnosisEntity(), new DiagnosisEntity()));
+    
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(sortDirection.toUpperCase()), sortField.getColumnName()));
+    
+        Page<DiagnosisEntity> diagnosisPage = new PageImpl<>(List.of(new DiagnosisEntity(), new DiagnosisEntity()), pageRequest, 2);
+    
         when(diagnosisRepository.findAll(pageRequest)).thenReturn(diagnosisPage);
+    
         when(modelMapper.map(any(DiagnosisEntity.class), eq(DiagnosisDto.class)))
-                .thenAnswer(invocation -> new DiagnosisDto(/* set properties based on entity */));
-
-        Page<DiagnosisDto> result = diagnosisService.findAllByPageAndSort(page, size, sortField, sortDirection);
-
+                .thenAnswer(invocation -> new DiagnosisDto());
+    
+        Page<DiagnosisDto> result = diagnosisService.findAllByPageAndSort(pageRequest);
+    
         assertEquals(2, result.getContent().size());
+        assertEquals(2, result.getTotalElements());
+        assertEquals(page, result.getNumber());
+        assertEquals(size, result.getSize());
     }
+    
 
     @Test
     void findAllByAppointments_ShouldReturnDiagnosesForGivenAppointments() {

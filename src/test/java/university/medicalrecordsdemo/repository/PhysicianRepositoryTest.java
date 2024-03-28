@@ -81,12 +81,12 @@ public class PhysicianRepositoryTest {
 
        // Generate and persist physicians
         PhysicianEntity physician1 = new PhysicianEntity();
-        physician1.setMedicalLicenseNumber("MD323536");
+        physician1.setMedicalLicenseNumber("MD323537");
         physician1.setFirstName("John");
         physician1.setLastName("Doe");
         physician1.setGender("Male");
         physician1.setBirthDate(LocalDate.of(1980, 1, 1));
-        physician1.setUsername("john.doe@example.com");
+        physician1.setUsername("john.doe22@example.com");
         physician1.setPassword(encoder.encode("password"));
         physician1.setSsn("123-45-6789");
         physician1.setSpecialties(new HashSet<>(Arrays.asList(SpecialtyType.COLORECTAL_SURGERY, SpecialtyType.DERMATOPATHOLOGY)));
@@ -113,7 +113,7 @@ public class PhysicianRepositoryTest {
         physician3.setLastName("Smith");
         physician3.setGender("Non-Binary");
         physician3.setBirthDate(LocalDate.of(1975, 3, 22));
-        physician3.setUsername("alex.smith@example.com");
+        physician3.setUsername("alex.smith23@example.com");
         physician3.setPassword(encoder.encode("securePassword"));
         physician3.setSpecialties(new HashSet<>(Arrays.asList(SpecialtyType.ANESTHESIOLOGIST)));
         physician3.setRoles(new HashSet<>(Arrays.asList(physicianRole)));

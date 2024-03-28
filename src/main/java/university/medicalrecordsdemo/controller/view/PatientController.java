@@ -7,6 +7,7 @@ import university.medicalrecordsdemo.dto.physician.PhysicianDto;
 import university.medicalrecordsdemo.model.binding.patients.CreatePatientViewModel;
 import university.medicalrecordsdemo.model.binding.patients.PatientViewModel;
 import university.medicalrecordsdemo.model.binding.patients.UpdatePatientViewModel;
+import university.medicalrecordsdemo.model.binding.physicians.CreatePhysicianViewModel;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
 import university.medicalrecordsdemo.service.diagnosis.DiagnosisService;
 import university.medicalrecordsdemo.service.patient.PatientService;
@@ -16,6 +17,7 @@ import university.medicalrecordsdemo.util.enums.PatientTableColumnsEnum;
 import university.medicalrecordsdemo.model.binding.diagnoses.DiagnoseViewModel;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -150,24 +152,31 @@ public class PatientController {
 
     }
 
-    @PostMapping("/create")
-    public String createPatient(Model model, @Valid @ModelAttribute("patient") CreatePatientViewModel patient,
+   @PostMapping("/create")
+    public String createPhysician(Model model, @Valid @ModelAttribute("physician") CreatePhysicianViewModel physician,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            Set<PhysicianDto> gpPhysicians = physicianService.findAllBySpecialty(SpecialtyType.GENERAL_PRACTICE);
-            model.addAttribute("physicians", gpPhysicians);
-            model.addAttribute("contentTemplate", "patients/create");
+            model.addAttribute("specialities", SpecialtyType.values());
+            model.addAttribute("contentTemplate", "physicians/create");
             return "layout";
         }
 
-        LocalDate birthDate = patient.getBirthDate() == null || patient.getBirthDate().isEmpty() ? null :
-        LocalDate.parse(patient.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
-        
-        // Map the view model to DTO
-        PatientDto createPatientDTO = modelMapper.map(patient, PatientDto.class);
-        createPatientDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
-        patientService.create(createPatientDTO);
-        return "redirect:/patients";
+        try {
+            LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
+                LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+            
+            PhysicianDto createPhysicianDTO = modelMapper.map(physician, PhysicianDto.class);
+            createPhysicianDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
+            physicianService.create(createPhysicianDTO);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("specialities", SpecialtyType.values());
+            model.addAttribute("error", "A physician with the same username or medical license number already exists.");
+            model.addAttribute("physician", physician); // To repopulate the form with submitted values
+            model.addAttribute("contentTemplate", "physicians/create");
+            return "layout";
+        }
+
+        return "redirect:/physicians";
     }
 
     @GetMapping("/edit-patient/{id}")

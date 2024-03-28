@@ -3,10 +3,14 @@
 <head th:replace="~{fragments :: head}">
 <body>
     <div class="row login-page emr-image">
-        <div class="background-image"></div> <!-- Separate div for the background image -->
+        <div class="background-image"></div>
         <div class="content-container d-flex w-100 justify-content-center align-items-center">
             <div class="login-form-container" style="width: 40%;">
                 <h2 class="login-page-title  center-text">Sign Up For Physician</h2>
+                <div th:if="${error}" class="error-message">
+                    <p th:text="${error}"></p>
+                </div>
+
                 <form class="w-100" name="login" th:action="@{/register}" th:object="${physician}" method="post">
                     <fieldset>
                         <div class="row">

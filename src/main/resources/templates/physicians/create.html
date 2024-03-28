@@ -3,6 +3,9 @@
         <h1 class="font-weight-bold text-center" >Create Physician</h1>
     </div>
     <div class="section-white-container">
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
         <form class="w-100 d-flex flex-column" style="gap: 1rem;" action="#"  th:action="@{/physicians/create}" th:object="${physician}" method="post">
             <div class="row d-flex">
                 <div class="col form-group">

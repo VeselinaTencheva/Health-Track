@@ -11,8 +11,6 @@ import lombok.Setter;
 import university.medicalrecordsdemo.model.binding.users.CreateUserViewModel;
 import university.medicalrecordsdemo.model.entity.SpecialtyType;
 
-// import javax.validation.constraints.*;
-
 @Getter
 @Setter
 @NoArgsConstructor

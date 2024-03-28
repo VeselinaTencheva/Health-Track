@@ -156,6 +156,11 @@ main {
     opacity: 85%;
 }
 
+.error-message p {
+    color: #ff0000; /* Red color for error messages */
+    font-weight: bold;
+}
+
 .forgot-password{
     color: #385399;
     font-size: 14px;

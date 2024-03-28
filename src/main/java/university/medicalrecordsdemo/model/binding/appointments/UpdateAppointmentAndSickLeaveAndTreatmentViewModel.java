@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import university.medicalrecordsdemo.validation.NotEmptyIfPresent;
+import university.medicalrecordsdemo.validation.NotEmptyIfPresentValidator.NotEmptyIfPresent;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

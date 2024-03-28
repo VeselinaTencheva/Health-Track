@@ -3,7 +3,7 @@ package university.medicalrecordsdemo.model.binding.appointments;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import university.medicalrecordsdemo.validation.NotEmptyIfPresent;
+import university.medicalrecordsdemo.validation.NotEmptyIfPresentValidator.NotEmptyIfPresent;
 
 import java.time.LocalDate;
 

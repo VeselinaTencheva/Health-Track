@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import org.modelmapper.ModelMapper;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -127,23 +128,29 @@ public class PhysicianController {
     }
 
     @PostMapping("/create")
-    public String createPhysician(Model model,@Valid @ModelAttribute("physician") CreatePhysicianViewModel physician,
+    public String createPhysician(Model model, @Valid @ModelAttribute("physician") CreatePhysicianViewModel physician,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("specialities", SpecialtyType.values());
             model.addAttribute("contentTemplate", "physicians/create");
-
             return "layout";
         }
 
-        LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
-        LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
-        
-        // Map the view model to DTO
-        PhysicianDto createPhysicianDTO = modelMapper.map(physician,
-                PhysicianDto.class);
-        createPhysicianDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
-        physicianService.create(createPhysicianDTO);
+        try {
+            LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
+                LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+            
+            PhysicianDto createPhysicianDTO = modelMapper.map(physician, PhysicianDto.class);
+            createPhysicianDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
+            physicianService.create(createPhysicianDTO);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("specialities", SpecialtyType.values());
+            model.addAttribute("error", "A physician with the same username or ssn or medical license number already exists.");
+            model.addAttribute("physician", physician); // To repopulate the form with submitted values
+            model.addAttribute("contentTemplate", "physicians/create");
+            return "layout";
+        }
+
         return "redirect:/physicians";
     }
 

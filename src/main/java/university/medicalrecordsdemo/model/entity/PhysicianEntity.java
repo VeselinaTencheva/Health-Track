@@ -24,7 +24,7 @@ import java.util.Set;
 @Table(name = "physician")
 public class PhysicianEntity extends UserEntity {
 
-    // Medical license number
+    @Column(name = "medical_license_number", nullable = false, unique = true)
     private String medicalLicenseNumber;
 
     // List of specialties for the physician

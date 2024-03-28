@@ -1,5 +1,6 @@
 package university.medicalrecordsdemo.controller.view;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -82,22 +83,28 @@ public class IndexController {
     }
 
     @PostMapping("/register")
-    public String registerConfirm(Model model,@Valid @ModelAttribute("physician") CreatePhysicianViewModel physician,
+    public String registerConfirm(Model model, @Valid @ModelAttribute("physician") CreatePhysicianViewModel physician,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("specialities", SpecialtyType.values());
-            return "/register";
+            return "register";
         }
 
-        LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
-        LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        try {
+            LocalDate birthDate = physician.getBirthDate() == null || physician.getBirthDate().isEmpty() ? null :
+            LocalDate.parse(physician.getBirthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+            
+            // Map the view model to DTO
+            PhysicianDto createPhysicianDTO = modelMapper.map(physician, PhysicianDto.class);
+            createPhysicianDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
+            physicianService.create(createPhysicianDTO);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("specialities", SpecialtyType.values());
+            model.addAttribute("error", "Username or Medical License Number or SSN already exists.");
+            return "register";
+        }
         
-        // Map the view model to DTO
-        PhysicianDto createPhysicianDTO = modelMapper.map(physician,
-                PhysicianDto.class);
-        createPhysicianDTO.setBirthDate(birthDate); // Set the converted birthDate to the DTO
-        physicianService.create(createPhysicianDTO);
-        return "redirect:/physicians";
+        return "redirect:/";
     }
 
     @GetMapping("unauthorized")

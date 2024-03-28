@@ -1,4 +1,4 @@
-package university.medicalrecordsdemo.validation;
+package university.medicalrecordsdemo.validation.NotEmptyIfPresentValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.Retention;
